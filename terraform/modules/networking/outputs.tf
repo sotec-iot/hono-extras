@@ -28,6 +28,11 @@ output "device_communication_static_ip_name" {
   description = "Name of the Static IP for External Ingress"
 }
 
+output "device_communication_static_ip" {
+  value       = google_compute_global_address.device_communication_static_ip.address
+  description = "Output of the static IP for External Ingress"
+}
+
 output "ip_ranges_services_name" {
   value = google_compute_subnetwork.subnetwork.secondary_ip_range.0.range_name
 }
