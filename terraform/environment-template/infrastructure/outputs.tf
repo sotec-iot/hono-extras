@@ -54,6 +54,11 @@ output "device_communication_static_ip_name" {
   description = "Name of the Static IP for External Ingress"
 }
 
+output "device_communication_static_ip" {
+  value       = module.infrastructure.device_communication_static_ip
+  description = "Output of the static IP for External Ingress"
+}
+
 output "cloud_endpoints_key_file" {
   value       = module.infrastructure.cloud_endpoints_key_file
   description = "Service Account Key File for Cloud Endpoints Service Account"
