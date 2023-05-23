@@ -25,15 +25,18 @@ resource "google_container_node_pool" "standard_node_pool" {
   project            = var.project_id
   location           = var.region
   cluster            = google_container_cluster.hono_cluster.name
-  initial_node_count = 2
+  initial_node_count = var.node_pool_initial_node_count
   node_locations     = var.node_locations
   management {
     auto_repair  = true
     auto_upgrade = true
   }
-  autoscaling {
-    min_node_count = 0
-    max_node_count = 5
+  dynamic "autoscaling" {
+    for_each = var.node_pool_autoscaling_enabled ? [1] : []
+    content {
+      min_node_count = var.node_pool_min_node_count
+      max_node_count = var.node_pool_max_node_count
+    }
   }
   node_config {
     machine_type    = var.gke_machine_type
@@ -48,5 +51,19 @@ resource "google_container_node_pool" "standard_node_pool" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
-   
+  upgrade_settings {
+    strategy = var.node_pool_upgrade_strategy
+    max_surge = var.node_pool_upgrade_strategy == "SURGE"? var.node_pool_max_surge : null
+    max_unavailable = var.node_pool_upgrade_strategy == "SURGE"? var.node_pool_max_unavailable : null
+    dynamic "blue_green_settings" {
+      for_each = var.node_pool_upgrade_strategy != "SURGE" ? [1] : []
+      content {
+        standard_rollout_policy {
+          batch_node_count = var.node_pool_batch_node_count
+          batch_soak_duration = var.node_pool_batch_soak_duration
+        }
+        node_pool_soak_duration = var.node_pool_soak_duration
+      }
+    }
+  }
 }

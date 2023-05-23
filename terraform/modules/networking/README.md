@@ -37,6 +37,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for External Ingress |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress |
 | <a name="output_ip_ranges_pods_name"></a> [ip\_ranges\_pods\_name](#output\_ip\_ranges\_pods\_name) | n/a |
 | <a name="output_ip_ranges_services_name"></a> [ip\_ranges\_services\_name](#output\_ip\_ranges\_services\_name) | n/a |

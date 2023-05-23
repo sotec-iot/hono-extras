@@ -54,7 +54,7 @@ variable "sql_instance_version" {
 variable "sql_instance_deletion_policies" {
   type        = bool
   description = "Used to block Terraform from deleting a SQL Instance. Defaults to false."
-  default     = false
+  default     = true
 }
 
 variable "sql_instance_machine_type" {
@@ -66,7 +66,7 @@ variable "sql_instance_machine_type" {
 variable "sql_instance_disk_type" {
   type        = string
   description = "Disk Type of the SQL Instance"
-  default     = "pd-hdd"
+  default     = "PD-SSD"
 }
 
 variable "sql_instance_activation_policy" {
@@ -106,14 +106,32 @@ variable "gke_release_channel" {
 }
 
 variable "node_pool_disk_type" {
-  type    = string
-  default = "pd-standard"
+  type        = string
+  default     = "pd-standard"
 }
 
 variable "node_pool_disk_size" {
   type        = number
   description = "Size of the Node Pool Disk"
   default     = 50
+}
+
+variable "node_pool_initial_node_count" {
+  type        = number
+  description = "Initial number of nodes"
+  default     = 1
+}
+
+variable "node_pool_min_node_count" {
+  type        = number
+  description = "minimum number of nodes per zone"
+  default     = 0
+}
+
+variable "node_pool_max_node_count" {
+  type        = number
+  description = "maximum number of nodes per zone"
+  default     = 3
 }
 
 variable "storage_size_gb" {
@@ -131,4 +149,46 @@ variable "gke_node_pool_name" {
 variable "node_locations" {
   type        = list(string)
   description = "List of Strings for the Node Locations"
+}
+
+variable "node_pool_autoscaling_enabled" {
+  type        = string
+  description = "If node autoscaling should be enabled"
+  default     = false
+}
+
+variable "node_pool_upgrade_strategy" {
+  type        = string
+  description = "Upgrade strategy for node pool"
+  default     = "SURGE"
+}
+
+variable "node_pool_max_surge" {
+  type        = number
+  description = "Max surge nodes during surge upgrade process"
+  default     = 1
+}
+
+variable "node_pool_max_unavailable" {
+  type        = number
+  description = "Max unavailable nodes during surge upgrade process"
+  default     = 0
+}
+
+variable "node_pool_batch_node_count" {
+  type        = number
+  description = "Number of nodes to drain in a batch during blue-green upgrade process"
+  default     = 1
+}
+
+variable "node_pool_batch_soak_duration" {
+  type        = string
+  description = "Duration to wait after each batch finishes draining during blue-green upgrade process"
+  default     = "0s"
+}
+
+variable "node_pool_soak_duration" {
+  type        = string
+  description = "Duration to wait after all batches are drained during blue-green upgrade process"
+  default     = "3600s"
 }

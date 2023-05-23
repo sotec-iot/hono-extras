@@ -35,8 +35,18 @@ No requirements.
 | <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | Which Release Channel to use for the Cluster | `string` | `"STABLE"` | no |
 | <a name="input_ip_cidr_range"></a> [ip\_cidr\_range](#input\_ip\_cidr\_range) | The range of internal addresses that are owned by this subnetwork. Provide this property when you create the subnetwork.Ranges must be unique and non-overlapping within a network. Only IPv4 is supported. | `string` | `"10.10.1.0/24"` | no |
 | <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | List of Strings for the Node Locations | `list(string)` | n/a | yes |
+| <a name="input_node_pool_autoscaling_enabled"></a> [node\_pool\_autoscaling\_enabled](#input\_node\_pool\_autoscaling\_enabled) | If node autoscaling should be enabled | `string` | `false` | no |
+| <a name="input_node_pool_batch_node_count"></a> [node\_pool\_batch\_node\_count](#input\_node\_pool\_batch\_node\_count) | Number of nodes to drain in a batch during blue-green upgrade process | `number` | `1` | no |
+| <a name="input_node_pool_batch_soak_duration"></a> [node\_pool\_batch\_soak\_duration](#input\_node\_pool\_batch\_soak\_duration) | Duration to wait after each batch finishes draining during blue-green upgrade process | `string` | `"0s"` | no |
 | <a name="input_node_pool_disk_size"></a> [node\_pool\_disk\_size](#input\_node\_pool\_disk\_size) | Size of the Node Pool Disk | `number` | `50` | no |
 | <a name="input_node_pool_disk_type"></a> [node\_pool\_disk\_type](#input\_node\_pool\_disk\_type) | n/a | `string` | `"pd-standard"` | no |
+| <a name="input_node_pool_initial_node_count"></a> [node\_pool\_initial\_node\_count](#input\_node\_pool\_initial\_node\_count) | Initial number of nodes | `number` | `1` | no |
+| <a name="input_node_pool_max_node_count"></a> [node\_pool\_max\_node\_count](#input\_node\_pool\_max\_node\_count) | maximum number of nodes per zone | `number` | `3` | no |
+| <a name="input_node_pool_max_surge"></a> [node\_pool\_max\_surge](#input\_node\_pool\_max\_surge) | Max surge nodes during surge upgrade process | `number` | `1` | no |
+| <a name="input_node_pool_max_unavailable"></a> [node\_pool\_max\_unavailable](#input\_node\_pool\_max\_unavailable) | Max unavailable nodes during surge upgrade process | `number` | `0` | no |
+| <a name="input_node_pool_min_node_count"></a> [node\_pool\_min\_node\_count](#input\_node\_pool\_min\_node\_count) | minimum number of nodes per zone | `number` | `0` | no |
+| <a name="input_node_pool_soak_duration"></a> [node\_pool\_soak\_duration](#input\_node\_pool\_soak\_duration) | Duration to wait after all batches are drained during blue-green upgrade process | `string` | `"3600s"` | no |
+| <a name="input_node_pool_upgrade_strategy"></a> [node\_pool\_upgrade\_strategy](#input\_node\_pool\_upgrade\_strategy) | Upgrade strategy for node pool | `string` | `"SURGE"` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to deploy to | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region to deploy to | `string` | `"europe-west1"` | no |
 | <a name="input_secondary_ip_range_pods"></a> [secondary\_ip\_range\_pods](#input\_secondary\_ip\_range\_pods) | Secondary IP Ranges in Subnetwork for Pods | `string` | `"10.1.0.0/20"` | no |
@@ -45,8 +55,8 @@ No requirements.
 | <a name="input_sql_database_name"></a> [sql\_database\_name](#input\_sql\_database\_name) | The name of the database in the Cloud SQL instance. This does not include the project ID or instance name. | `string` | `"hono-db"` | no |
 | <a name="input_sql_db_user_name"></a> [sql\_db\_user\_name](#input\_sql\_db\_user\_name) | The name of the user. Changing this forces a new resource to be created. | `string` | `"hono-user"` | no |
 | <a name="input_sql_instance_activation_policy"></a> [sql\_instance\_activation\_policy](#input\_sql\_instance\_activation\_policy) | This specifies when the instance should be active. Can be either ALWAYS, NEVER or ON\_DEMAND. | `string` | `"ALWAYS"` | no |
-| <a name="input_sql_instance_deletion_policies"></a> [sql\_instance\_deletion\_policies](#input\_sql\_instance\_deletion\_policies) | Used to block Terraform from deleting a SQL Instance. Defaults to false. | `bool` | `false` | no |
-| <a name="input_sql_instance_disk_type"></a> [sql\_instance\_disk\_type](#input\_sql\_instance\_disk\_type) | Disk Type of the SQL Instance | `string` | `"pd-hdd"` | no |
+| <a name="input_sql_instance_deletion_policies"></a> [sql\_instance\_deletion\_policies](#input\_sql\_instance\_deletion\_policies) | Used to block Terraform from deleting a SQL Instance. Defaults to false. | `bool` | `true` | no |
+| <a name="input_sql_instance_disk_type"></a> [sql\_instance\_disk\_type](#input\_sql\_instance\_disk\_type) | Disk Type of the SQL Instance | `string` | `"PD-SSD"` | no |
 | <a name="input_sql_instance_ipv4_enable"></a> [sql\_instance\_ipv4\_enable](#input\_sql\_instance\_ipv4\_enable) | Whether this Cloud SQL instance should be assigned a public IPV4 address. At least ipv4\_enabled must be enabled or a private\_network must be configured. | `bool` | `false` | no |
 | <a name="input_sql_instance_machine_type"></a> [sql\_instance\_machine\_type](#input\_sql\_instance\_machine\_type) | Machine Type of the SQL Instance | `string` | `"db-custom-1-3840"` | no |
 | <a name="input_sql_instance_name"></a> [sql\_instance\_name](#input\_sql\_instance\_name) | Name of the SQL Instance | `string` | `"hono-sql"` | no |
@@ -58,6 +68,7 @@ No requirements.
 | Name | Description |
 |------|-------------|
 | <a name="output_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#output\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account |
+| <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for External Ingress |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress |
 | <a name="output_gke_cluster_ca_certificate"></a> [gke\_cluster\_ca\_certificate](#output\_gke\_cluster\_ca\_certificate) | CA-Certificate for the Cluster |
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | Name of the GKE Cluster |
