@@ -12,21 +12,20 @@ Prerequisites:
 The following steps need to be followed:
 
 1. Replace the placeholders in the following files with the name of the newly created bucket:
-   * backend.tf in environment-template/infrastructure,
-   * backend.tf and data.tf in environment-template/software.
+    * backend.tf in environment-template/infrastructure,
+    * backend.tf and data.tf in environment-template/software.
 2. Adjust the values in the locals.tf files in environment-template/infrastructure and environment-template/software to fit your case.
-3. For transport layer security (TLS) on the API and the MQTT adapter we are expecting key and cert files, named “api_tls.key”, “api_tls.crt”, “mqtt_tls.key” and “mqtt_tls.crt”, respectively, within the folder environment-template/software. The api files will be used to create both the esp-ssl and the ingress-tls secret. Rename the files you got from creating the certificates for your DNS records accordingly and copy them into the previously mentioned folder.
-4. Open a command-line interface (CLI).
-5. Set your project in your gcloud config by running the following command:
+3. Open a command-line interface (CLI).
+4. Set your project in your gcloud config by running the following command:
     ```
     gcloud config set project project-id
     ```
-   Replace <b>project-id</b> with the ID of your project.
-6. Log into your account by running:
+    Replace <b>project-id</b> with the ID of your project.
+5. Log into your account by running:
     ```
     gcloud auth application-default login
     ```
-7. Within your CLI navigate to the environment-template/infrastructure folder and run the following commands:
+6. Within your CLI navigate to the environment-template/infrastructure folder and run the following commands:
     ```
     terraform init
     ```
@@ -36,18 +35,17 @@ The following steps need to be followed:
     ```
     terraform apply
     ```
-8. After terraform apply is complete, setup DNS records for the Eclipse Hono API & MQTT endpoint (Example: api.hono.mydomain.com and mqtt.hono.mydomain.com) with the static IPs you get as an output from the terraform apply. For instructions on how to set up DNS records, see [Setup DNS records](https://cloud.google.com/dns/docs/set-up-dns-records-domain-name).
-
-9. Create Certificates for the DNS records. For example use [letsencrypt](https://letsencrypt.org/).
-
-10. Navigate to the environment-template/software folder within your CLI.
-
-11. Register gcloud as a Docker credential helper by running:
+7. After terraform apply is complete, setup DNS records for the Eclipse Hono API & MQTT endpoint (Example: api.hono.mydomain.com and mqtt.hono.mydomain.com) with the static IPs you get as an output from the terraform apply. For instructions on how to set up DNS records, see [Setup DNS records](https://cloud.google.com/dns/docs/set-up-dns-records-domain-name).
+8. Create Certificates for the DNS records. For example use [letsencrypt](https://letsencrypt.org/).
+9. For transport layer security (TLS) on the API and the MQTT adapter we are expecting key and cert files, named “api_tls.key”, “api_tls.crt”, “mqtt_tls.key” and “mqtt_tls.crt”, respectively, within the folder environment-template/software. The api files will be used to create both the esp-ssl and the ingress-tls secret. Rename the files you got from creating the certificates for your DNS records accordingly and copy them into the previously mentioned folder.
+10. Add the URI of the DNS record for the Eclipse Hono API/UI to the Authorized redirect URIs within your [OAuth Client](https://console.cloud.google.com/apis/credentials).
+11. Navigate to the environment-template/software folder within your CLI.
+12. Register gcloud as a Docker credential helper by running:
     ```
     gcloud auth configure-docker location-docker.pkg.dev
     ```
     Replace <b>location</b> with the location of the Artifact Registry, where the Helm chart is located.
-12. If your Helm chart is within a private Artifact Registry:
+13. If your Helm chart is within a private Artifact Registry:
 
     Authenticate with the registry using the following command:
 
@@ -61,11 +59,11 @@ The following steps need to be followed:
     ```
     returns: ya29.8QEQIfY_...
     ```
-    helm registry login -u oauth2accesstoken -p ya29.8QEQIfY_… \ https://location-docker.pkg.dev
+    helm registry login -u oauth2accesstoken -p ya29.8QEQIfY_… https://location-docker.pkg.dev
     ```
-
+    
     Replace <b>location</b> with the location of the Artifact Registry, where the Helm chart is located.
-13. Run the commands from step 7 again.
+14. Run the commands from step 7 again.
 
 
 More Details to Variables and Locals can be found in the template README´s

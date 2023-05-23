@@ -41,7 +41,7 @@ module "cloud_sql" {
   sql_instance_version           = var.sql_instance_version
   sql_instance_machine_type      = var.sql_instance_machine_type
   sql_instance_disk_type         = var.sql_instance_disk_type
-  sql_instance_deletion_policies  = var.sql_instance_deletion_policies
+  sql_instance_deletion_policies = var.sql_instance_deletion_policies
   sql_instance_activation_policy = var.sql_instance_activation_policy
   sql_public_ip_enable           = var.sql_instance_ipv4_enable
   sql_db_user_name               = var.sql_db_user_name
@@ -58,20 +58,30 @@ module "google_iam" {
 module "gke" {
   source = "../modules/gke"
 
-  project_id                = var.project_id
-  gke_cluster_name          = var.gke_cluster_name
-  region                    = var.region
-  network_name              = module.networking.network_name
-  subnetwork_name           = module.networking.subnetwork_name
-  gke_release_channel       = var.gke_release_channel
-  ip_ranges_services        = module.networking.ip_ranges_services_name
-  ip_ranges_pods            = module.networking.ip_ranges_pods_name
-  gke_service_account_email = module.google_iam.gke_service_account_email
-  gke_machine_type          = var.gke_machine_type
-  gke_node_pool_name        = var.gke_node_pool_name
-  node_locations            = var.node_locations
-  node_pool_disk_type       = var.node_pool_disk_type
-  node_pool_disk_size       = var.node_pool_disk_size
+  project_id                    = var.project_id
+  gke_cluster_name              = var.gke_cluster_name
+  region                        = var.region
+  network_name                  = module.networking.network_name
+  subnetwork_name               = module.networking.subnetwork_name
+  gke_release_channel           = var.gke_release_channel
+  ip_ranges_services            = module.networking.ip_ranges_services_name
+  ip_ranges_pods                = module.networking.ip_ranges_pods_name
+  gke_service_account_email     = module.google_iam.gke_service_account_email
+  gke_machine_type              = var.gke_machine_type
+  gke_node_pool_name            = var.gke_node_pool_name
+  node_locations                = var.node_locations
+  node_pool_disk_type           = var.node_pool_disk_type
+  node_pool_disk_size           = var.node_pool_disk_size
+  node_pool_initial_node_count  = var.node_pool_initial_node_count
+  node_pool_min_node_count      = var.node_pool_min_node_count
+  node_pool_max_node_count      = var.node_pool_max_node_count
+  node_pool_autoscaling_enabled = var.node_pool_autoscaling_enabled
+  node_pool_upgrade_strategy    = var.node_pool_upgrade_strategy
+  node_pool_max_surge           = var.node_pool_max_surge
+  node_pool_max_unavailable     = var.node_pool_max_unavailable
+  node_pool_batch_node_count    = var.node_pool_batch_node_count
+  node_pool_batch_soak_duration = var.node_pool_batch_soak_duration
+  node_pool_soak_duration       = var.node_pool_soak_duration
 
   depends_on = [
     google_project_service.project

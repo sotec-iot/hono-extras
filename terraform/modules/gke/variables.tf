@@ -67,3 +67,53 @@ variable "node_pool_disk_size" {
   type        = number
   description = "Size of the Node Pool Disk"
 }
+
+variable "node_pool_initial_node_count" {
+  type        = number
+  description = "Initial number of nodes"
+}
+
+variable "node_pool_min_node_count" {
+  type        = number
+  description = "Minimum number of nodes per zone"
+}
+
+variable "node_pool_max_node_count" {
+  type        = number
+  description = "Maximum number of nodes per zone"
+}
+
+variable "node_pool_autoscaling_enabled" {
+  type        = string
+  description = "If node autoscaling should be enabled"
+}
+
+variable "node_pool_upgrade_strategy" {
+  type        = string
+  description = "Upgrade strategy for node pool"
+}
+
+variable "node_pool_max_surge" {
+  type        = number
+  description = "Max surge nodes during surge upgrade process"
+}
+
+variable "node_pool_max_unavailable" {
+  type        = number
+  description = "Max unavailable nodes during surge upgrade process"
+}
+
+variable "node_pool_batch_node_count" {
+  type        = number
+  description = "Number of nodes to drain in a batch during blue-green upgrade process"
+}
+
+variable "node_pool_batch_soak_duration" {
+  type        = string
+  description = "Duration to wait after each batch finishes draining during blue-green upgrade process"
+}
+
+variable "node_pool_soak_duration" {
+  type        = string
+  description = "Duration to wait after all batches are drained during blue-green upgrade process"
+}

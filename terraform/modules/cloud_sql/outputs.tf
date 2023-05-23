@@ -10,7 +10,7 @@ output "sql_user" {
 }
 
 output "sql_ip" {
-  value       = google_sql_database_instance.hono_sql.ip_address[0].ip_address
+  value       = google_sql_database_instance.hono_sql.private_ip_address
   description = "URL of the Postgres Database"
 }
 
