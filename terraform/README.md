@@ -63,7 +63,16 @@ The following steps need to be followed:
     ```
     
     Replace <b>location</b> with the location of the Artifact Registry, where the Helm chart is located.
-14. Run the commands from step 7 again.
+14. Run the following commands again:
+    ```
+    terraform init
+    ```
+    ```
+    terraform plan
+    ```
+    ```
+    terraform apply
+    ```
 
 
 More Details to Variables and Locals can be found in the template README´s
