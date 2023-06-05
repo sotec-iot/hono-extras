@@ -17,6 +17,7 @@ module "hono" {
   device_communication_static_ip_name = var.device_communication_static_ip_name
   helm_package_repository             = var.helm_package_repository
   hono_chart_name                     = var.hono_chart_name
+  hono_chart_version                  = var.hono_chart_version
   oauth_app_name                      = var.oauth_app_name
   device_communication_dns_name       = var.device_communication_dns_name
   api_tls_key                         = var.api_tls_key
