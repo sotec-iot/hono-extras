@@ -129,7 +129,8 @@ resource "kubernetes_secret" "iap_client_secret" {
 resource "helm_release" "hono" {
   name             = "eclipse-hono"
   repository       = var.helm_package_repository # Repository of the hono package
-  chart            = var.hono_chart_name         # name of the Chart in the Repository         
+  chart            = var.hono_chart_name         # name of the chart in the repository
+  version          = var.hono_chart_version      # version of the chart in the repository
   namespace        = kubernetes_namespace.hono.metadata[0].name
   create_namespace = false
   timeout          = 600

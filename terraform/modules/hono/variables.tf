@@ -59,6 +59,11 @@ variable "hono_chart_name" {
   description = "Name of the Chart in the Repository"
 }
 
+variable "hono_chart_version" {
+  type        = string
+  description = "Version of the Chart in the Repository"
+}
+
 variable "oauth_app_name" {
   type        = string
   description = "Name of the OAuth Application"
