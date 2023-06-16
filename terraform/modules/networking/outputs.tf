@@ -18,8 +18,13 @@ output "network_id" {
   description = "Output of the network id of the network that is created"
 }
 
+output "http_static_ip" {
+  value       = google_compute_address.http_static_ip[*].address
+  description = "Output of the http static ip address"
+}
+
 output "mqtt_static_ip" {
-  value       = google_compute_address.mqtt_static_ip.address
+  value       = google_compute_address.mqtt_static_ip[*].address
   description = "Output of the mqtt static ip address"
 }
 

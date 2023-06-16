@@ -13,6 +13,21 @@ variable "project_id" {
   description = "Project ID in which the cluster is present"
 }
 
+variable "enable_http_adapter" {
+  type        = bool
+  description = "Used to enable the http adapter"
+}
+
+variable "enable_mqtt_adapter" {
+  type        = bool
+  description = "Used to enable the mqtt adapter"
+}
+
+variable "http_static_ip" {
+  type        = string
+  description = "static ip address for the http loadbalancer"
+}
+
 variable "mqtt_static_ip" {
   type        = string
   description = "static ip address for the mqtt loadbalancer"
@@ -59,6 +74,11 @@ variable "hono_chart_name" {
   description = "Name of the Chart in the Repository"
 }
 
+variable "hono_chart_version" {
+  type        = string
+  description = "Version of the Chart in the Repository"
+}
+
 variable "oauth_app_name" {
   type        = string
   description = "Name of the OAuth Application"
@@ -71,28 +91,73 @@ variable "device_communication_dns_name" {
 
 variable "api_tls_key" {
   type        = string
-  description = "Filename of the ingress tls/server Key File including file extension"
+  description = "Content of the ingress tls/server Key File"
 }
 
 variable "api_tls_crt" {
   type        = string
-  description = "Filename of the ingress tls/server Cert File including file extension"
+  description = "Content of the ingress tls/server Cert File"
+}
+
+variable "http_tls_key" {
+  type        = string
+  description = "Content of the http tls Key File"
+}
+
+variable "http_tls_crt" {
+  type        = string
+  description = "Content of the http tls Cert File"
 }
 
 variable "mqtt_tls_key" {
   type        = string
-  description = "Filename of the mqtt tls Key File including file extension"
+  description = "Content of the mqtt tls Key File"
 }
 
 variable "mqtt_tls_crt" {
   type        = string
-  description = "Filename of the mqtt tls Cert File including file extension"
+  description = "Content of the mqtt tls Cert File"
+}
+
+variable "api_tls_key_from_storage" {
+  type        = string
+  description = "Content of the ingress tls/server Key File from storage bucket"
+}
+
+variable "api_tls_crt_from_storage" {
+  type        = string
+  description = "Content of the ingress tls/server Cert File from storage bucket"
+}
+
+variable "http_tls_key_from_storage" {
+  type        = string
+  description = "Content of the http tls Key File from storage bucket"
+}
+
+variable "http_tls_crt_from_storage" {
+  type        = string
+  description = "Content of the http tls Cert File from storage bucket"
+}
+
+variable "mqtt_tls_key_from_storage" {
+  type        = string
+  description = "Content of the mqtt tls Key File from storage bucket"
+}
+
+variable "mqtt_tls_crt_from_storage" {
+  type        = string
+  description = "Content of the mqtt tls Cert File from storage bucket"
 }
 
 variable "cloud_endpoints_key_file" {
   type        = string
   description = "Service Account Key File for Cloud Endpoints Service Account"
   sensitive   = true
+}
+
+variable "http_secret_name" {
+  type = string
+  description = "Name of the kubernetes secret for the http adapter"
 }
 
 variable "mqtt_secret_name" {

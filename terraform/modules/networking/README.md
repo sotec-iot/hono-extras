@@ -16,6 +16,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [google_compute_address.http_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address) | resource |
 | [google_compute_address.mqtt_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address) | resource |
 | [google_compute_global_address.device_communication_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_compute_global_address.private_ip_address](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
@@ -27,6 +28,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_enable_http_ip_creation"></a> [enable\_http\_ip\_creation](#input\_enable\_http\_ip\_creation) | Used to enable the creation of a static ip for the http adapter | `string` | n/a | yes |
+| <a name="input_enable_mqtt_ip_creation"></a> [enable\_mqtt\_ip\_creation](#input\_enable\_mqtt\_ip\_creation) | Used to enable the creation of a static ip for the mqtt adapter | `string` | n/a | yes |
 | <a name="input_ip_cidr_range"></a> [ip\_cidr\_range](#input\_ip\_cidr\_range) | The range of internal addresses that are owned by this subnetwork. Provide this property when you create the subnetwork.Ranges must be unique and non-overlapping within a network. Only IPv4 is supported. | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to deploy to | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region to deploy to | `string` | n/a | yes |
@@ -39,6 +42,7 @@ No modules.
 |------|-------------|
 | <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for External Ingress |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress |
+| <a name="output_http_static_ip"></a> [http\_static\_ip](#output\_http\_static\_ip) | Output of the http static ip address |
 | <a name="output_ip_ranges_pods_name"></a> [ip\_ranges\_pods\_name](#output\_ip\_ranges\_pods\_name) | n/a |
 | <a name="output_ip_ranges_services_name"></a> [ip\_ranges\_services\_name](#output\_ip\_ranges\_services\_name) | n/a |
 | <a name="output_mqtt_static_ip"></a> [mqtt\_static\_ip](#output\_mqtt\_static\_ip) | Output of the mqtt static ip address |
