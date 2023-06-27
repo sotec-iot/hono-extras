@@ -69,5 +69,4 @@ variable "sql_database_name" {
 variable "sql_instance_backup_enable" {
   type        = bool
   description = "Whether this Cloud SQL instance should enable automatic backups"
-  default     = false
 }
