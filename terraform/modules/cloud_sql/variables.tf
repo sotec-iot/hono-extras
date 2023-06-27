@@ -65,3 +65,9 @@ variable "sql_database_name" {
   type        = string
   description = "The name of the database in the Cloud SQL instance. This does not include the project ID or instance name."
 }
+
+variable "sql_instance_backup_enable" {
+  type        = bool
+  description = "Whether this Cloud SQL instance should enable automatic backups"
+  default     = false
+}

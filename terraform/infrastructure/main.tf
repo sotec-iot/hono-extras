@@ -48,6 +48,7 @@ module "cloud_sql" {
   sql_public_ip_enable           = var.sql_instance_ipv4_enable
   sql_db_user_name               = var.sql_db_user_name
   sql_database_name              = var.sql_database_name
+  sql_instance_backup_enable     = var.sql_instance_backup_enable
 }
 
 module "google_iam" {
