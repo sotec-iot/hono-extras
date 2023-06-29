@@ -20,9 +20,17 @@ locals {
     {
       googleProjectId = var.project_id
       adapters = {
-        mqtt = {
+        http = {
+          enabled = var.enable_http_adapter
           svc = {
-            loadBalancerIP = var.mqtt_static_ip # sets a static IP loadbalancerIP for mqtt
+            loadBalancerIP = var.http_static_ip # sets a static IP loadbalancerIP for http adapter
+          }
+          tlsKeysSecret = var.http_secret_name
+        }
+        mqtt = {
+          enabled = var.enable_mqtt_adapter
+          svc = {
+            loadBalancerIP = var.mqtt_static_ip # sets a static IP loadbalancerIP for mqtt adapter
           }
           tlsKeysSecret = var.mqtt_secret_name
         }
@@ -72,35 +80,53 @@ resource "kubernetes_namespace" "hono" {
 }
 
 resource "kubernetes_secret" "ingress_secret_tls" {
+  count = (var.api_tls_crt != null && var.api_tls_key != null) || (var.api_tls_crt_from_storage != null && var.api_tls_key_from_storage != null) ? 1 : 0
   metadata {
     name      = var.ingress_secret_name
     namespace = kubernetes_namespace.hono.metadata[0].name
   }
+  type = "kubernetes.io/tls"
   data = {
-    "tls.crt" = var.api_tls_crt
-    "tls.key" = var.api_tls_key
+    "tls.crt" = var.api_tls_crt == null ? var.api_tls_crt_from_storage : var.api_tls_crt
+    "tls.key" = var.api_tls_key == null ? var.api_tls_key_from_storage : var.api_tls_key
   }
 }
 
 resource "kubernetes_secret" "esp-ssl" {
+  count = (var.api_tls_crt != null && var.api_tls_key != null) || (var.api_tls_crt_from_storage != null && var.api_tls_key_from_storage != null) ? 1 : 0
   metadata {
     name      = "esp-ssl"
     namespace = kubernetes_namespace.hono.metadata[0].name
   }
   data = {
-    "server.crt" = var.api_tls_crt
-    "server.key" = var.api_tls_key
+    "server.crt" = var.api_tls_crt == null ? var.api_tls_crt_from_storage : var.api_tls_crt
+    "server.key" = var.api_tls_key == null ? var.api_tls_key_from_storage : var.api_tls_key
+  }
+}
+
+resource "kubernetes_secret" "http_secret" {
+  count = var.enable_http_adapter && ((var.http_tls_crt != null && var.http_tls_key != null) || (var.http_tls_crt_from_storage != null && var.http_tls_key_from_storage != null)) ? 1 : 0
+  metadata {
+    name      = var.http_secret_name
+    namespace = kubernetes_namespace.hono.metadata[0].name
+  }
+  type = "kubernetes.io/tls"
+  data = {
+    "tls.crt" = var.http_tls_crt == null ? var.http_tls_crt_from_storage : var.http_tls_crt
+    "tls.key" = var.http_tls_key == null ? var.http_tls_key_from_storage : var.http_tls_key
   }
 }
 
 resource "kubernetes_secret" "mqtt_secret" {
+  count = var.enable_mqtt_adapter && ((var.mqtt_tls_crt != null && var.mqtt_tls_key != null) || (var.mqtt_tls_crt_from_storage != null && var.mqtt_tls_key_from_storage != null)) ? 1 : 0
   metadata {
     name      = var.mqtt_secret_name
     namespace = kubernetes_namespace.hono.metadata[0].name
   }
+  type = "kubernetes.io/tls"
   data = {
-    "tls.crt" = var.mqtt_tls_crt
-    "tls.key" = var.mqtt_tls_key
+    "tls.crt" = var.mqtt_tls_crt == null ? var.mqtt_tls_crt_from_storage : var.mqtt_tls_crt
+    "tls.key" = var.mqtt_tls_key == null ? var.mqtt_tls_key_from_storage : var.mqtt_tls_key
   }
 }
 

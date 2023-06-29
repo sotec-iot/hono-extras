@@ -13,7 +13,7 @@ The following steps need to be followed:
 
 1. Replace the placeholders in the following files with the name of the newly created bucket:
     * backend.tf in environment-template/infrastructure,
-    * backend.tf and data.tf in environment-template/software.
+    * backend.tf and locals.tf in environment-template/software.
 2. Adjust the values in the locals.tf files in environment-template/infrastructure and environment-template/software to fit your case.
 3. Open a command-line interface (CLI).
 4. Set your project in your gcloud config by running the following command:

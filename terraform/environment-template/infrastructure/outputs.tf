@@ -18,6 +18,11 @@ output "zone" {
   description = "Zone in which the Cluster will be deployed"
 }
 
+output "http_static_ip" {
+  value       = module.infrastructure.http_static_ip
+  description = "Static IP for the HTTP Workload"
+}
+
 output "mqtt_static_ip" {
   value       = module.infrastructure.mqtt_static_ip
   description = "Static IP for the MQTT Workload"

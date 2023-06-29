@@ -23,6 +23,8 @@ module "networking" {
   ip_cidr_range              = var.ip_cidr_range
   secondary_ip_range_service = var.secondary_ip_range_services
   secondary_ip_range_pods    = var.secondary_ip_range_pods
+  enable_http_ip_creation    = var.enable_http_ip_creation
+  enable_mqtt_ip_creation    = var.enable_mqtt_ip_creation
 
   depends_on = [
     google_project_service.project

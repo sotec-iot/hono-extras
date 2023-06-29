@@ -27,6 +27,18 @@ variable "secondary_ip_range_pods" {
   default     = "10.1.0.0/20"
 }
 
+variable "enable_http_ip_creation" {
+  type        = string
+  description = "Used to enable the creation of a static ip for the http adapter"
+  default     = false
+}
+
+variable "enable_mqtt_ip_creation" {
+  type        = string
+  description = "Used to enable the creation of a static ip for the mqtt adapter"
+  default     = true
+}
+
 variable "gke_machine_type" {
   type        = string
   description = "Machine Type for node_pools"
