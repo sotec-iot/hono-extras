@@ -20,6 +20,9 @@ resource "google_sql_database_instance" "hono_sql" {
       # Create private in the networking with the given
       private_network = var.network_id
     }
+    backup_configuration {
+      enabled = var.sql_instance_backup_enable
+    }
   }
 }
 
