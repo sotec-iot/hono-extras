@@ -29,6 +29,8 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_enable_http_ip_creation"></a> [enable\_http\_ip\_creation](#input\_enable\_http\_ip\_creation) | Used to enable the creation of a static ip for the http adapter | `string` | `false` | no |
+| <a name="input_enable_mqtt_ip_creation"></a> [enable\_mqtt\_ip\_creation](#input\_enable\_mqtt\_ip\_creation) | Used to enable the creation of a static ip for the mqtt adapter | `string` | `true` | no |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | `"hono-cluster"` | no |
 | <a name="input_gke_machine_type"></a> [gke\_machine\_type](#input\_gke\_machine\_type) | Machine Type for node\_pools | `string` | `"c2-standard-8"` | no |
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | `"standard-node-pool"` | no |
@@ -73,6 +75,7 @@ No requirements.
 | <a name="output_gke_cluster_ca_certificate"></a> [gke\_cluster\_ca\_certificate](#output\_gke\_cluster\_ca\_certificate) | CA-Certificate for the Cluster |
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | Name of the GKE Cluster |
 | <a name="output_gke_cluster_name_endpoint"></a> [gke\_cluster\_name\_endpoint](#output\_gke\_cluster\_name\_endpoint) | Endpoint of the GKE Cluster |
+| <a name="output_http_static_ip"></a> [http\_static\_ip](#output\_http\_static\_ip) | Output of the mqtt static ip address |
 | <a name="output_mqtt_static_ip"></a> [mqtt\_static\_ip](#output\_mqtt\_static\_ip) | Output of the mqtt static ip address |
 | <a name="output_service_name_communication"></a> [service\_name\_communication](#output\_service\_name\_communication) | Name of the Cloud Endpoint service for device communication |
 | <a name="output_sql_database"></a> [sql\_database](#output\_sql\_database) | Name of the Postgres Database |

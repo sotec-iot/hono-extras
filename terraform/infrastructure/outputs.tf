@@ -3,6 +3,11 @@ output "gke_cluster_name" {
   description = "Name of the GKE Cluster"
 }
 
+output "http_static_ip" {
+  value       = module.networking.http_static_ip
+  description = "Output of the mqtt static ip address"
+}
+
 output "mqtt_static_ip" {
   value       = module.networking.mqtt_static_ip
   description = "Output of the mqtt static ip address"

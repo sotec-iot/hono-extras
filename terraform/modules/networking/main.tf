@@ -26,8 +26,18 @@ resource "google_compute_subnetwork" "subnetwork" {
   private_ip_google_access = true
 }
 
-#Creating the Static IP address(external)
+#Creating the Static IP address(external) for the http adapter
+resource "google_compute_address" "http_static_ip" {
+  count        = var.enable_http_ip_creation ? 1 : 0
+  project      = var.project_id
+  region       = var.region
+  name         = "http-static-ip"
+  address_type = "EXTERNAL"
+}
+
+#Creating the Static IP address(external) for the mqtt adapter
 resource "google_compute_address" "mqtt_static_ip" {
+  count        = var.enable_mqtt_ip_creation ? 1 : 0
   project      = var.project_id
   region       = var.region
   name         = "mqtt-static-ip"

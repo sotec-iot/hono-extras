@@ -22,3 +22,13 @@ variable "secondary_ip_range_pods" {
   type        = string
   description = "Secondary IP Range for Pods"
 }
+
+variable "enable_http_ip_creation" {
+  type        = string
+  description = "Used to enable the creation of a static ip for the http adapter"
+}
+
+variable "enable_mqtt_ip_creation" {
+  type        = string
+  description = "Used to enable the creation of a static ip for the mqtt adapter"
+}
