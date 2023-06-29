@@ -204,3 +204,9 @@ variable "node_pool_soak_duration" {
   description = "Duration to wait after all batches are drained during blue-green upgrade process"
   default     = "3600s"
 }
+
+variable "sql_instance_backup_enable" {
+  type        = bool
+  description = "Whether this Cloud SQL instance should enable automatic backups"
+  default     = false
+}
