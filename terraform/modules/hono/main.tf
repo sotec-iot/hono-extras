@@ -80,7 +80,7 @@ resource "kubernetes_namespace" "hono" {
 }
 
 resource "kubernetes_secret" "ingress_secret_tls" {
-  count = (var.api_tls_crt != null || var.api_tls_crt_from_storage != null) && (var.api_tls_key != null || var.api_tls_key_from_storage != null) != null ? 1 : 0
+  count = (var.api_tls_crt != null && var.api_tls_key != null) || (var.api_tls_crt_from_storage != null && var.api_tls_key_from_storage != null) ? 1 : 0
   metadata {
     name      = var.ingress_secret_name
     namespace = kubernetes_namespace.hono.metadata[0].name
@@ -93,7 +93,7 @@ resource "kubernetes_secret" "ingress_secret_tls" {
 }
 
 resource "kubernetes_secret" "esp-ssl" {
-  count = (var.api_tls_crt != null || var.api_tls_crt_from_storage != null) && (var.api_tls_key != null || var.api_tls_key_from_storage != null) != null ? 1 : 0
+  count = (var.api_tls_crt != null && var.api_tls_key != null) || (var.api_tls_crt_from_storage != null && var.api_tls_key_from_storage != null) ? 1 : 0
   metadata {
     name      = "esp-ssl"
     namespace = kubernetes_namespace.hono.metadata[0].name
@@ -105,7 +105,7 @@ resource "kubernetes_secret" "esp-ssl" {
 }
 
 resource "kubernetes_secret" "http_secret" {
-  count = var.enable_http_adapter && (var.http_tls_crt != null || var.http_tls_crt_from_storage != null) && (var.http_tls_key != null || var.http_tls_key_from_storage != null) != null ? 1 : 0
+  count = var.enable_http_adapter && ((var.http_tls_crt != null && var.http_tls_key != null) || (var.http_tls_crt_from_storage != null && var.http_tls_key_from_storage != null)) ? 1 : 0
   metadata {
     name      = var.http_secret_name
     namespace = kubernetes_namespace.hono.metadata[0].name
@@ -118,7 +118,7 @@ resource "kubernetes_secret" "http_secret" {
 }
 
 resource "kubernetes_secret" "mqtt_secret" {
-  count = var.enable_mqtt_adapter && (var.mqtt_tls_crt != null || var.mqtt_tls_crt_from_storage != null) && (var.mqtt_tls_key != null || var.mqtt_tls_key_from_storage != null) ? 1 : 0
+  count = var.enable_mqtt_adapter && ((var.mqtt_tls_crt != null && var.mqtt_tls_key != null) || (var.mqtt_tls_crt_from_storage != null && var.mqtt_tls_key_from_storage != null)) ? 1 : 0
   metadata {
     name      = var.mqtt_secret_name
     namespace = kubernetes_namespace.hono.metadata[0].name
