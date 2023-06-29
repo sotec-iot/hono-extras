@@ -29,6 +29,7 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the service account needed for the use of cert manager | `bool` | `false` | no |
 | <a name="input_enable_http_ip_creation"></a> [enable\_http\_ip\_creation](#input\_enable\_http\_ip\_creation) | Used to enable the creation of a static ip for the http adapter | `string` | `false` | no |
 | <a name="input_enable_mqtt_ip_creation"></a> [enable\_mqtt\_ip\_creation](#input\_enable\_mqtt\_ip\_creation) | Used to enable the creation of a static ip for the mqtt adapter | `string` | `true` | no |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | `"hono-cluster"` | no |
@@ -69,6 +70,8 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cert_manager_sa_account_id"></a> [cert\_manager\_sa\_account\_id](#output\_cert\_manager\_sa\_account\_id) | Account id of the cert-manager Service Account |
+| <a name="output_cert_manager_sa_key_file"></a> [cert\_manager\_sa\_key\_file](#output\_cert\_manager\_sa\_key\_file) | Service Account Key File for cert-manager Service Account |
 | <a name="output_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#output\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account |
 | <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for External Ingress |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress |

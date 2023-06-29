@@ -56,6 +56,7 @@ module "google_iam" {
   service_name_communication   = module.cloud_endpoint.service_name_communication
   project_id                   = var.project_id
   service_account_roles_gke_sa = var.service_account_roles_gke_sa
+  enable_cert_manager          = var.enable_cert_manager
 }
 
 module "gke" {

@@ -7,18 +7,19 @@ locals {
   helm_package_repository       = "<helm-package-repository>"                 # Insert the link to your helm chart (e.g. oci://europe-west1-docker.pkg.dev/my-project/my-repository)
   hono_chart_name               = "<chart-name>"                              # Insert the name of your helm chart (e.g. hono)
 
-  # To create or change the kubernetes secrets please provide the private keys and certificates with the respective names inside the same folder as this file for the secrets you want to create.
+  enable_cert_manager           = false                                       # Toggle the use of the cert-manager
+
+  # In case enable_cert_manager is set to false:
+  #
+  # To create or change the hono domain kubernetes secret (wildcard certificate, e.g. *.my-domain.com) please provide the private key and certificate with the respective names inside the same folder as this file.
   #
   # File names:
-  #   For api secret:
-  #     api_tls.key
-  #     api_tls.crt
-  #   For http adapter secret:
-  #     http_tls.key
-  #     http_tls.crt
-  #   For mqtt adapter secret:
-  #     mqtt_tls.key
-  #     mqtt_tls.crt
+  #   hono_tls.key
+  #   hono_tls.crt
   #
-  # note: this is only needed to create a secret or to change it. Otherwise the key and certificate can be omitted.
+  # note: this is only needed to create the secret or to change it. Otherwise the key and certificate can be omitted.
+
+  # The following variable only have to be given values if enable_cert_manager is set to true!
+  cert_manager_email            = "<email>"                                   # Insert an E-Mail address to contact in case something goes wrong with the certificate renewal
+  wildcard_domain               = "<wildcard-domain>"                         # Insert your root domain with a wildcard character as a sub domain (e.g. *.my-domain.com)
 }
