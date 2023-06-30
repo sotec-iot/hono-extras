@@ -42,4 +42,5 @@ No inputs.
 | <a name="output_sql_db_pw"></a> [sql\_db\_pw](#output\_sql\_db\_pw) | SQL Database User Password |
 | <a name="output_sql_ip"></a> [sql\_ip](#output\_sql\_ip) | IP of the SQL Database |
 | <a name="output_sql_user"></a> [sql\_user](#output\_sql\_user) | SQL Database Username |
+| <a name="output_ssl_policy_name"></a> [ssl\_policy\_name](#output\_ssl\_policy\_name) | Name of the SSL policy for external ingress |
 | <a name="output_zone"></a> [zone](#output\_zone) | Zone in which the Cluster will be deployed |

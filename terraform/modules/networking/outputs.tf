@@ -30,12 +30,12 @@ output "mqtt_static_ip" {
 
 output "device_communication_static_ip_name" {
   value       = google_compute_global_address.device_communication_static_ip.name
-  description = "Name of the Static IP for External Ingress"
+  description = "Name of the static IP for external ingress"
 }
 
 output "device_communication_static_ip" {
   value       = google_compute_global_address.device_communication_static_ip.address
-  description = "Output of the static IP for External Ingress"
+  description = "Output of the static IP for external ingress"
 }
 
 output "ip_ranges_services_name" {
@@ -44,4 +44,9 @@ output "ip_ranges_services_name" {
 
 output "ip_ranges_pods_name" {
   value = google_compute_subnetwork.subnetwork.secondary_ip_range.1.range_name
+}
+
+output "ssl_policy_name" {
+  value = google_compute_ssl_policy.ssl_policy.name
+  description = "Name of the SSL policy for external ingress"
 }

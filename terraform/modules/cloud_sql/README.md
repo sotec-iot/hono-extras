@@ -33,6 +33,7 @@ No modules.
 | <a name="input_sql_database_name"></a> [sql\_database\_name](#input\_sql\_database\_name) | The name of the database in the Cloud SQL instance. This does not include the project ID or instance name. | `string` | n/a | yes |
 | <a name="input_sql_db_user_name"></a> [sql\_db\_user\_name](#input\_sql\_db\_user\_name) | The name of the user. Changing this forces a new resource to be created. | `string` | n/a | yes |
 | <a name="input_sql_instance_activation_policy"></a> [sql\_instance\_activation\_policy](#input\_sql\_instance\_activation\_policy) | This specifies when the instance should be active. Can be either ALWAYS, NEVER or ON\_DEMAND. | `string` | n/a | yes |
+| <a name="input_sql_instance_backup_enable"></a> [sql\_instance\_backup\_enable](#input\_sql\_instance\_backup\_enable) | Whether this Cloud SQL instance should enable automatic backups | `bool` | n/a | yes |
 | <a name="input_sql_instance_deletion_policies"></a> [sql\_instance\_deletion\_policies](#input\_sql\_instance\_deletion\_policies) | Used to block Terraform from deleting a SQL Instance. Defaults to false. | `bool` | n/a | yes |
 | <a name="input_sql_instance_disk_type"></a> [sql\_instance\_disk\_type](#input\_sql\_instance\_disk\_type) | Disk Type of the SQL Instance | `string` | n/a | yes |
 | <a name="input_sql_instance_machine_type"></a> [sql\_instance\_machine\_type](#input\_sql\_instance\_machine\_type) | Machine Type of the SQL Instance | `string` | n/a | yes |

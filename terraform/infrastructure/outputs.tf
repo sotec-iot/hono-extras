@@ -59,6 +59,11 @@ output "device_communication_static_ip" {
   description = "Output of the static IP for External Ingress"
 }
 
+output "ssl_policy_name" {
+  value = module.networking.ssl_policy_name
+  description = "Name of the SSL policy for external ingress"
+}
+
 output "cloud_endpoints_key_file" {
   value       = module.google_iam.cloud_endpoints_key_file
   description = "Service Account Key File for Cloud Endpoints Service Account"

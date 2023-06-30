@@ -65,6 +65,7 @@ locals {
         ingressTlsSecret  = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
         staticIpName      = var.device_communication_static_ip_name
         host              = var.device_communication_dns_name
+        sslPolicy         = var.ssl_policy_name
       }
       managementUi = {
         googleClientId = var.oauth_client_id
