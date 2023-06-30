@@ -73,17 +73,11 @@ locals {
   )]
 }
 
-resource "kubernetes_namespace" "hono" {
-  metadata {
-    name = var.namespace
-  }
-}
-
 resource "kubernetes_secret" "hono_domain_secret_tls" {
   count = !var.cert_manager_enabled && ((var.hono_tls_key != null && var.hono_tls_crt != null) || (var.hono_tls_key_from_storage != null && var.hono_tls_crt_from_storage != null)) ? 1 : 0
   metadata {
     name      = var.hono_domain_secret_name
-    namespace = kubernetes_namespace.hono.metadata[0].name
+    namespace = var.hono_namespace
   }
   type = "kubernetes.io/tls"
   data = {
@@ -95,7 +89,7 @@ resource "kubernetes_secret" "hono_domain_secret_tls" {
 resource "kubernetes_secret" "cloud_endpoints_key_file" {
   metadata {
     name      = "service-account-creds"
-    namespace = kubernetes_namespace.hono.metadata[0].name
+    namespace = var.hono_namespace
   }
   binary_data = {
     "hono-cloud-endpoint-manager.json" = var.cloud_endpoints_key_file
@@ -105,7 +99,7 @@ resource "kubernetes_secret" "cloud_endpoints_key_file" {
 resource "kubernetes_secret" "iap_client_secret" {
   metadata {
     name = "iap-client-secret"
-    namespace = kubernetes_namespace.hono.metadata[0].name
+    namespace = var.hono_namespace
   }
   data = {
     "client_id"     = var.oauth_client_id
@@ -118,7 +112,7 @@ resource "helm_release" "hono" {
   repository       = var.helm_package_repository # Repository of the hono package
   chart            = var.hono_chart_name         # name of the chart in the repository
   version          = var.hono_chart_version      # version of the chart in the repository
-  namespace        = kubernetes_namespace.hono.metadata[0].name
+  namespace        = var.hono_namespace
   create_namespace = false
   timeout          = 600
 

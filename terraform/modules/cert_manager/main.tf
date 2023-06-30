@@ -12,10 +12,8 @@ resource "helm_release" "cert-manager" {
   repository = "https://charts.jetstack.io"
   chart = "cert-manager"
   version = var.cert_manager_version
-
-
   namespace = var.cert_manager_namespace
-  create_namespace = true
+  create_namespace = false
 
   set {
     name  = "installCRDs"
@@ -63,6 +61,7 @@ resource "kubectl_manifest" "issuer_letsencrypt_prod" {
       }
     }
   })
+
   depends_on = [helm_release.cert-manager, kubernetes_secret.cert_manager_sa_key_secret]
 }
 
@@ -87,6 +86,6 @@ resource "kubectl_manifest" "certificate" {
       ]
     }
   })
-  depends_on = [helm_release.cert-manager, kubernetes_secret.cert_manager_sa_key_secret]
 
+  depends_on = [helm_release.cert-manager, kubernetes_secret.cert_manager_sa_key_secret]
 }

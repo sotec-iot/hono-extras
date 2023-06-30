@@ -1,6 +1,6 @@
-variable "namespace" {
+variable "hono_namespace" {
   type        = string
-  description = "namespace of the deployment"
+  description = "namespace of the hono deployment"
 }
 
 variable "cluster_name" {

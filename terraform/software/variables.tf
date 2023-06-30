@@ -1,4 +1,4 @@
-variable "namespace" {
+variable "hono_namespace" {
   type        = string
   description = "namespace of the deployment"
   default     = "hono"

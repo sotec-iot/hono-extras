@@ -1,11 +1,18 @@
 moved {
-  from = kubernetes_namespace.hono
-  to   = module.hono.kubernetes_namespace.hono
+  from = module.hono.kubernetes_namespace.hono
+  to   = module.namespace.kubernetes_namespace.hono
+}
+
+module "namespace" {
+  source = "../modules/namespace"
+  hono_namespace                      = var.hono_namespace
+  cert_manager_namespace              = var.cert_manager_namespace
+  enable_cert_manager                 = var.enable_cert_manager
 }
 
 module "hono" {
   source                              = "../modules/hono"
-  namespace                           = var.namespace
+  hono_namespace                      = var.hono_namespace
   cluster_name                        = var.cluster_name
   project_id                          = var.project_id
   enable_http_adapter                 = var.enable_http_adapter
@@ -33,14 +40,15 @@ module "hono" {
   oauth_client_id                     = var.oauth_client_id
   oauth_client_secret                 = var.oauth_client_secret
   cert_manager_enabled                = var.enable_cert_manager
-  depends_on = [module.cert-manager]
+
+  depends_on = [module.namespace, module.cert-manager]
 }
 
 module "cert-manager" {
   source                              = "../modules/cert_manager"
   count                               = var.enable_cert_manager ? 1 : 0
   project_id                          = var.project_id
-  hono_namespace                      = var.namespace
+  hono_namespace                      = var.hono_namespace
   cert_manager_namespace              = var.cert_manager_namespace
   cert_manager_version                = var.cert_manager_version
   cert_manager_issuer_kind            = var.cert_manager_issuer_kind
@@ -52,4 +60,6 @@ module "cert-manager" {
   cert_manager_cert_renew_before      = var.cert_manager_cert_renew_before
   hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
   wildcard_domain                     = var.wildcard_domain
+
+  depends_on = [module.namespace]
 }
