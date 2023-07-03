@@ -1,6 +1,6 @@
-variable "namespace" {
+variable "hono_namespace" {
   type        = string
-  description = "namespace of the deployment"
+  description = "namespace of the hono deployment"
 }
 
 variable "cluster_name" {
@@ -21,6 +21,11 @@ variable "enable_http_adapter" {
 variable "enable_mqtt_adapter" {
   type        = bool
   description = "Used to enable the mqtt adapter"
+}
+
+variable "cert_manager_enabled" {
+  type        = bool
+  description = "Disables the creation of TLS secrets to manually maintain"
 }
 
 variable "http_static_ip" {
@@ -89,64 +94,24 @@ variable "device_communication_dns_name" {
   description = "Name of the DNS Host"
 }
 
-variable "api_tls_key" {
+variable "hono_tls_key" {
   type        = string
-  description = "Content of the ingress tls/server Key File"
+  description = "Content of the hono domain tls Key File"
 }
 
-variable "api_tls_crt" {
+variable "hono_tls_crt" {
   type        = string
-  description = "Content of the ingress tls/server Cert File"
+  description = "Content of the hono domain tls Cert File"
 }
 
-variable "http_tls_key" {
+variable "hono_tls_key_from_storage" {
   type        = string
-  description = "Content of the http tls Key File"
+  description = "Content of the hono domain tls Key File from storage bucket"
 }
 
-variable "http_tls_crt" {
+variable "hono_tls_crt_from_storage" {
   type        = string
-  description = "Content of the http tls Cert File"
-}
-
-variable "mqtt_tls_key" {
-  type        = string
-  description = "Content of the mqtt tls Key File"
-}
-
-variable "mqtt_tls_crt" {
-  type        = string
-  description = "Content of the mqtt tls Cert File"
-}
-
-variable "api_tls_key_from_storage" {
-  type        = string
-  description = "Content of the ingress tls/server Key File from storage bucket"
-}
-
-variable "api_tls_crt_from_storage" {
-  type        = string
-  description = "Content of the ingress tls/server Cert File from storage bucket"
-}
-
-variable "http_tls_key_from_storage" {
-  type        = string
-  description = "Content of the http tls Key File from storage bucket"
-}
-
-variable "http_tls_crt_from_storage" {
-  type        = string
-  description = "Content of the http tls Cert File from storage bucket"
-}
-
-variable "mqtt_tls_key_from_storage" {
-  type        = string
-  description = "Content of the mqtt tls Key File from storage bucket"
-}
-
-variable "mqtt_tls_crt_from_storage" {
-  type        = string
-  description = "Content of the mqtt tls Cert File from storage bucket"
+  description = "Content of the hono domain tls Cert File from storage bucket"
 }
 
 variable "cloud_endpoints_key_file" {
@@ -155,19 +120,14 @@ variable "cloud_endpoints_key_file" {
   sensitive   = true
 }
 
-variable "http_secret_name" {
+variable "hono_domain_secret_name" {
   type = string
-  description = "Name of the kubernetes secret for the http adapter"
+  description = "Name of the kubernetes secret for the hono domain (wildcard)"
 }
 
-variable "mqtt_secret_name" {
+variable "hono_domain_managed_secret_name" {
   type = string
-  description = "Name of the kubernetes secret for the mqtt adapter"
-}
-
-variable "ingress_secret_name" {
-  type = string
-  description = "Name of the kubernetes secret for the ingress"
+  description = "Name of the kubernetes secret for the hono domain (wildcard) in case it is managed by cert-manager"
 }
 
 variable "oauth_client_id" {

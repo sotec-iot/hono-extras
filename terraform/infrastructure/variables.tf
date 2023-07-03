@@ -205,6 +205,12 @@ variable "node_pool_soak_duration" {
   default     = "3600s"
 }
 
+variable "enable_cert_manager" {
+  type        = bool
+  description = "Enables the service account needed for the use of cert manager"
+  default     = false
+}
+
 variable "sql_instance_backup_enable" {
   type        = bool
   description = "Whether this Cloud SQL instance should enable automatic backups"

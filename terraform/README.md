@@ -35,17 +35,22 @@ The following steps need to be followed:
     ```
     terraform apply
     ```
-7. After terraform apply is complete, setup DNS records for the Eclipse Hono API & MQTT endpoint (Example: api.hono.mydomain.com and mqtt.hono.mydomain.com) with the static IPs you get as an output from the terraform apply. For instructions on how to set up DNS records, see [Setup DNS records](https://cloud.google.com/dns/docs/set-up-dns-records-domain-name).
-8. Create Certificates for the DNS records. For example use [letsencrypt](https://letsencrypt.org/).
-9. For transport layer security (TLS) on the API and the MQTT adapter we are expecting key and cert files, named “api_tls.key”, “api_tls.crt”, “mqtt_tls.key” and “mqtt_tls.crt”, respectively, within the folder environment-template/software. The api files will be used to create both the esp-ssl and the ingress-tls secret. Rename the files you got from creating the certificates for your DNS records accordingly and copy them into the previously mentioned folder.
-10. Add the URI of the DNS record for the Eclipse Hono API/UI to the Authorized redirect URIs within your [OAuth Client](https://console.cloud.google.com/apis/credentials).
-11. Navigate to the environment-template/software folder within your CLI.
-12. Register gcloud as a Docker credential helper by running:
+7. Setup DNS records for the Eclipse Hono API & MQTT endpoint (Example: api.hono.my-domain.com and mqtt.hono.my-domain.com) with the static IPs you get as an output from the terraform apply. For instructions on how to set up DNS records in Google Cloud DNS, see [Setup DNS records](https://cloud.google.com/dns/docs/set-up-dns-records-domain-name).
+8. Next you have to decide if you want to use [cert-manager](https://cert-manager.io) or manage the TLS certificate manually.
+   1. Using cert-manager:
+      1. Make sure the DNS records are set up in [Google Cloud DNS](https://console.cloud.google.com/net-services/dns).
+      2. Enable the cert-manager in locals.tf in environment-template/software and provide a contact E-Mail and the root domain of the DNS records with a wildcard character (e.g. *.my-domain.com)
+   2. Manual Certificate management:
+      1. Create a wildcard certificate for the DNS records (e.g. *.my-domain.com). For example use [letsencrypt](https://letsencrypt.org).
+      2. Rename the certificate and key to "hono_tls.crt" and "hono_tls.key", respectively, and move them into the folder environment-template/software.
+9. Add the URI of the DNS record for the Eclipse Hono API/UI to the Authorized redirect URIs within your [OAuth Client](https://console.cloud.google.com/apis/credentials).
+10. Navigate to the environment-template/software folder within your CLI.
+11. Register gcloud as a Docker credential helper by running:
     ```
     gcloud auth configure-docker location-docker.pkg.dev
     ```
     Replace <b>location</b> with the location of the Artifact Registry, where the Helm chart is located.
-13. If your Helm chart is within a private Artifact Registry:
+12. If your Helm chart is within a private Artifact Registry:
 
     Authenticate with the registry using the following command:
 
@@ -63,7 +68,7 @@ The following steps need to be followed:
     ```
     
     Replace <b>location</b> with the location of the Artifact Registry, where the Helm chart is located.
-14. Run the following commands again:
+13. Run the following commands again:
     ```
     terraform init
     ```

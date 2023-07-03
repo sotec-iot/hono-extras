@@ -1,4 +1,4 @@
-variable "namespace" {
+variable "hono_namespace" {
   type        = string
   description = "namespace of the deployment"
   default     = "hono"
@@ -94,64 +94,24 @@ variable "device_communication_dns_name" {
   description = "Name of the DNS Host"
 }
 
-variable "api_tls_key" {
+variable "hono_tls_key" {
   type        = string
-  description = "Content of the ingress tls/server Key File"
+  description = "Content of the hono domain tls Key File"
 }
 
-variable "api_tls_crt" {
+variable "hono_tls_crt" {
   type        = string
-  description = "Content of the ingress tls/server Cert File"
+  description = "Content of the hono domain tls Cert File"
 }
 
-variable "http_tls_key" {
+variable "hono_tls_key_from_storage" {
   type        = string
-  description = "Content of the http tls Key File"
+  description = "Content of the hono domain tls Key File from storage bucket"
 }
 
-variable "http_tls_crt" {
+variable "hono_tls_crt_from_storage" {
   type        = string
-  description = "Content of the http tls Cert File"
-}
-
-variable "mqtt_tls_key" {
-  type        = string
-  description = "Content of the mqtt tls Key File"
-}
-
-variable "mqtt_tls_crt" {
-  type        = string
-  description = "Content of the mqtt tls Cert File"
-}
-
-variable "api_tls_key_from_storage" {
-  type        = string
-  description = "Content of the ingress tls/server Key File from storage bucket"
-}
-
-variable "api_tls_crt_from_storage" {
-  type        = string
-  description = "Content of the ingress tls/server Cert File from storage bucket"
-}
-
-variable "http_tls_key_from_storage" {
-  type        = string
-  description = "Content of the http tls Key File from storage bucket"
-}
-
-variable "http_tls_crt_from_storage" {
-  type        = string
-  description = "Content of the http tls Cert File from storage bucket"
-}
-
-variable "mqtt_tls_key_from_storage" {
-  type        = string
-  description = "Content of the mqtt tls Key File from storage bucket"
-}
-
-variable "mqtt_tls_crt_from_storage" {
-  type        = string
-  description = "Content of the mqtt tls Cert File from storage bucket"
+  description = "Content of the hono domain tls Cert File from storage bucket"
 }
 
 variable "cloud_endpoints_key_file" {
@@ -160,22 +120,16 @@ variable "cloud_endpoints_key_file" {
   sensitive   = true
 }
 
-variable "http_secret_name" {
+variable "hono_domain_secret_name" {
   type = string
-  description = "Name of the kubernetes secret for the http adapter"
-  default = "hono-http-secret"
+  description = "Name of the kubernetes secret for the hono domain (wildcard)"
+  default = "hono-domain-secret"
 }
 
-variable "mqtt_secret_name" {
+variable "hono_domain_managed_secret_name" {
   type = string
-  description = "Name of the kubernetes secret for the mqtt adapter"
-  default = "hono-mqtt-secret"
-}
-
-variable "ingress_secret_name" {
-  type = string
-  description = "Name of the kubernetes secret for the ingress"
-  default = "ingress-secret-tls"
+  description = "Name of the kubernetes secret for the hono domain (wildcard) in case it is managed by cert-manager"
+  default = "hono-domain-managed-secret"
 }
 
 variable "oauth_client_id" {
@@ -186,4 +140,67 @@ variable "oauth_client_id" {
 variable "oauth_client_secret" {
   type = string
   description = "The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
+}
+
+variable "enable_cert_manager" {
+  type        = bool
+  description = "Enables the use of cert manager."
+  default     = false
+}
+
+variable "cert_manager_namespace" {
+  type        = string
+  description = "namespace of the cert manager deployment."
+  default     = "cert-manager"
+}
+
+variable "cert_manager_version" {
+  type        = string
+  description = "Version of the chart to deploy."
+  default     = "1.12.2"
+}
+
+variable "cert_manager_issuer_kind" {
+  type        = string
+  description = "Kind of the cert-manager issuer (Issuer or ClusterIssuer)."
+  default     = "ClusterIssuer"
+}
+
+variable "cert_manager_issuer_name" {
+  type        = string
+  description = "Name of the cert-manager issuer."
+  default     = "letsencrypt-prod"
+}
+
+variable "cert_manager_email" {
+  type        = string
+  description = "E-Mail address to contact in case something goes wrong with the certificate renewal."
+}
+
+variable "cert_manager_sa_account_id" {
+  type        = string
+  description = "Account id of the cert-manager Service Account."
+}
+
+variable "cert_manager_sa_key_file" {
+  type        = string
+  description = "Service Account Key File for cert-manager Service Account."
+  sensitive   = true
+}
+
+variable "cert_manager_cert_duration" {
+  type        = string
+  description = "Validity period of a newly created certificate (e.g. 2160h for 90 day validity)."
+  default     = "2160h"
+}
+
+variable "cert_manager_cert_renew_before" {
+  type        = string
+  description = "When to renew the certificate based on its remaining validity period (e.g. 360h for 15 days before expiration)."
+  default     = "360h"
+}
+
+variable "wildcard_domain" {
+  type        = string
+  description = "The wildcard domain the secret will be maintained for (e.g. *.root-domain.com)."
 }
