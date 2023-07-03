@@ -1,11 +1,18 @@
 moved {
-  from = kubernetes_namespace.hono
-  to   = module.hono.kubernetes_namespace.hono
+  from = module.hono.kubernetes_namespace.hono
+  to   = module.namespace.kubernetes_namespace.hono
+}
+
+module "namespace" {
+  source = "../modules/namespace"
+  hono_namespace                      = var.hono_namespace
+  cert_manager_namespace              = var.cert_manager_namespace
+  enable_cert_manager                 = var.enable_cert_manager
 }
 
 module "hono" {
   source                              = "../modules/hono"
-  namespace                           = var.namespace
+  hono_namespace                      = var.hono_namespace
   cluster_name                        = var.cluster_name
   project_id                          = var.project_id
   enable_http_adapter                 = var.enable_http_adapter
@@ -23,24 +30,36 @@ module "hono" {
   hono_chart_version                  = var.hono_chart_version
   oauth_app_name                      = var.oauth_app_name
   device_communication_dns_name       = var.device_communication_dns_name
-  api_tls_key                         = var.api_tls_key
-  api_tls_crt                         = var.api_tls_crt
-  http_tls_key                        = var.http_tls_key
-  http_tls_crt                        = var.http_tls_crt
-  mqtt_tls_key                        = var.mqtt_tls_key
-  mqtt_tls_crt                        = var.mqtt_tls_crt
-  api_tls_key_from_storage            = var.api_tls_key_from_storage
-  api_tls_crt_from_storage            = var.api_tls_crt_from_storage
-  http_tls_key_from_storage           = var.http_tls_key_from_storage
-  http_tls_crt_from_storage           = var.http_tls_crt_from_storage
-  mqtt_tls_key_from_storage           = var.mqtt_tls_key_from_storage
-  mqtt_tls_crt_from_storage           = var.mqtt_tls_crt_from_storage
+  hono_tls_key                        = var.hono_tls_key
+  hono_tls_crt                        = var.hono_tls_crt
+  hono_tls_key_from_storage           = var.hono_tls_key_from_storage
+  hono_tls_crt_from_storage           = var.hono_tls_crt_from_storage
   cloud_endpoints_key_file            = var.cloud_endpoints_key_file
-  http_secret_name                    = var.http_secret_name
-  mqtt_secret_name                    = var.mqtt_secret_name
-  ingress_secret_name                 = var.ingress_secret_name
+  hono_domain_secret_name             = var.hono_domain_secret_name
+  hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
   oauth_client_id                     = var.oauth_client_id
   oauth_client_secret                 = var.oauth_client_secret
+  cert_manager_enabled                = var.enable_cert_manager
+
+  depends_on = [module.namespace, module.cert-manager]
 }
 
+module "cert-manager" {
+  source                              = "../modules/cert_manager"
+  count                               = var.enable_cert_manager ? 1 : 0
+  project_id                          = var.project_id
+  hono_namespace                      = var.hono_namespace
+  cert_manager_namespace              = var.cert_manager_namespace
+  cert_manager_version                = var.cert_manager_version
+  cert_manager_issuer_kind            = var.cert_manager_issuer_kind
+  cert_manager_issuer_name            = var.cert_manager_issuer_name
+  cert_manager_email                  = var.cert_manager_email
+  cert_manager_sa_account_id          = var.cert_manager_sa_account_id
+  cert_manager_sa_key_file            = var.cert_manager_sa_key_file
+  cert_manager_cert_duration          = var.cert_manager_cert_duration
+  cert_manager_cert_renew_before      = var.cert_manager_cert_renew_before
+  hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
+  wildcard_domain                     = var.wildcard_domain
 
+  depends_on = [module.namespace]
+}

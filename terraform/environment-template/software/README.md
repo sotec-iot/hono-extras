@@ -4,6 +4,7 @@
 |------|---------|
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 4 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | ~> 2 |
+| <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | ~> 1 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2 |
 
 ## Providers
@@ -36,10 +37,6 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_api_tls_crt_in_storage"></a> [api\_tls\_crt\_in\_storage](#output\_api\_tls\_crt\_in\_storage) | n/a |
-| <a name="output_api_tls_key_in_storage"></a> [api\_tls\_key\_in\_storage](#output\_api\_tls\_key\_in\_storage) | n/a |
-| <a name="output_http_tls_crt_in_storage"></a> [http\_tls\_crt\_in\_storage](#output\_http\_tls\_crt\_in\_storage) | n/a |
-| <a name="output_http_tls_key_in_storage"></a> [http\_tls\_key\_in\_storage](#output\_http\_tls\_key\_in\_storage) | n/a |
-| <a name="output_mqtt_tls_crt_in_storage"></a> [mqtt\_tls\_crt\_in\_storage](#output\_mqtt\_tls\_crt\_in\_storage) | n/a |
-| <a name="output_mqtt_tls_key_in_storage"></a> [mqtt\_tls\_key\_in\_storage](#output\_mqtt\_tls\_key\_in\_storage) | n/a |
+| <a name="output_hono_tls_crt_in_storage"></a> [hono\_tls\_crt\_in\_storage](#output\_hono\_tls\_crt\_in\_storage) | n/a |
+| <a name="output_hono_tls_key_in_storage"></a> [hono\_tls\_key\_in\_storage](#output\_hono\_tls\_key\_in\_storage) | n/a |
 | <a name="output_values"></a> [values](#output\_values) | n/a |

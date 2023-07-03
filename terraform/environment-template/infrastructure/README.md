@@ -27,6 +27,8 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cert_manager_sa_account_id"></a> [cert\_manager\_sa\_account\_id](#output\_cert\_manager\_sa\_account\_id) | Account id of the cert-manager Service Account |
+| <a name="output_cert_manager_sa_key_file"></a> [cert\_manager\_sa\_key\_file](#output\_cert\_manager\_sa\_key\_file) | Service Account Key File for cert-manager Service Account |
 | <a name="output_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#output\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account |
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | Name of the GKE Cluster |
 | <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for External Ingress |

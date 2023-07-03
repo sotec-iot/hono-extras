@@ -18,3 +18,14 @@ output "cloud_endpoints_key_file" {
   description = "Service Account Key File for Cloud Endpoints Service Account"
   sensitive   = true
 }
+
+output "cert_manager_sa_account_id" {
+  value       = google_service_account.cert_manager_sa[*].account_id
+  description = "Account id of the cert-manager Service Account"
+}
+
+output "cert_manager_sa_key_file" {
+  value       = google_service_account_key.cert_manager_sa_key[*].private_key
+  description = "Service Account Key File for cert-manager Service Account"
+  sensitive   = true
+}
