@@ -67,3 +67,8 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
 }
 
+resource "google_compute_ssl_policy" "ssl_policy" {
+  name            = var.ssl_policy_name
+  profile         = var.ssl_policy_profile
+  min_tls_version = var.ssl_policy_min_tls_version
+}

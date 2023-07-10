@@ -40,6 +40,7 @@ module "hono" {
   oauth_client_id                     = var.oauth_client_id
   oauth_client_secret                 = var.oauth_client_secret
   cert_manager_enabled                = var.enable_cert_manager
+  ssl_policy_name                     = var.ssl_policy_name
 
   depends_on = [module.namespace, module.cert-manager]
 }

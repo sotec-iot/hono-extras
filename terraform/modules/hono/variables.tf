@@ -139,3 +139,8 @@ variable "oauth_client_secret" {
   type = string
   description = "The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
 }
+
+variable "ssl_policy_name" {
+  type = string
+  description = "Name of the SSL policy for external ingress"
+}

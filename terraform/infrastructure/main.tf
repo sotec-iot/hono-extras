@@ -25,6 +25,9 @@ module "networking" {
   secondary_ip_range_pods    = var.secondary_ip_range_pods
   enable_http_ip_creation    = var.enable_http_ip_creation
   enable_mqtt_ip_creation    = var.enable_mqtt_ip_creation
+  ssl_policy_name            = var.ssl_policy_name
+  ssl_policy_profile         = var.ssl_policy_profile
+  ssl_policy_min_tls_version = var.ssl_policy_min_tls_version
 
   depends_on = [
     google_project_service.project

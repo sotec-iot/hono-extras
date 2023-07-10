@@ -11,6 +11,7 @@ module "software" {
   sql_database                        = data.terraform_remote_state.infrastructure.outputs.sql_database
   service_name_communication          = data.terraform_remote_state.infrastructure.outputs.service_name_communication
   device_communication_static_ip_name = data.terraform_remote_state.infrastructure.outputs.device_communication_static_ip_name
+  ssl_policy_name                     = data.terraform_remote_state.infrastructure.outputs.ssl_policy_name
   cloud_endpoints_key_file            = data.terraform_remote_state.infrastructure.outputs.cloud_endpoints_key_file
   cert_manager_sa_account_id          = try(data.terraform_remote_state.infrastructure.outputs.cert_manager_sa_account_id[0], "")
   cert_manager_sa_key_file            = try(data.terraform_remote_state.infrastructure.outputs.cert_manager_sa_key_file[0], "")
