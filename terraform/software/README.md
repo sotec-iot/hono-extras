@@ -59,6 +59,7 @@ No resources.
 | <a name="input_sql_db_pw"></a> [sql\_db\_pw](#input\_sql\_db\_pw) | password for the sql\_user for the database | `string` | n/a | yes |
 | <a name="input_sql_ip"></a> [sql\_ip](#input\_sql\_ip) | URL of the Postgres Database | `string` | n/a | yes |
 | <a name="input_sql_user"></a> [sql\_user](#input\_sql\_user) | username of the sql database username | `string` | n/a | yes |
+| <a name="input_ssl_policy_name"></a> [ssl\_policy\_name](#input\_ssl\_policy\_name) | Name of the SSL policy for external ingress | `string` | n/a | yes |
 | <a name="input_wildcard_domain"></a> [wildcard\_domain](#input\_wildcard\_domain) | The wildcard domain the secret will be maintained for (e.g. *.root-domain.com). | `string` | n/a | yes |
 
 ## Outputs

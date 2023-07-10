@@ -216,3 +216,21 @@ variable "sql_instance_backup_enable" {
   description = "Whether this Cloud SQL instance should enable automatic backups"
   default     = false
 }
+
+variable "ssl_policy_name" {
+  type        = string
+  description = "The name of the SSL policy"
+  default     = "hono-ingress"
+}
+
+variable "ssl_policy_profile" {
+  type        = string
+  description = "The profile of the SSL policy"
+  default     = "MODERN"
+}
+
+variable "ssl_policy_min_tls_version" {
+  type        = string
+  description = "The minimum TLS version the SSL policy should allow"
+  default     = "TLS_1_2"
+}

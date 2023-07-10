@@ -58,12 +58,16 @@ No requirements.
 | <a name="input_sql_database_name"></a> [sql\_database\_name](#input\_sql\_database\_name) | The name of the database in the Cloud SQL instance. This does not include the project ID or instance name. | `string` | `"hono-db"` | no |
 | <a name="input_sql_db_user_name"></a> [sql\_db\_user\_name](#input\_sql\_db\_user\_name) | The name of the user. Changing this forces a new resource to be created. | `string` | `"hono-user"` | no |
 | <a name="input_sql_instance_activation_policy"></a> [sql\_instance\_activation\_policy](#input\_sql\_instance\_activation\_policy) | This specifies when the instance should be active. Can be either ALWAYS, NEVER or ON\_DEMAND. | `string` | `"ALWAYS"` | no |
+| <a name="input_sql_instance_backup_enable"></a> [sql\_instance\_backup\_enable](#input\_sql\_instance\_backup\_enable) | Whether this Cloud SQL instance should enable automatic backups | `bool` | `false` | no |
 | <a name="input_sql_instance_deletion_policies"></a> [sql\_instance\_deletion\_policies](#input\_sql\_instance\_deletion\_policies) | Used to block Terraform from deleting a SQL Instance. Defaults to false. | `bool` | `true` | no |
 | <a name="input_sql_instance_disk_type"></a> [sql\_instance\_disk\_type](#input\_sql\_instance\_disk\_type) | Disk Type of the SQL Instance | `string` | `"PD-SSD"` | no |
 | <a name="input_sql_instance_ipv4_enable"></a> [sql\_instance\_ipv4\_enable](#input\_sql\_instance\_ipv4\_enable) | Whether this Cloud SQL instance should be assigned a public IPV4 address. At least ipv4\_enabled must be enabled or a private\_network must be configured. | `bool` | `false` | no |
 | <a name="input_sql_instance_machine_type"></a> [sql\_instance\_machine\_type](#input\_sql\_instance\_machine\_type) | Machine Type of the SQL Instance | `string` | `"db-custom-1-3840"` | no |
 | <a name="input_sql_instance_name"></a> [sql\_instance\_name](#input\_sql\_instance\_name) | Name of the SQL Instance | `string` | `"hono-sql"` | no |
 | <a name="input_sql_instance_version"></a> [sql\_instance\_version](#input\_sql\_instance\_version) | Database Version | `string` | `"POSTGRES_14"` | no |
+| <a name="input_ssl_policy_min_tls_version"></a> [ssl\_policy\_min\_tls\_version](#input\_ssl\_policy\_min\_tls\_version) | The minimum TLS version the SSL policy should allow | `string` | `"TLS_1_2"` | no |
+| <a name="input_ssl_policy_name"></a> [ssl\_policy\_name](#input\_ssl\_policy\_name) | The name of the SSL policy | `string` | `"hono-ingress"` | no |
+| <a name="input_ssl_policy_profile"></a> [ssl\_policy\_profile](#input\_ssl\_policy\_profile) | The profile of the SSL policy | `string` | `"MODERN"` | no |
 | <a name="input_storage_size_gb"></a> [storage\_size\_gb](#input\_storage\_size\_gb) | The storage size in GB for the Cloud SQL Instance (100 or 200) | `number` | `100` | no |
 
 ## Outputs
@@ -85,3 +89,4 @@ No requirements.
 | <a name="output_sql_db_pw"></a> [sql\_db\_pw](#output\_sql\_db\_pw) | Output of the SQL user password |
 | <a name="output_sql_ip"></a> [sql\_ip](#output\_sql\_ip) | URL of the Postgres Database |
 | <a name="output_sql_user"></a> [sql\_user](#output\_sql\_user) | Output of the SQL user name |
+| <a name="output_ssl_policy_name"></a> [ssl\_policy\_name](#output\_ssl\_policy\_name) | Name of the SSL policy for external ingress |

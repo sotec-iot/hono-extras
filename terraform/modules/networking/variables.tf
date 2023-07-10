@@ -32,3 +32,18 @@ variable "enable_mqtt_ip_creation" {
   type        = string
   description = "Used to enable the creation of a static ip for the mqtt adapter"
 }
+
+variable "ssl_policy_name" {
+  type        = string
+  description = "The name of the SSL policy"
+}
+
+variable "ssl_policy_profile" {
+  type        = string
+  description = "The profile of the SSL policy"
+}
+
+variable "ssl_policy_min_tls_version" {
+  type        = string
+  description = "The minimum TLS version the SSL policy should allow"
+}

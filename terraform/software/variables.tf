@@ -204,3 +204,8 @@ variable "wildcard_domain" {
   type        = string
   description = "The wildcard domain the secret will be maintained for (e.g. *.root-domain.com)."
 }
+
+variable "ssl_policy_name" {
+  type = string
+  description = "Name of the SSL policy for external ingress"
+}
