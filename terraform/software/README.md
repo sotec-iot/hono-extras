@@ -13,6 +13,7 @@ No providers.
 | <a name="module_cert-manager"></a> [cert-manager](#module\_cert-manager) | ../modules/cert_manager | n/a |
 | <a name="module_hono"></a> [hono](#module\_hono) | ../modules/hono | n/a |
 | <a name="module_namespace"></a> [namespace](#module\_namespace) | ../modules/namespace | n/a |
+| <a name="module_stakater-reloader"></a> [stakater-reloader](#module\_stakater-reloader) | ../modules/stakater_reloader | n/a |
 
 ## Resources
 
@@ -54,12 +55,13 @@ No resources.
 | <a name="input_oauth_client_id"></a> [oauth\_client\_id](#input\_oauth\_client\_id) | The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP) | `string` | n/a | yes |
 | <a name="input_oauth_client_secret"></a> [oauth\_client\_secret](#input\_oauth\_client\_secret) | The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP) | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID in which the cluster is present | `string` | n/a | yes |
+| <a name="input_reloader_version"></a> [reloader\_version](#input\_reloader\_version) | Version of the stakater reloader helm chart. | `string` | `"v1.0.29"` | no |
 | <a name="input_service_name_communication"></a> [service\_name\_communication](#input\_service\_name\_communication) | name of the Cloud Endpoint service for device communication | `string` | n/a | yes |
 | <a name="input_sql_database"></a> [sql\_database](#input\_sql\_database) | name of the Postgres Database | `string` | n/a | yes |
 | <a name="input_sql_db_pw"></a> [sql\_db\_pw](#input\_sql\_db\_pw) | password for the sql\_user for the database | `string` | n/a | yes |
 | <a name="input_sql_ip"></a> [sql\_ip](#input\_sql\_ip) | URL of the Postgres Database | `string` | n/a | yes |
 | <a name="input_sql_user"></a> [sql\_user](#input\_sql\_user) | username of the sql database username | `string` | n/a | yes |
-| <a name="input_ssl_policy_name"></a> [ssl\_policy\_name](#input\_ssl\_policy\_name) | Name of the SSL policy for external ingress | `string` | n/a | yes |
+| <a name="input_ssl_policy_name"></a> [ssl\_policy\_name](#input\_ssl\_policy\_name) | Name of the SSL policy for external ingress. | `string` | n/a | yes |
 | <a name="input_wildcard_domain"></a> [wildcard\_domain](#input\_wildcard\_domain) | The wildcard domain the secret will be maintained for (e.g. *.root-domain.com). | `string` | n/a | yes |
 
 ## Outputs

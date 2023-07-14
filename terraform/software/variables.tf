@@ -207,5 +207,11 @@ variable "wildcard_domain" {
 
 variable "ssl_policy_name" {
   type = string
-  description = "Name of the SSL policy for external ingress"
+  description = "Name of the SSL policy for external ingress."
+}
+
+variable "reloader_version" {
+  type        = string
+  description = "Version of the stakater reloader helm chart."
+  default     = "v1.0.29"
 }

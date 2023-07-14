@@ -64,3 +64,11 @@ module "cert-manager" {
 
   depends_on = [module.namespace]
 }
+
+module "stakater-reloader" {
+  source                              = "../modules/stakater_reloader"
+  count                               = var.enable_cert_manager ? 1 : 0
+  hono_namespace                      = var.hono_namespace
+  reloader_version                    = var.reloader_version
+  depends_on = [module.namespace]
+}
