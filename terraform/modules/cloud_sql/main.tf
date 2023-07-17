@@ -29,7 +29,7 @@ resource "google_sql_database_instance" "hono_sql" {
 resource "random_password" "password" {
   length           = 16
   special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  override_special = "!#$%&*()-_=+[]}<>:?"
 }
 
 resource "google_sql_user" "hono-sql-user" {
