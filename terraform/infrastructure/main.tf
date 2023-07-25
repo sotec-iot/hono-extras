@@ -37,21 +37,24 @@ module "networking" {
 module "cloud_sql" {
   source = "../modules/cloud_sql"
 
-  project_id                     = var.project_id
-  region                         = var.region
-  storage_size_gb                = var.storage_size_gb
-  service_networking             = module.networking.service_networking
-  network_id                     = module.networking.network_id
-  sql_instance_name              = var.sql_instance_name
-  sql_instance_version           = var.sql_instance_version
-  sql_instance_machine_type      = var.sql_instance_machine_type
-  sql_instance_disk_type         = var.sql_instance_disk_type
-  sql_instance_deletion_policies = var.sql_instance_deletion_policies
-  sql_instance_activation_policy = var.sql_instance_activation_policy
-  sql_public_ip_enable           = var.sql_instance_ipv4_enable
-  sql_db_user_name               = var.sql_db_user_name
-  sql_database_name              = var.sql_database_name
-  sql_instance_backup_enable     = var.sql_instance_backup_enable
+  project_id                                = var.project_id
+  region                                    = var.region
+  storage_size_gb                           = var.storage_size_gb
+  service_networking                        = module.networking.service_networking
+  network_id                                = module.networking.network_id
+  sql_instance_name                         = var.sql_instance_name
+  sql_instance_version                      = var.sql_instance_version
+  sql_instance_machine_type                 = var.sql_instance_machine_type
+  sql_instance_disk_type                    = var.sql_instance_disk_type
+  sql_instance_deletion_protection_enabled  = var.sql_instance_deletion_protection_enabled
+  sql_instance_activation_policy            = var.sql_instance_activation_policy
+  sql_public_ip_enable                      = var.sql_instance_ipv4_enable
+  sql_db_user_name                          = var.sql_db_user_name
+  sql_database_name                         = var.sql_database_name
+  sql_instance_backup_enabled               = var.sql_instance_backup_enabled
+  sql_instance_backup_location              = var.sql_instance_backup_location
+  sql_instance_backup_start_time            = var.sql_instance_backup_start_time
+  sql_instance_backup_count                 = var.sql_instance_backup_count
 }
 
 module "google_iam" {
