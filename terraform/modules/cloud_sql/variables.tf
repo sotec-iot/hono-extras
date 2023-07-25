@@ -41,9 +41,9 @@ variable "sql_instance_disk_type" {
   description = "Disk Type of the SQL Instance"
 }
 
-variable "sql_instance_deletion_policies" {
+variable "sql_instance_deletion_protection_enabled" {
   type        = bool
-  description = "Used to block Terraform from deleting a SQL Instance. Defaults to false."
+  description = "Enables the deletion protection for the SQL instance."
 }
 
 variable "sql_instance_activation_policy" {
@@ -66,7 +66,22 @@ variable "sql_database_name" {
   description = "The name of the database in the Cloud SQL instance. This does not include the project ID or instance name."
 }
 
-variable "sql_instance_backup_enable" {
+variable "sql_instance_backup_enabled" {
   type        = bool
-  description = "Whether this Cloud SQL instance should enable automatic backups"
+  description = "Whether this Cloud SQL instance should enable automatic backups."
+}
+
+variable "sql_instance_backup_location" {
+  type        = string
+  description = "Location where the Cloud SQL instance backups are stored."
+}
+
+variable "sql_instance_backup_start_time" {
+  type        = string
+  description = "The time at which the Cloud SQL instance should start the daily backup."
+}
+
+variable "sql_instance_backup_count" {
+  type        = number
+  description = "The number of backups the Cloud SQL instance should retain."
 }
