@@ -63,9 +63,9 @@ variable "sql_instance_version" {
   default     = "POSTGRES_14"
 }
 
-variable "sql_instance_deletion_policies" {
+variable "sql_instance_deletion_protection_enabled" {
   type        = bool
-  description = "Used to block Terraform from deleting a SQL Instance. Defaults to false."
+  description = "Enables the deletion protection for the SQL instance."
   default     = true
 }
 
@@ -211,10 +211,28 @@ variable "enable_cert_manager" {
   default     = false
 }
 
-variable "sql_instance_backup_enable" {
+variable "sql_instance_backup_enabled" {
   type        = bool
-  description = "Whether this Cloud SQL instance should enable automatic backups"
+  description = "Whether this Cloud SQL instance should enable automatic backups."
   default     = false
+}
+
+variable "sql_instance_backup_location" {
+  type        = string
+  description = "Location where the Cloud SQL instance backups are stored."
+  default     = null
+}
+
+variable "sql_instance_backup_start_time" {
+  type        = string
+  description = "The time at which the Cloud SQL instance should start the daily backup."
+  default     = "03:00"
+}
+
+variable "sql_instance_backup_count" {
+  type        = number
+  description = "The number of backups the Cloud SQL instance should retain."
+  default     = 14
 }
 
 variable "ssl_policy_name" {
