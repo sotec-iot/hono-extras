@@ -205,6 +205,18 @@ variable "wildcard_domain" {
   description = "The wildcard domain the secret will be maintained for (e.g. *.root-domain.com)."
 }
 
+variable "trust_manager_version" {
+  type        = string
+  description = "Version of the chart to deploy."
+  default     = "0.5.0"
+}
+
+variable "hono_trust_store_config_map_name" {
+  type        = string
+  description = "Name of the kubernetes trust store config map for the hono deployments managed by trust-manager."
+  default     = "hono-trust-store-config-map"
+}
+
 variable "ssl_policy_name" {
   type = string
   description = "Name of the SSL policy for external ingress."
