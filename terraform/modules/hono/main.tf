@@ -16,6 +16,12 @@ locals {
     }
   }
 
+  deployment = {
+    annotations = {
+      "reloader.stakater.com/auto" = "true"
+    }
+  }
+
   values = [jsonencode(
     {
       googleProjectId = var.project_id
@@ -25,22 +31,38 @@ locals {
           svc = {
             loadBalancerIP = var.http_static_ip # sets a static IP loadbalancerIP for http adapter
           }
+          deployment = local.deployment
           tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+          tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
         }
         mqtt = {
           enabled = var.enable_mqtt_adapter
           svc = {
             loadBalancerIP = var.mqtt_static_ip # sets a static IP loadbalancerIP for mqtt adapter
           }
+          deployment = local.deployment
           tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+          tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
         }
       }
+      authServer = {
+        deployment = local.deployment
+        tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+      }
       deviceRegistryExample = {
+        tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+        tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
         # sets database connection config
         jdbcBasedDeviceRegistry = {
+          deployment = local.deployment
           tenant   = local.database_block
           registry = local.database_block
         }
+      }
+      commandRouterService = {
+        deployment = local.deployment
+        tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+        tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
       }
       deviceCommunication = {
         app = {

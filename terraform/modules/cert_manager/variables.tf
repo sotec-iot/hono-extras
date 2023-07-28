@@ -18,6 +18,11 @@ variable "cert_manager_version" {
   description = "Version of the chart to deploy."
 }
 
+variable "trust_manager_version" {
+  type        = string
+  description = "Version of the chart to deploy."
+}
+
 variable "cert_manager_issuer_kind" {
   type        = string
   description = "Kind of the cert-manager issuer (Issuer or ClusterIssuer)."
@@ -62,4 +67,9 @@ variable "cert_manager_cert_renew_before" {
 variable "wildcard_domain" {
   type        = string
   description = "The wildcard domain the secret will be maintained for (e.g. *.root-domain.com)."
+}
+
+variable "hono_trust_store_config_map_name" {
+  type        = string
+  description = "Name of the kubernetes trust store config map for the hono deployments managed by trust-manager."
 }
