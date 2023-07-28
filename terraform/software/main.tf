@@ -37,6 +37,7 @@ module "hono" {
   cloud_endpoints_key_file            = var.cloud_endpoints_key_file
   hono_domain_secret_name             = var.hono_domain_secret_name
   hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
+  hono_trust_store_config_map_name    = var.hono_trust_store_config_map_name
   oauth_client_id                     = var.oauth_client_id
   oauth_client_secret                 = var.oauth_client_secret
   cert_manager_enabled                = var.enable_cert_manager
@@ -61,6 +62,8 @@ module "cert-manager" {
   cert_manager_cert_renew_before      = var.cert_manager_cert_renew_before
   hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
   wildcard_domain                     = var.wildcard_domain
+  trust_manager_version               = var.trust_manager_version
+  hono_trust_store_config_map_name    = var.hono_trust_store_config_map_name
 
   depends_on = [module.namespace]
 }

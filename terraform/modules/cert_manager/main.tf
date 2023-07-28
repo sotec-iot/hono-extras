@@ -61,7 +61,6 @@ resource "kubectl_manifest" "issuer_letsencrypt_prod" {
       }
     }
   })
-
   depends_on = [helm_release.cert-manager, kubernetes_secret.cert_manager_sa_key_secret]
 }
 
@@ -86,6 +85,41 @@ resource "kubectl_manifest" "certificate" {
       ]
     }
   })
-
   depends_on = [helm_release.cert-manager, kubernetes_secret.cert_manager_sa_key_secret]
+}
+
+resource "helm_release" "trust-manager" {
+  name  = "trust-manager"
+  repository = "https://charts.jetstack.io"
+  chart = "trust-manager"
+  version = var.trust_manager_version
+  namespace = var.hono_namespace
+  create_namespace = false
+  depends_on = [helm_release.cert-manager]
+}
+
+resource "kubectl_manifest" "trust-bundle" {
+  yaml_body = yamlencode({
+    "apiVersion" = "trust.cert-manager.io/v1alpha1"
+    "kind" = "Bundle"
+    "metadata" = {
+      "name" = var.hono_trust_store_config_map_name
+    }
+    "spec" = {
+      "sources" = [
+        {"useDefaultCAs" = true}
+      ]
+      "target" = {
+        "configMap" = {
+          "key" = "ca.crt"
+        }
+        "namespaceSelector" = {
+          "matchLabels" = {
+            "kubernetes.io/metadata.name" = "hono"
+          }
+        }
+      }
+    }
+  })
+  depends_on = [helm_release.trust-manager]
 }
