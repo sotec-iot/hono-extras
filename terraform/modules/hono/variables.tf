@@ -130,6 +130,11 @@ variable "hono_domain_managed_secret_name" {
   description = "Name of the kubernetes secret for the hono domain (wildcard) in case it is managed by cert-manager"
 }
 
+variable "hono_trust_store_config_map_name" {
+  type        = string
+  description = "Name of the kubernetes trust store config map for the hono deployments managed by trust-manager."
+}
+
 variable "oauth_client_id" {
   type = string
   description = "The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
