@@ -44,9 +44,14 @@ output "sql_ip" {
   description = "IP of the SQL Database"
 }
 
-output "sql_database" {
-  value       = module.infrastructure.sql_database
-  description = "Name of the SQL Database"
+output "sql_hono_database" {
+  value       = module.infrastructure.sql_hono_database
+  description = "Name of the hono postgres database."
+}
+
+output "sql_grafana_database" {
+  value       = module.infrastructure.sql_grafana_database
+  description = "Name of the grafana postgres database."
 }
 
 output "service_name_communication" {
@@ -64,8 +69,18 @@ output "device_communication_static_ip" {
   description = "Output of the static IP for External Ingress"
 }
 
+output "grafana_static_ip_name" {
+  value       = module.infrastructure.grafana_static_ip_name
+  description = "Name of the static IP for grafana external ingress."
+}
+
+output "grafana_static_ip" {
+  value       = module.infrastructure.grafana_static_ip
+  description = "Output of the static IP for grafana external ingress."
+}
+
 output "ssl_policy_name" {
-  value = module.infrastructure.ssl_policy_name
+  value       = module.infrastructure.ssl_policy_name
   description = "Name of the SSL policy for external ingress"
 }
 
@@ -87,6 +102,11 @@ output "cert_manager_sa_key_file" {
 }
 
 output "cert_manager_issuer_project_id" {
-  value        = module.infrastructure.cert_manager_issuer_project_id
+  value       = module.infrastructure.cert_manager_issuer_project_id
   description = "Project ID in which the Cloud DNS zone to manage the DNS entries is located."
+}
+
+output "grafana_expose_externally" {
+  value       = module.infrastructure.grafana_expose_externally
+  description = "Whether or not Grafana should be exposed externally."
 }

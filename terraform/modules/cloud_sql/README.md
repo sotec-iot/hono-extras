@@ -17,6 +17,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [google_sql_database.grafana_sql_db](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) | resource |
 | [google_sql_database.hono_sql_db](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) | resource |
 | [google_sql_database_instance.hono_sql](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance) | resource |
 | [google_sql_user.hono-sql-user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_user) | resource |
@@ -30,8 +31,9 @@ No modules.
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to deploy to | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region for the Cloud SQL Instance | `string` | n/a | yes |
 | <a name="input_service_networking"></a> [service\_networking](#input\_service\_networking) | Reference to service\_networking connection from VPC\_network to SQL Instance | `any` | n/a | yes |
-| <a name="input_sql_database_name"></a> [sql\_database\_name](#input\_sql\_database\_name) | The name of the database in the Cloud SQL instance. This does not include the project ID or instance name. | `string` | n/a | yes |
 | <a name="input_sql_db_user_name"></a> [sql\_db\_user\_name](#input\_sql\_db\_user\_name) | The name of the user. Changing this forces a new resource to be created. | `string` | n/a | yes |
+| <a name="input_sql_grafana_database_name"></a> [sql\_grafana\_database\_name](#input\_sql\_grafana\_database\_name) | The name of the grafana database in the Cloud SQL instance. This does not include the Google project ID or instance name. | `string` | n/a | yes |
+| <a name="input_sql_hono_database_name"></a> [sql\_hono\_database\_name](#input\_sql\_hono\_database\_name) | The name of the hono database in the Cloud SQL instance. This does not include the Google project ID or instance name. | `string` | n/a | yes |
 | <a name="input_sql_instance_activation_policy"></a> [sql\_instance\_activation\_policy](#input\_sql\_instance\_activation\_policy) | This specifies when the instance should be active. Can be either ALWAYS, NEVER or ON\_DEMAND. | `string` | n/a | yes |
 | <a name="input_sql_instance_backup_count"></a> [sql\_instance\_backup\_count](#input\_sql\_instance\_backup\_count) | The number of backups the Cloud SQL instance should retain. | `number` | n/a | yes |
 | <a name="input_sql_instance_backup_enabled"></a> [sql\_instance\_backup\_enabled](#input\_sql\_instance\_backup\_enabled) | Whether this Cloud SQL instance should enable automatic backups. | `bool` | n/a | yes |
@@ -49,7 +51,8 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_sql_database"></a> [sql\_database](#output\_sql\_database) | Name of the Postgres Database |
-| <a name="output_sql_db_pw"></a> [sql\_db\_pw](#output\_sql\_db\_pw) | Output of the SQL user password |
-| <a name="output_sql_ip"></a> [sql\_ip](#output\_sql\_ip) | URL of the Postgres Database |
-| <a name="output_sql_user"></a> [sql\_user](#output\_sql\_user) | Output of the SQL user name |
+| <a name="output_sql_db_pw"></a> [sql\_db\_pw](#output\_sql\_db\_pw) | Output of the SQL user password. |
+| <a name="output_sql_grafana_database"></a> [sql\_grafana\_database](#output\_sql\_grafana\_database) | Name of the grafana postgres database. |
+| <a name="output_sql_hono_database"></a> [sql\_hono\_database](#output\_sql\_hono\_database) | Name of the hono postgres database. |
+| <a name="output_sql_ip"></a> [sql\_ip](#output\_sql\_ip) | URL of the postgres database. |
+| <a name="output_sql_user"></a> [sql\_user](#output\_sql\_user) | Output of the SQL user name. |
