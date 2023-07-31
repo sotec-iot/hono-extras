@@ -47,3 +47,8 @@ variable "ssl_policy_min_tls_version" {
   type        = string
   description = "The minimum TLS version the SSL policy should allow."
 }
+
+variable "grafana_expose_externally" {
+  type        = bool
+  description = "Whether or not Grafana should be exposed externally."
+}

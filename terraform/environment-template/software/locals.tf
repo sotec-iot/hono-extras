@@ -6,6 +6,7 @@ locals {
   oauth_client_secret           = "<oauth_client_secret>"                     # Insert the client secret of your OAuth 2.0 client
   helm_package_repository       = "<helm-package-repository>"                 # Insert the link to your helm chart (e.g. oci://europe-west1-docker.pkg.dev/my-project/my-repository)
   hono_chart_name               = "<chart-name>"                              # Insert the name of your helm chart (e.g. hono)
+  hono_chart_version            = "<chart-version>"                           # Insert the version of your helm chart (e.g. 2.5.0-1)
 
   enable_cert_manager           = false                                       # Toggle the use of the cert-manager
 

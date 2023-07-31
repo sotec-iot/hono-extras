@@ -8,9 +8,12 @@ module "software" {
   sql_user                            = data.terraform_remote_state.infrastructure.outputs.sql_user
   sql_db_pw                           = data.terraform_remote_state.infrastructure.outputs.sql_db_pw
   sql_ip                              = data.terraform_remote_state.infrastructure.outputs.sql_ip
-  sql_database                        = data.terraform_remote_state.infrastructure.outputs.sql_database
+  sql_hono_database                   = data.terraform_remote_state.infrastructure.outputs.sql_hono_database
+  sql_grafana_database                = data.terraform_remote_state.infrastructure.outputs.sql_grafana_database
   service_name_communication          = data.terraform_remote_state.infrastructure.outputs.service_name_communication
   device_communication_static_ip_name = data.terraform_remote_state.infrastructure.outputs.device_communication_static_ip_name
+  grafana_static_ip_name              = try(data.terraform_remote_state.infrastructure.outputs.grafana_static_ip_name[0], "")
+  grafana_expose_externally           = data.terraform_remote_state.infrastructure.outputs.grafana_expose_externally
   ssl_policy_name                     = data.terraform_remote_state.infrastructure.outputs.ssl_policy_name
   cloud_endpoints_key_file            = data.terraform_remote_state.infrastructure.outputs.cloud_endpoints_key_file
   cert_manager_sa_account_id          = try(data.terraform_remote_state.infrastructure.outputs.cert_manager_sa_account_id[0], "")
@@ -23,6 +26,7 @@ module "software" {
   oauth_app_name                      = local.oauth_app_name
   helm_package_repository             = local.helm_package_repository
   hono_chart_name                     = local.hono_chart_name
+  hono_chart_version                  = local.hono_chart_version
   device_communication_dns_name       = local.device_communication_dns_name
   oauth_client_id                     = local.oauth_client_id
   oauth_client_secret                 = local.oauth_client_secret

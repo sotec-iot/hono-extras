@@ -28,6 +28,7 @@ module "networking" {
   ssl_policy_name            = var.ssl_policy_name
   ssl_policy_profile         = var.ssl_policy_profile
   ssl_policy_min_tls_version = var.ssl_policy_min_tls_version
+  grafana_expose_externally  = var.grafana_expose_externally
 
   depends_on = [
     google_project_service.project
@@ -37,34 +38,35 @@ module "networking" {
 module "cloud_sql" {
   source = "../modules/cloud_sql"
 
-  project_id                                = var.project_id
-  region                                    = var.region
-  storage_size_gb                           = var.storage_size_gb
-  service_networking                        = module.networking.service_networking
-  network_id                                = module.networking.network_id
-  sql_instance_name                         = var.sql_instance_name
-  sql_instance_version                      = var.sql_instance_version
-  sql_instance_machine_type                 = var.sql_instance_machine_type
-  sql_instance_disk_type                    = var.sql_instance_disk_type
-  sql_instance_deletion_protection_enabled  = var.sql_instance_deletion_protection_enabled
-  sql_instance_activation_policy            = var.sql_instance_activation_policy
-  sql_public_ip_enable                      = var.sql_instance_ipv4_enable
-  sql_db_user_name                          = var.sql_db_user_name
-  sql_database_name                         = var.sql_database_name
-  sql_instance_backup_enabled               = var.sql_instance_backup_enabled
-  sql_instance_backup_location              = var.sql_instance_backup_location
-  sql_instance_backup_start_time            = var.sql_instance_backup_start_time
-  sql_instance_backup_count                 = var.sql_instance_backup_count
+  project_id                               = var.project_id
+  region                                   = var.region
+  storage_size_gb                          = var.storage_size_gb
+  service_networking                       = module.networking.service_networking
+  network_id                               = module.networking.network_id
+  sql_instance_name                        = var.sql_instance_name
+  sql_instance_version                     = var.sql_instance_version
+  sql_instance_machine_type                = var.sql_instance_machine_type
+  sql_instance_disk_type                   = var.sql_instance_disk_type
+  sql_instance_deletion_protection_enabled = var.sql_instance_deletion_protection_enabled
+  sql_instance_activation_policy           = var.sql_instance_activation_policy
+  sql_public_ip_enable                     = var.sql_instance_ipv4_enable
+  sql_db_user_name                         = var.sql_db_user_name
+  sql_hono_database_name                   = var.sql_hono_database_name
+  sql_grafana_database_name                = var.sql_grafana_database_name
+  sql_instance_backup_enabled              = var.sql_instance_backup_enabled
+  sql_instance_backup_location             = var.sql_instance_backup_location
+  sql_instance_backup_start_time           = var.sql_instance_backup_start_time
+  sql_instance_backup_count                = var.sql_instance_backup_count
 }
 
 module "google_iam" {
-  source                          = "../modules/google_iam"
-  service_name_communication      = module.cloud_endpoint.service_name_communication
-  project_id                      = var.project_id
-  service_account_roles_gke_sa    = var.service_account_roles_gke_sa
-  enable_cert_manager             = var.enable_cert_manager
-  cert_manager_sa_account_id      = var.cert_manager_sa_account_id
-  cert_manager_issuer_project_id  = var.cert_manager_issuer_project_id
+  source                         = "../modules/google_iam"
+  service_name_communication     = module.cloud_endpoint.service_name_communication
+  project_id                     = var.project_id
+  service_account_roles_gke_sa   = var.service_account_roles_gke_sa
+  enable_cert_manager            = var.enable_cert_manager
+  cert_manager_sa_account_id     = var.cert_manager_sa_account_id
+  cert_manager_issuer_project_id = var.cert_manager_issuer_project_id
 }
 
 module "gke" {

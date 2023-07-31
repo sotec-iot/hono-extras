@@ -22,7 +22,8 @@ resource "google_service_account" "cloud_endpoints_sa" {
 
 # Creating necessary iam bindings
 resource "google_project_iam_member" "cloud_endpoint_sa_binding" {
-  for_each = toset(["roles/servicemanagement.serviceController",
+  for_each = toset([
+    "roles/servicemanagement.serviceController",
     "roles/cloudtrace.agent",
     "roles/pubsub.editor",
     "roles/servicemanagement.serviceController"
@@ -47,10 +48,10 @@ resource "google_service_account" "cert_manager_sa" {
 
 # Setting IAM Roles for cert-manager Service Account
 resource "google_project_iam_member" "cert_manager_sa_roles" {
-  count    = var.enable_cert_manager ? 1 : 0
-  project  = var.cert_manager_issuer_project_id != null ? var.cert_manager_issuer_project_id : var.project_id
-  role     = "roles/dns.admin"
-  member   = google_service_account.cert_manager_sa[0].member
+  count   = var.enable_cert_manager ? 1 : 0
+  project = var.cert_manager_issuer_project_id != null ? var.cert_manager_issuer_project_id : var.project_id
+  role    = "roles/dns.admin"
+  member  = google_service_account.cert_manager_sa[0].member
 }
 
 resource "google_service_account_key" "cert_manager_sa_key" {

@@ -99,10 +99,16 @@ variable "sql_db_user_name" {
   default     = "hono-user"
 }
 
-variable "sql_database_name" {
+variable "sql_hono_database_name" {
   type        = string
-  description = "The name of the database in the Cloud SQL instance. This does not include the project ID or instance name."
+  description = "The name of the hono database in the Cloud SQL instance. This does not include the project ID or instance name."
   default     = "hono-db"
+}
+
+variable "sql_grafana_database_name" {
+  type        = string
+  description = "The name of the grafana database in the Cloud SQL instance. This does not include the project ID or instance name."
+  default     = "grafana-db"
 }
 
 variable "service_account_roles_gke_sa" {
@@ -118,8 +124,8 @@ variable "gke_release_channel" {
 }
 
 variable "node_pool_disk_type" {
-  type        = string
-  default     = "pd-standard"
+  type    = string
+  default = "pd-standard"
 }
 
 variable "node_pool_disk_size" {
@@ -263,4 +269,10 @@ variable "ssl_policy_min_tls_version" {
   type        = string
   description = "The minimum TLS version the SSL policy should allow"
   default     = "TLS_1_2"
+}
+
+variable "grafana_expose_externally" {
+  type        = bool
+  description = "Whether or not Grafana should be exposed externally."
+  default     = false
 }

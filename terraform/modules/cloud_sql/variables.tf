@@ -61,9 +61,14 @@ variable "sql_db_user_name" {
   description = "The name of the user. Changing this forces a new resource to be created."
 }
 
-variable "sql_database_name" {
+variable "sql_hono_database_name" {
   type        = string
-  description = "The name of the database in the Cloud SQL instance. This does not include the project ID or instance name."
+  description = "The name of the hono database in the Cloud SQL instance. This does not include the Google project ID or instance name."
+}
+
+variable "sql_grafana_database_name" {
+  type        = string
+  description = "The name of the grafana database in the Cloud SQL instance. This does not include the Google project ID or instance name."
 }
 
 variable "sql_instance_backup_enabled" {
