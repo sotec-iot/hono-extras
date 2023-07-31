@@ -7,11 +7,11 @@ resource "google_compute_network" "vpc_network" {
 
 #Creating the subnetwork
 resource "google_compute_subnetwork" "subnetwork" {
-  project       = var.project_id
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
-  name          = "honosubnet-01"
-  ip_cidr_range = var.ip_cidr_range
+  project            = var.project_id
+  region             = var.region
+  network            = google_compute_network.vpc_network.id
+  name               = "honosubnet-01"
+  ip_cidr_range      = var.ip_cidr_range
   secondary_ip_range = [
     {
       range_name    = "services"
@@ -48,6 +48,14 @@ resource "google_compute_address" "mqtt_static_ip" {
 resource "google_compute_global_address" "device_communication_static_ip" {
   project      = var.project_id
   name         = "device-communication-api"
+  address_type = "EXTERNAL"
+}
+
+# Creating global static ip for Grafana ingress
+resource "google_compute_global_address" "grafana_static_ip" {
+  count        = var.grafana_expose_externally ? 1 : 0
+  project      = var.project_id
+  name         = "hono-grafana"
   address_type = "EXTERNAL"
 }
 

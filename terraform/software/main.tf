@@ -4,10 +4,10 @@ moved {
 }
 
 module "namespace" {
-  source = "../modules/namespace"
-  hono_namespace                      = var.hono_namespace
-  cert_manager_namespace              = var.cert_manager_namespace
-  enable_cert_manager                 = var.enable_cert_manager
+  source                 = "../modules/namespace"
+  hono_namespace         = var.hono_namespace
+  cert_manager_namespace = var.cert_manager_namespace
+  enable_cert_manager    = var.enable_cert_manager
 }
 
 module "hono" {
@@ -21,7 +21,8 @@ module "hono" {
   mqtt_static_ip                      = var.mqtt_static_ip
   sql_user                            = var.sql_user
   sql_db_pw                           = var.sql_db_pw
-  sql_database                        = var.sql_database
+  sql_hono_database                   = var.sql_hono_database
+  sql_grafana_database                = var.sql_grafana_database
   sql_ip                              = var.sql_ip
   service_name_communication          = var.service_name_communication
   device_communication_static_ip_name = var.device_communication_static_ip_name
@@ -50,36 +51,39 @@ module "hono" {
   hpa_maxReplicas_device_registry     = var.hpa_maxReplicas_device_registry
   prometheus_adapter_version          = var.prometheus_adapter_version
   prometheus_adapter_custom_metrics   = var.prometheus_adapter_custom_metrics
+  grafana_expose_externally           = var.grafana_expose_externally
+  grafana_static_ip_name              = var.grafana_static_ip_name
+  grafana_dns_name                    = var.grafana_dns_name
 
   depends_on = [module.namespace, module.cert-manager]
 }
 
 module "cert-manager" {
-  source                              = "../modules/cert_manager"
-  count                               = var.enable_cert_manager ? 1 : 0
-  hono_namespace                      = var.hono_namespace
-  cert_manager_namespace              = var.cert_manager_namespace
-  cert_manager_version                = var.cert_manager_version
-  cert_manager_issuer_kind            = var.cert_manager_issuer_kind
-  cert_manager_issuer_name            = var.cert_manager_issuer_name
-  cert_manager_issuer_project_id      = var.cert_manager_issuer_project_id
-  cert_manager_email                  = var.cert_manager_email
-  cert_manager_sa_account_id          = var.cert_manager_sa_account_id
-  cert_manager_sa_key_file            = var.cert_manager_sa_key_file
-  cert_manager_cert_duration          = var.cert_manager_cert_duration
-  cert_manager_cert_renew_before      = var.cert_manager_cert_renew_before
-  hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
-  wildcard_domain                     = var.wildcard_domain
-  trust_manager_version               = var.trust_manager_version
-  hono_trust_store_config_map_name    = var.hono_trust_store_config_map_name
+  source                           = "../modules/cert_manager"
+  count                            = var.enable_cert_manager ? 1 : 0
+  hono_namespace                   = var.hono_namespace
+  cert_manager_namespace           = var.cert_manager_namespace
+  cert_manager_version             = var.cert_manager_version
+  cert_manager_issuer_kind         = var.cert_manager_issuer_kind
+  cert_manager_issuer_name         = var.cert_manager_issuer_name
+  cert_manager_issuer_project_id   = var.cert_manager_issuer_project_id
+  cert_manager_email               = var.cert_manager_email
+  cert_manager_sa_account_id       = var.cert_manager_sa_account_id
+  cert_manager_sa_key_file         = var.cert_manager_sa_key_file
+  cert_manager_cert_duration       = var.cert_manager_cert_duration
+  cert_manager_cert_renew_before   = var.cert_manager_cert_renew_before
+  hono_domain_managed_secret_name  = var.hono_domain_managed_secret_name
+  wildcard_domain                  = var.wildcard_domain
+  trust_manager_version            = var.trust_manager_version
+  hono_trust_store_config_map_name = var.hono_trust_store_config_map_name
 
   depends_on = [module.namespace]
 }
 
 module "stakater-reloader" {
-  source                              = "../modules/stakater_reloader"
-  count                               = var.enable_cert_manager ? 1 : 0
-  hono_namespace                      = var.hono_namespace
-  reloader_version                    = var.reloader_version
-  depends_on = [module.namespace]
+  source           = "../modules/stakater_reloader"
+  count            = var.enable_cert_manager ? 1 : 0
+  hono_namespace   = var.hono_namespace
+  reloader_version = var.reloader_version
+  depends_on       = [module.namespace]
 }

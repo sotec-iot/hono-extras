@@ -2,7 +2,7 @@ locals {
   # creating the configuration to connect to the SQL Database
   db_connection_config = {
     # build the URL for the connection
-    url         = "jdbc:postgresql://${var.sql_ip}:5432/${var.sql_database}"
+    url         = "jdbc:postgresql://${var.sql_ip}:5432/${var.sql_hono_database}"
     driverClass = "org.postgresql.Driver"
     username    = var.sql_user
     password    = var.sql_db_pw
@@ -75,13 +75,39 @@ locals {
         tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
         tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
       }
+      grafana = {
+        ingress = {
+          enabled = var.grafana_expose_externally
+          annotations = {
+            "kubernetes.io/ingress.global-static-ip-name" = var.grafana_static_ip_name
+          }
+          hosts = [
+            var.grafana_dns_name
+          ]
+          tls = [
+            {
+              secretName = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+            }
+          ]
+        }
+        "grafana.ini" = {
+          database = {
+            type = "postgres"
+            host = "${var.sql_ip}:5432"
+            name = var.sql_grafana_database
+            user = var.sql_user
+            password = var.sql_db_pw
+            ssl_mode = "disable"
+          }
+        }
+      }
       deviceCommunication = {
         app = {
           name = var.oauth_app_name
         }
         api = {
           database = { # database connection for device Communication
-            name     = var.sql_database
+            name     = var.sql_hono_database
             host     = var.sql_ip
             port     = 5432
             username = var.sql_user

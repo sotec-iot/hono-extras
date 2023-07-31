@@ -54,9 +54,14 @@ variable "sql_ip" {
   description = "URL of the Postgres Database"
 }
 
-variable "sql_database" {
+variable "sql_hono_database" {
   type        = string
-  description = "name of the Postgres Database"
+  description = "Name of the postgres database for Hono."
+}
+
+variable "sql_grafana_database" {
+  type        = string
+  description = "Name of the postgres database for Grafana."
 }
 
 variable "service_name_communication" {
@@ -186,4 +191,19 @@ variable "prometheus_adapter_version" {
 
 variable "prometheus_adapter_custom_metrics" {
   description = "Prometheus metrics to expose via the prometheus adapter to use as custom metrics in horizontal pod autoscaler."
+}
+
+variable "grafana_expose_externally" {
+  type        = bool
+  description = "Whether or not Grafana should be exposed externally."
+}
+
+variable "grafana_static_ip_name" {
+  type        = string
+  description = "Name of the static IP for external ingress."
+}
+
+variable "grafana_dns_name" {
+  type        = string
+  description = "Name of the DNS host for Grafana"
 }
