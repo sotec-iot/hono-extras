@@ -49,12 +49,12 @@ module "hono" {
 module "cert-manager" {
   source                              = "../modules/cert_manager"
   count                               = var.enable_cert_manager ? 1 : 0
-  project_id                          = var.project_id
   hono_namespace                      = var.hono_namespace
   cert_manager_namespace              = var.cert_manager_namespace
   cert_manager_version                = var.cert_manager_version
   cert_manager_issuer_kind            = var.cert_manager_issuer_kind
   cert_manager_issuer_name            = var.cert_manager_issuer_name
+  cert_manager_issuer_project_id      = var.cert_manager_issuer_project_id
   cert_manager_email                  = var.cert_manager_email
   cert_manager_sa_account_id          = var.cert_manager_sa_account_id
   cert_manager_sa_key_file            = var.cert_manager_sa_key_file
