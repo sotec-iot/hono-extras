@@ -15,6 +15,7 @@ resource "google_project_iam_member" "gke_service_account_roles" {
 
 # Creating the Service Account for Cloud Endpoints
 resource "google_service_account" "cloud_endpoints_sa" {
+  project      = var.project_id
   account_id   = "hono-cloud-endpoint-manager"
   display_name = "hono-cloud-endpoint-manager"
 }
@@ -39,14 +40,15 @@ resource "google_service_account_key" "endpoints_sa_key" {
 # Creating the Service Account for cert-manager
 resource "google_service_account" "cert_manager_sa" {
   count        = var.enable_cert_manager ? 1 : 0
-  account_id   = "hono-cert-manager-dns-solver"
-  display_name = "hono-cert-manager-dns-solver"
+  project      = var.cert_manager_issuer_project_id != null ? var.cert_manager_issuer_project_id : var.project_id
+  account_id   = var.cert_manager_sa_account_id
+  display_name = var.cert_manager_sa_account_id
 }
 
 # Setting IAM Roles for cert-manager Service Account
 resource "google_project_iam_member" "cert_manager_sa_roles" {
   count    = var.enable_cert_manager ? 1 : 0
-  project  = var.project_id
+  project  = var.cert_manager_issuer_project_id != null ? var.cert_manager_issuer_project_id : var.project_id
   role     = "roles/dns.admin"
   member   = google_service_account.cert_manager_sa[0].member
 }

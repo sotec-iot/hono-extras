@@ -29,6 +29,8 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_cert_manager_issuer_project_id"></a> [cert\_manager\_issuer\_project\_id](#input\_cert\_manager\_issuer\_project\_id) | Project ID in which the Cloud DNS zone to manage the DNS entries is located. Defaults to use the same project ID as the Hono instance. | `string` | `null` | no |
+| <a name="input_cert_manager_sa_account_id"></a> [cert\_manager\_sa\_account\_id](#input\_cert\_manager\_sa\_account\_id) | ID under which the cert-manager service account is going to be created. | `string` | `"hono-cert-manager-dns-solver"` | no |
 | <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the service account needed for the use of cert manager | `bool` | `false` | no |
 | <a name="input_enable_http_ip_creation"></a> [enable\_http\_ip\_creation](#input\_enable\_http\_ip\_creation) | Used to enable the creation of a static ip for the http adapter | `string` | `false` | no |
 | <a name="input_enable_mqtt_ip_creation"></a> [enable\_mqtt\_ip\_creation](#input\_enable\_mqtt\_ip\_creation) | Used to enable the creation of a static ip for the mqtt adapter | `string` | `true` | no |
@@ -77,6 +79,7 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cert_manager_issuer_project_id"></a> [cert\_manager\_issuer\_project\_id](#output\_cert\_manager\_issuer\_project\_id) | Project ID in which the Cloud DNS zone to manage the DNS entries is located. |
 | <a name="output_cert_manager_sa_account_id"></a> [cert\_manager\_sa\_account\_id](#output\_cert\_manager\_sa\_account\_id) | Account id of the cert-manager Service Account |
 | <a name="output_cert_manager_sa_key_file"></a> [cert\_manager\_sa\_key\_file](#output\_cert\_manager\_sa\_key\_file) | Service Account Key File for cert-manager Service Account |
 | <a name="output_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#output\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account |

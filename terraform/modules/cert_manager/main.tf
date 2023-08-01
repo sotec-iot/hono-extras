@@ -49,7 +49,7 @@ resource "kubectl_manifest" "issuer_letsencrypt_prod" {
           {
             "dns01" = {
               "cloudDNS" = {
-                "project" = var.project_id
+                "project" = var.cert_manager_issuer_project_id
                 "serviceAccountSecretRef" = {
                   "name" = var.cert_manager_sa_account_id
                   "key" = "key.json"
