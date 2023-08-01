@@ -15,6 +15,7 @@ module "software" {
   cloud_endpoints_key_file            = data.terraform_remote_state.infrastructure.outputs.cloud_endpoints_key_file
   cert_manager_sa_account_id          = try(data.terraform_remote_state.infrastructure.outputs.cert_manager_sa_account_id[0], "")
   cert_manager_sa_key_file            = try(data.terraform_remote_state.infrastructure.outputs.cert_manager_sa_key_file[0], "")
+  cert_manager_issuer_project_id      = try(data.terraform_remote_state.infrastructure.outputs.cert_manager_issuer_project_id[0], "")
   hono_tls_key_from_storage           = try(data.terraform_remote_state.software.outputs.hono_tls_key_in_storage, null)
   hono_tls_crt_from_storage           = try(data.terraform_remote_state.software.outputs.hono_tls_crt_in_storage, null)
   hono_tls_key                        = try(file("${path.module}/hono_tls.key"), null)

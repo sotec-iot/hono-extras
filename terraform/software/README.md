@@ -28,6 +28,7 @@ No resources.
 | <a name="input_cert_manager_email"></a> [cert\_manager\_email](#input\_cert\_manager\_email) | E-Mail address to contact in case something goes wrong with the certificate renewal. | `string` | n/a | yes |
 | <a name="input_cert_manager_issuer_kind"></a> [cert\_manager\_issuer\_kind](#input\_cert\_manager\_issuer\_kind) | Kind of the cert-manager issuer (Issuer or ClusterIssuer). | `string` | `"ClusterIssuer"` | no |
 | <a name="input_cert_manager_issuer_name"></a> [cert\_manager\_issuer\_name](#input\_cert\_manager\_issuer\_name) | Name of the cert-manager issuer. | `string` | `"letsencrypt-prod"` | no |
+| <a name="input_cert_manager_issuer_project_id"></a> [cert\_manager\_issuer\_project\_id](#input\_cert\_manager\_issuer\_project\_id) | Project ID in which the Cloud DNS zone to manage the DNS entries is located. | `string` | n/a | yes |
 | <a name="input_cert_manager_namespace"></a> [cert\_manager\_namespace](#input\_cert\_manager\_namespace) | namespace of the cert manager deployment. | `string` | `"cert-manager"` | no |
 | <a name="input_cert_manager_sa_account_id"></a> [cert\_manager\_sa\_account\_id](#input\_cert\_manager\_sa\_account\_id) | Account id of the cert-manager Service Account. | `string` | n/a | yes |
 | <a name="input_cert_manager_sa_key_file"></a> [cert\_manager\_sa\_key\_file](#input\_cert\_manager\_sa\_key\_file) | Service Account Key File for cert-manager Service Account. | `string` | n/a | yes |

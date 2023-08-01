@@ -58,11 +58,13 @@ module "cloud_sql" {
 }
 
 module "google_iam" {
-  source                       = "../modules/google_iam"
-  service_name_communication   = module.cloud_endpoint.service_name_communication
-  project_id                   = var.project_id
-  service_account_roles_gke_sa = var.service_account_roles_gke_sa
-  enable_cert_manager          = var.enable_cert_manager
+  source                          = "../modules/google_iam"
+  service_name_communication      = module.cloud_endpoint.service_name_communication
+  project_id                      = var.project_id
+  service_account_roles_gke_sa    = var.service_account_roles_gke_sa
+  enable_cert_manager             = var.enable_cert_manager
+  cert_manager_sa_account_id      = var.cert_manager_sa_account_id
+  cert_manager_issuer_project_id  = var.cert_manager_issuer_project_id
 }
 
 module "gke" {

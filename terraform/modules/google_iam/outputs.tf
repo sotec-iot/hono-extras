@@ -29,3 +29,8 @@ output "cert_manager_sa_key_file" {
   description = "Service Account Key File for cert-manager Service Account"
   sensitive   = true
 }
+
+output "cert_manager_issuer_project_id" {
+  value        = google_service_account.cert_manager_sa[*].project
+  description = "Project ID in which the Cloud DNS zone to manage the DNS entries is located."
+}

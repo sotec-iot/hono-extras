@@ -172,6 +172,11 @@ variable "cert_manager_issuer_name" {
   default     = "letsencrypt-prod"
 }
 
+variable "cert_manager_issuer_project_id" {
+  type        = string
+  description = "Project ID in which the Cloud DNS zone to manage the DNS entries is located."
+}
+
 variable "cert_manager_email" {
   type        = string
   description = "E-Mail address to contact in case something goes wrong with the certificate renewal."

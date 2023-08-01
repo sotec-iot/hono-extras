@@ -1,8 +1,3 @@
-variable "project_id" {
-  type        = string
-  description = "Project ID in which the cluster is present"
-}
-
 variable "hono_namespace" {
   type        = string
   description = "Namespace of the hono deployment."
@@ -31,6 +26,11 @@ variable "cert_manager_issuer_kind" {
 variable "cert_manager_issuer_name" {
   type        = string
   description = "Name of the cert-manager issuer."
+}
+
+variable "cert_manager_issuer_project_id" {
+  type        = string
+  description = "Project ID in which the Cloud DNS zone to manage the DNS entries is located."
 }
 
 variable "cert_manager_email" {
