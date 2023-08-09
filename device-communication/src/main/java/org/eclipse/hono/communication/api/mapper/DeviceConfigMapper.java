@@ -49,6 +49,9 @@ public interface DeviceConfigMapper {
      */
     @Mapping(target = "version", source = "request.versionToUpdate")
     @Mapping(target = "cloudUpdateTime", expression = "java(getDateTime())")
+    @Mapping(target = "tenantId", ignore = true)
+    @Mapping(target = "deviceId", ignore = true)
+    @Mapping(target = "deviceAckTime", ignore = true)
     DeviceConfigEntity configRequestToDeviceConfigEntity(DeviceConfigRequest request);
 
     default String getDateTime() {

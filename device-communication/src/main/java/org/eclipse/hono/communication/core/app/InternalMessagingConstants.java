@@ -14,18 +14,20 @@
  *
  */
 
-package org.eclipse.hono.communication.api.config;
+package org.eclipse.hono.communication.core.app;
 
 /**
- * Device commands constant values.
+ * Internal Messaging Constant values.
  */
-public final class DeviceCommandConstants {
+public class InternalMessagingConstants {
 
-    /**
-     * OpenApi POST device command operation id.
-     */
-    public static final String POST_DEVICE_COMMAND_OP_ID = "postCommand";
+    public static final String DEVICE_ID = "device_id";
+    public static final String TENANT_ID = "tenant_id";
+    public static final String SUBJECT = "subject";
+    public static final String CORRELATION_ID = "correlation-id";
+    public static final String RESPONSE_REQUIRED = "response-required";
+    public static final String STATUS = "status";
 
-    private DeviceCommandConstants() {
+    private InternalMessagingConstants() {
     }
 }

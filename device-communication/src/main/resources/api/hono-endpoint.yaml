@@ -1,6 +1,6 @@
 swagger: "2.0"
 x-components: { }
-host: "hono-device-communication-gce.endpoints.sotec-iot-core-dev.cloud.goog"
+host: "hono-device-communication-gce.endpoints.<google-project-id>.cloud.goog"
 info:
   description: Device commands and configs API.
   title: Hono Device Communication API
