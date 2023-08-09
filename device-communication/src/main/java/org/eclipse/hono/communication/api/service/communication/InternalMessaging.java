@@ -14,15 +14,14 @@
  *
  */
 
-package org.eclipse.hono.communication.api.service;
+package org.eclipse.hono.communication.api.service.communication;
 
 /**
- * Interface for creating Database Tables at application startup.
+ * Internal messaging interface.
  */
-public interface DatabaseSchemaCreator {
+public interface InternalMessaging extends InternalMessageSubscriber, InternalMessagePublisher {
 
-    /**
-     * Create database tables.
-     */
-    void createDBTables();
+
 }
+
+

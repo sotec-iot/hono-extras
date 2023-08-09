@@ -14,18 +14,22 @@
  *
  */
 
-package org.eclipse.hono.communication.api.config;
+package org.eclipse.hono.communication.api.service.communication;
+
+import java.util.Map;
 
 /**
- * Device commands constant values.
+ * Interface for internal communication topic publisher.
  */
-public final class DeviceCommandConstants {
+public interface InternalMessagePublisher {
 
     /**
-     * OpenApi POST device command operation id.
+     * Publish a message to a topic.
+     *
+     * @param topic      The topic to publish the message
+     * @param message    The message to publish
+     * @param attributes The message attributes
+     * @throws Exception Throws Exception if subscription can't be created
      */
-    public static final String POST_DEVICE_COMMAND_OP_ID = "postCommand";
-
-    private DeviceCommandConstants() {
-    }
+    void publish(String topic, byte[] message, Map<String, String> attributes) throws Exception;
 }

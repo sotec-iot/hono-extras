@@ -14,18 +14,25 @@
  *
  */
 
-package org.eclipse.hono.communication.api.config;
+package org.eclipse.hono.communication.api.service.command;
+
+import org.eclipse.hono.communication.api.data.DeviceCommandRequest;
+
+import io.vertx.core.Future;
 
 /**
- * Device commands constant values.
+ * Device commands interface.
  */
-public final class DeviceCommandConstants {
+public interface DeviceCommandService {
 
     /**
-     * OpenApi POST device command operation id.
+     * proceed Post device command.
+     *
+     * @param commandRequest The commandRequest
+     * @param tenantId       Tenant id
+     * @param deviceId       Device Id
+     * @return Future of Void
      */
-    public static final String POST_DEVICE_COMMAND_OP_ID = "postCommand";
+    Future<Void> postCommand(DeviceCommandRequest commandRequest, String tenantId, String deviceId);
 
-    private DeviceCommandConstants() {
-    }
 }

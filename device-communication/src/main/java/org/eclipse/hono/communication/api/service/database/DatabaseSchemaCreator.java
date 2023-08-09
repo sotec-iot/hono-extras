@@ -14,18 +14,15 @@
  *
  */
 
-package org.eclipse.hono.communication.api.config;
+package org.eclipse.hono.communication.api.service.database;
 
 /**
- * Device commands constant values.
+ * Interface for creating Database Tables at application startup.
  */
-public final class DeviceCommandConstants {
+public interface DatabaseSchemaCreator {
 
     /**
-     * OpenApi POST device command operation id.
+     * Create database tables.
      */
-    public static final String POST_DEVICE_COMMAND_OP_ID = "postCommand";
-
-    private DeviceCommandConstants() {
-    }
+    void createDBTables();
 }

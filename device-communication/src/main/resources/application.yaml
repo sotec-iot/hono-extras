@@ -1,6 +1,29 @@
 app:
   name: "Device Communication"
   version: ${COM_APP_VERSION:"v1"}
+  projectId: ${COM_PROJECT_ID:project-id}
+
+  internalMessaging:
+    message:
+      attributeKeys:
+        deviceIdKey: ${COM_EVENT_ATTRIBUTE_DEVICE_ID:device_id}
+        tenantIdKey: ${COM_EVENT_ATTRIBUTE_TENANT_ID:tenant_id}
+        configVersionIdKey: ${COM_EVENT_ATTRIBUTE_CONFIG_VERSION:config-version}
+        contentTypeKey: ${COM_EVENT_ATTRIBUTE_CONTENT_TYPE:content-type}
+        origAdapterKey: ${COM_EVENT_ATTRIBUTE_ORIG_ADAPTER:orig_adapter}
+        origAddressKey: ${COM_EVENT_ATTRIBUTE_ORIG_ADDRESS:orig_address}
+        ttdKey: ${COM_EVENT_ATTRIBUTE_TTD:ttd}
+    event:
+      topicFormat: ${COM_EVENT_ON_CONNECT_TOPIC_FORMAT:%s.event} # TENANT_NAME.event
+      emptyNotificationEventContentType: ${COM_EVENT_EMPTY_NOTIFICATION_CONTENT_TYPE:application/vnd.eclipse-hono-empty-notification}
+
+    state:
+      topicFormat: ${COM_STATE_TOPIC_FORMAT:%s.event.state}  # TENANT_NAME.event.state
+    command:
+      topicFormat: ${COM_COMMAND_TOPIC_FORMAT:%s.command} # TENANT_NAME.command
+      ackTopic: ${COM_CONFIG_ACK_TOPIC:%s.command_response} # TENANT_NAME.command_response
+      configAckDelay: ${COM_CONFIG_ACK_DELAY:10000}
+
 vertx:
   openapi:
     file: ${COM_OPENAPI_FILE_PATH:api/hono-device-communication-v1.yaml}
@@ -9,18 +32,23 @@ vertx:
     url: ${COM_SERVER_HOST:0.0.0.0}
     port: ${COM_SERVER_PORT:8080}
     paths:
-      base: ${COM_SERVER_BASE_PATH:/api/v1/}  # base path should always end with "/"
+      base: ${COM_SERVER_BASE_PATH:/v1/}  # base path should always end with "/"
       liveness: ${COM_SERVER_LIVENESS_PATH:/alive}
       readiness: ${COM_SERVER_READINESS_PATH:/ready}
 
   database:
     pool-max-size: ${COM_POOL_MAX_SIZE:5}
     name: ${COM_DB_NAME:hono}
-    host: ${COM_DB_HOST:localhost}
+    host: ${COM_DB_HOST:host.docker.internal}
     port: ${COM_DB_PORT:5432}
     username: ${COM_DB_USERNAME:postgres}
     password: ${COM_DB_PASSWORD:mysecretpassword}
     db-kind: "postgresql"
+
+  # Tenant table configs. Used for listing tenants
+  tenant:
+    table: ${COM_DB_TENANT_TABLE:tenants}
+    tenant-id-column: ${COM_DB_TENANT_COL_NAME:tenant_id}
 
   # Device registration table configs. Used for validating devices
   device-registration:

@@ -14,18 +14,21 @@
  *
  */
 
-package org.eclipse.hono.communication.api.config;
+package org.eclipse.hono.communication.api.service.communication;
+
+import com.google.cloud.pubsub.v1.MessageReceiver;
 
 /**
- * Device commands constant values.
+ * Interface for internal communication topic subscriber.
  */
-public final class DeviceCommandConstants {
+public interface InternalMessageSubscriber {
 
     /**
-     * OpenApi POST device command operation id.
+     * Subscribe to a topic.
+     *
+     * @param topic           The topic to subscribe
+     * @param callbackHandler The function to be called when a message is received
      */
-    public static final String POST_DEVICE_COMMAND_OP_ID = "postCommand";
-
-    private DeviceCommandConstants() {
-    }
+    void subscribe(String topic, MessageReceiver callbackHandler);
 }
+

@@ -14,23 +14,32 @@
  *
  */
 
-package org.eclipse.hono.communication.api.service;
+package org.eclipse.hono.communication.api.repository;
 
-import io.vertx.pgclient.PgPool;
+import java.util.List;
+
+import io.vertx.core.Future;
+
 
 /**
- * Database service interface.
+ * Device repository interface.
  */
-public interface DatabaseService {
-    /**
-     * Gets the database client instance.
-     *
-     * @return The database client
-     */
-    PgPool getDbClient();
+public interface DeviceRepository {
 
     /**
-     * Closes the database connection.
+     * Check if device exist.
+     *
+     * @param deviceId The device id
+     * @param tenantId The tenant id
+     * @return Future of integer
      */
-    void close();
+    Future<Integer> searchForDevice(String deviceId, String tenantId);
+
+    /**
+     * Lists all unique tenants.
+     *
+     * @return Future of list with all tenants.
+     */
+    Future<List<String>> listDistinctTenants();
+
 }

@@ -14,18 +14,23 @@
  *
  */
 
-package org.eclipse.hono.communication.api.config;
+package org.eclipse.hono.communication.api.service.database;
+
+import io.vertx.pgclient.PgPool;
 
 /**
- * Device commands constant values.
+ * Database service interface.
  */
-public final class DeviceCommandConstants {
+public interface DatabaseService {
+    /**
+     * Gets the database client instance.
+     *
+     * @return The database client
+     */
+    PgPool getDbClient();
 
     /**
-     * OpenApi POST device command operation id.
+     * Closes the database connection.
      */
-    public static final String POST_DEVICE_COMMAND_OP_ID = "postCommand";
-
-    private DeviceCommandConstants() {
-    }
+    void close();
 }
