@@ -12,9 +12,8 @@ resource "google_sql_database_instance" "hono_sql" {
     activation_policy           = var.sql_instance_activation_policy
     deletion_protection_enabled = var.sql_instance_deletion_protection_enabled
 
-
     ip_configuration {
-      ipv4_enabled = var.sql_public_ip_enable
+      ipv4_enabled    = var.sql_public_ip_enable
       private_network = var.network_id
     }
     backup_configuration {

@@ -43,6 +43,12 @@ locals {
           deployment = local.deployment
           tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
           tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+          horizontalPodAutoscaler = {
+            enabled     = var.hpa_enabled
+            minReplicas = var.hpa_minReplicas_mqtt
+            maxReplicas = var.hpa_maxReplicas_mqtt
+            metrics     = var.hpa_metrics_mqtt
+          }
         }
       }
       authServer = {
@@ -57,6 +63,11 @@ locals {
           deployment = local.deployment
           tenant   = local.database_block
           registry = local.database_block
+          horizontalPodAutoscaler = {
+            enabled     = var.hpa_enabled
+            minReplicas = var.hpa_minReplicas_device_registry
+            maxReplicas = var.hpa_maxReplicas_device_registry
+          }
         }
       }
       commandRouterService = {
@@ -121,7 +132,7 @@ resource "kubernetes_secret" "cloud_endpoints_key_file" {
 
 resource "kubernetes_secret" "iap_client_secret" {
   metadata {
-    name = "iap-client-secret"
+    name      = "iap-client-secret"
     namespace = var.hono_namespace
   }
   data = {
@@ -141,4 +152,26 @@ resource "helm_release" "hono" {
 
   # using json to set values in the helm chart
   values = local.values
+}
+
+resource "helm_release" "prometheus_adapter" {
+  count            = var.hpa_enabled ? 1 : 0
+  name             = "prometheus-adapter"
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "prometheus-adapter"
+  namespace        = var.hono_namespace
+  version          = var.prometheus_adapter_version
+  create_namespace = false
+  timeout          = 120
+
+  values = [
+    jsonencode({
+      prometheus = {
+        url = "http://eclipse-hono-prometheus-server.${var.hono_namespace}.svc"
+      }
+      rules = {
+        custom = var.prometheus_adapter_custom_metrics
+      }
+    })
+  ]
 }

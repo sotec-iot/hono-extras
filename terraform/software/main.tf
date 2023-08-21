@@ -42,6 +42,14 @@ module "hono" {
   oauth_client_secret                 = var.oauth_client_secret
   cert_manager_enabled                = var.enable_cert_manager
   ssl_policy_name                     = var.ssl_policy_name
+  hpa_enabled                         = var.hpa_enabled
+  hpa_minReplicas_mqtt                = var.hpa_minReplicas_mqtt
+  hpa_maxReplicas_mqtt                = var.hpa_maxReplicas_mqtt
+  hpa_metrics_mqtt                    = var.hpa_metrics_mqtt
+  hpa_minReplicas_device_registry     = var.hpa_minReplicas_device_registry
+  hpa_maxReplicas_device_registry     = var.hpa_maxReplicas_device_registry
+  prometheus_adapter_version          = var.prometheus_adapter_version
+  prometheus_adapter_custom_metrics   = var.prometheus_adapter_custom_metrics
 
   depends_on = [module.namespace, module.cert-manager]
 }
