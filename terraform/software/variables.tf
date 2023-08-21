@@ -121,24 +121,24 @@ variable "cloud_endpoints_key_file" {
 }
 
 variable "hono_domain_secret_name" {
-  type = string
+  type        = string
   description = "Name of the kubernetes secret for the hono domain (wildcard)"
-  default = "hono-domain-secret"
+  default     = "hono-domain-secret"
 }
 
 variable "hono_domain_managed_secret_name" {
-  type = string
+  type        = string
   description = "Name of the kubernetes secret for the hono domain (wildcard) in case it is managed by cert-manager"
-  default = "hono-domain-managed-secret"
+  default     = "hono-domain-managed-secret"
 }
 
 variable "oauth_client_id" {
-  type = string
+  type        = string
   description = "The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
 }
 
 variable "oauth_client_secret" {
-  type = string
+  type        = string
   description = "The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
 }
 
@@ -223,7 +223,7 @@ variable "hono_trust_store_config_map_name" {
 }
 
 variable "ssl_policy_name" {
-  type = string
+  type        = string
   description = "Name of the SSL policy for external ingress."
 }
 
@@ -231,4 +231,94 @@ variable "reloader_version" {
   type        = string
   description = "Version of the stakater reloader helm chart."
   default     = "v1.0.29"
+}
+
+variable "hpa_enabled" {
+  type        = bool
+  description = "Enables the creation of a horizontal pod autoscaler for the MQTT adapter and the device registry."
+  default     = false
+}
+
+variable "hpa_minReplicas_mqtt" {
+  type        = number
+  description = "Minimum number of replicas the horizontal pod autoscaler can scale to."
+  default     = 1
+}
+
+variable "hpa_maxReplicas_mqtt" {
+  type        = number
+  description = "Maximum number of replicas the horizontal pod autoscaler can scale to."
+  default     = 10
+}
+
+variable "hpa_metrics_mqtt" {
+  description = "Metrics for the MQTT horizontal pod autoscaler as JSON list."
+  default     = [
+    {
+      type = "Pods"
+      pods = {
+        metric = {
+          name : "hono_connections_authenticated"
+        }
+        target = {
+          type         = "AverageValue"
+          averageValue = "10000"
+        }
+      }
+    },
+    {
+      type     = "Resource"
+      resource = {
+        name   = "cpu"
+        target = {
+          type               = "Utilization"
+          averageUtilization = 80
+        }
+      }
+    },
+    {
+      type     = "Resource"
+      resource = {
+        name   = "memory"
+        target = {
+          type               = "Utilization"
+          averageUtilization = 85
+        }
+      }
+    }
+  ]
+}
+
+variable "hpa_minReplicas_device_registry" {
+  type        = number
+  description = "Minimum number of replicas the device registry horizontal pod autoscaler can scale to."
+  default     = 1
+}
+
+variable "hpa_maxReplicas_device_registry" {
+  type        = number
+  description = "Maximum number of replicas the device registry horizontal pod autoscaler can scale to."
+  default     = 5
+}
+
+variable "prometheus_adapter_version" {
+  type        = string
+  description = "Version of the prometheus-adapter helm chart."
+  default     = "4.4.1"
+}
+
+variable "prometheus_adapter_custom_metrics" {
+  description = "Prometheus metrics to expose via the prometheus adapter to use as custom metrics in horizontal pod autoscaler."
+  default     = [
+    {
+      seriesQuery = "hono_connections_authenticated{kubernetes_namespace!=\"\",kubernetes_pod_name!=\"\"}"
+      resources   = {
+        overrides = {
+          kubernetes_namespace = { resource : "namespace" }
+          kubernetes_pod_name  = { resource : "pod" }
+        }
+      }
+      metricsQuery = "sum(hono_connections_authenticated{<<.LabelMatchers>>}) by (<<.GroupBy>>)"
+    }
+  ]
 }
