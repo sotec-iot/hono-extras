@@ -121,12 +121,12 @@ variable "cloud_endpoints_key_file" {
 }
 
 variable "hono_domain_secret_name" {
-  type = string
+  type        = string
   description = "Name of the kubernetes secret for the hono domain (wildcard)"
 }
 
 variable "hono_domain_managed_secret_name" {
-  type = string
+  type        = string
   description = "Name of the kubernetes secret for the hono domain (wildcard) in case it is managed by cert-manager"
 }
 
@@ -136,16 +136,54 @@ variable "hono_trust_store_config_map_name" {
 }
 
 variable "oauth_client_id" {
-  type = string
+  type        = string
   description = "The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
 }
 
 variable "oauth_client_secret" {
-  type = string
+  type        = string
   description = "The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
 }
 
 variable "ssl_policy_name" {
-  type = string
+  type        = string
   description = "Name of the SSL policy for external ingress"
+}
+
+variable "hpa_enabled" {
+  type        = bool
+  description = "Enables the creation of horizontal pod autoscaler for the MQTT adapter and the device registry."
+}
+
+variable "hpa_minReplicas_mqtt" {
+  type        = number
+  description = "Minimum number of replicas that the horizontal pod autoscaler must maintain for the MQTT adapter deployment."
+}
+
+variable "hpa_maxReplicas_mqtt" {
+  type        = number
+  description = "Maximum number of replicas that the horizontal pod autoscaler can spawn for the MQTT adapter deployment."
+}
+
+variable "hpa_metrics_mqtt" {
+  description = "Metrics for the MQTT horizontal pod autoscaler as JSON list."
+}
+
+variable "hpa_minReplicas_device_registry" {
+  type        = number
+  description = "Minimum number of replicas that the horizontal pod autoscaler must maintain for the device registry deployment."
+}
+
+variable "hpa_maxReplicas_device_registry" {
+  type        = number
+  description = "Maximum number of replicas that the horizontal pod autoscaler can spawn for the device registry deployment."
+}
+
+variable "prometheus_adapter_version" {
+  type        = string
+  description = "Version of the prometheus-adapter helm chart."
+}
+
+variable "prometheus_adapter_custom_metrics" {
+  description = "Prometheus metrics to expose via the prometheus adapter to use as custom metrics in horizontal pod autoscaler."
 }
