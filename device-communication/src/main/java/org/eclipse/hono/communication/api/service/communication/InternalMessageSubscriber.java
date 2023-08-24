@@ -26,9 +26,8 @@ public interface InternalMessageSubscriber {
     /**
      * Subscribe to a topic.
      *
-     * @param topic           The topic to subscribe
+     * @param topic The topic to subscribe
      * @param callbackHandler The function to be called when a message is received
      */
     void subscribe(String topic, MessageReceiver callbackHandler);
 }
-

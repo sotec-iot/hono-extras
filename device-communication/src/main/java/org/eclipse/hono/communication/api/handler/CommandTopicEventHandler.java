@@ -14,19 +14,22 @@
  *
  */
 
-package org.eclipse.hono.communication.api.service;
+package org.eclipse.hono.communication.api.handler;
 
-import io.vertx.ext.web.RoutingContext;
+import com.google.cloud.pubsub.v1.AckReplyConsumer;
+import com.google.pubsub.v1.PubsubMessage;
 
 /**
- * Device commands interface.
+ * Command topic event handler interface.
  */
-public interface DeviceCommandService {
+public interface CommandTopicEventHandler {
 
     /**
-     * Post device command.
+     * Handle incoming command response message.
      *
-     * @param routingContext The RoutingContext
+     * @param pubsubMessage The message to handle
+     * @param consumer The message consumer
      */
-    void postCommand(RoutingContext routingContext);
+
+    void onDeviceCommandResponse(PubsubMessage pubsubMessage, AckReplyConsumer consumer);
 }

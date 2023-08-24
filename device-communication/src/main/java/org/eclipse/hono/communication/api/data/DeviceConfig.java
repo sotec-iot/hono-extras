@@ -21,8 +21,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
-
 /**
  * The device configuration.
  **/
@@ -44,18 +42,18 @@ public class DeviceConfig {
     /**
      * Creates a new device config.
      *
-     * @param version         Config version
+     * @param version Config version
      * @param cloudUpdateTime Cloud update time
-     * @param deviceAckTime   Device ack time
-     * @param binaryData      Binary data
+     * @param deviceAckTime Device ack time
+     * @param binaryData Binary data
      */
-    public DeviceConfig(final String version, final String cloudUpdateTime, final String deviceAckTime, final String binaryData) {
+    public DeviceConfig(final String version, final String cloudUpdateTime, final String deviceAckTime,
+            final String binaryData) {
         this.version = version;
         this.cloudUpdateTime = cloudUpdateTime;
         this.deviceAckTime = deviceAckTime;
         this.binaryData = binaryData;
     }
-
 
     @JsonProperty("version")
     public String getVersion() {
@@ -67,7 +65,6 @@ public class DeviceConfig {
         this.version = version;
     }
 
-
     @JsonProperty("cloudUpdateTime")
     public String getCloudUpdateTime() {
         return cloudUpdateTime;
@@ -77,7 +74,6 @@ public class DeviceConfig {
     public void setCloudUpdateTime(final String cloudUpdateTime) {
         this.cloudUpdateTime = cloudUpdateTime;
     }
-
 
     @JsonProperty("deviceAckTime")
     public String getDeviceAckTime() {
@@ -89,7 +85,6 @@ public class DeviceConfig {
         this.deviceAckTime = deviceAckTime;
     }
 
-
     @JsonProperty("binaryData")
     public String getBinaryData() {
         return binaryData;
@@ -99,7 +94,6 @@ public class DeviceConfig {
     public void setBinaryData(final String binaryData) {
         this.binaryData = binaryData;
     }
-
 
     @Override
     public boolean equals(final Object o) {
@@ -133,8 +127,7 @@ public class DeviceConfig {
     }
 
     /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
      */
     private String toIndentedString(final Object o) {
         if (o == null) {

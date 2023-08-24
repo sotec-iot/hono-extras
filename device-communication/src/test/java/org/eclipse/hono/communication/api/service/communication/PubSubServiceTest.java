@@ -16,13 +16,20 @@
 
 package org.eclipse.hono.communication.api.service.communication;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 
 import org.eclipse.hono.communication.core.app.InternalMessagingConfig;
 import org.junit.jupiter.api.AfterEach;
@@ -31,7 +38,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.MockedStatic;
 
-
 import com.google.api.core.ApiFuture;
 import com.google.cloud.pubsub.v1.MessageReceiver;
 import com.google.cloud.pubsub.v1.Publisher;
@@ -39,7 +45,6 @@ import com.google.cloud.pubsub.v1.Subscriber;
 import com.google.pubsub.v1.ProjectSubscriptionName;
 import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.TopicName;
-
 
 class PubSubServiceTest {
 
@@ -66,7 +71,8 @@ class PubSubServiceTest {
 
     @AfterEach
     void tearDown() {
-        verifyNoMoreInteractions(configMock, publisherBuilderMock, publisherMock, subscriberBuilderMock, subscriberMock, messageReceiverMock);
+        verifyNoMoreInteractions(configMock, publisherBuilderMock, publisherMock, subscriberBuilderMock, subscriberMock,
+                messageReceiverMock);
     }
 
     @Test
@@ -79,7 +85,8 @@ class PubSubServiceTest {
             final Publisher.Builder builderMock = mock(Publisher.Builder.class);
 
             final ApiFuture<String> mockedApiFuture = mock(ApiFuture.class);
-            publisherMockedStatic.when(() -> Publisher.newBuilder(ArgumentMatchers.any(TopicName.class))).thenReturn(builderMock);
+            publisherMockedStatic.when(() -> Publisher.newBuilder(ArgumentMatchers.any(TopicName.class)))
+                    .thenReturn(builderMock);
 
             when(builderMock.build()).thenReturn(publisherMock);
             when(publisherMock.publish(ArgumentMatchers.any(PubsubMessage.class))).thenReturn(mockedApiFuture);
@@ -109,11 +116,11 @@ class PubSubServiceTest {
         try (MockedStatic<Publisher> publisherMockedStatic = mockStatic(Publisher.class)) {
             try (MockedStatic<PubsubMessage> pubsubMessageMockedStatic = mockStatic(PubsubMessage.class)) {
 
-
                 final Publisher.Builder builderMock = mock(Publisher.Builder.class);
 
                 final ApiFuture<String> mockedApiFuture = mock(ApiFuture.class);
-                publisherMockedStatic.when(() -> Publisher.newBuilder(ArgumentMatchers.any(TopicName.class))).thenReturn(builderMock);
+                publisherMockedStatic.when(() -> Publisher.newBuilder(ArgumentMatchers.any(TopicName.class)))
+                        .thenReturn(builderMock);
 
                 when(builderMock.build()).thenReturn(publisherMock);
                 when(publisherMock.publish(ArgumentMatchers.any(PubsubMessage.class))).thenReturn(mockedApiFuture);
@@ -136,18 +143,18 @@ class PubSubServiceTest {
 
     }
 
-
     @Test
     public void testSubscribe_success() throws Exception {
         final String subscriptionName = "my-sub";
-        final ProjectSubscriptionName projectSubscriptionName = ProjectSubscriptionName.of(PROJECT_ID, subscriptionName);
+        final ProjectSubscriptionName projectSubscriptionName = ProjectSubscriptionName.of(PROJECT_ID,
+                subscriptionName);
         try (MockedStatic<Subscriber> subscriberMockedStatic = mockStatic(Subscriber.class)) {
-            subscriberMockedStatic.when(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock)).thenReturn(subscriberBuilderMock);
+            subscriberMockedStatic.when(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock))
+                    .thenReturn(subscriberBuilderMock);
             when(configMock.getProjectId()).thenReturn(PROJECT_ID);
             when(subscriberBuilderMock.build()).thenReturn(subscriberMock);
             final PubSubService pubSubServiceSpyClient = spy(new PubSubService(configMock));
             doReturn(projectSubscriptionName).when(pubSubServiceSpyClient).initSubscription(topic);
-
 
             pubSubServiceSpyClient.subscribe(topic, messageReceiverMock);
 
@@ -159,9 +166,7 @@ class PubSubServiceTest {
             verify(pubSubServiceSpyClient).subscribe(topic, messageReceiverMock);
             verifyNoMoreInteractions(pubSubServiceSpyClient, subscriberMock);
 
-
             subscriberMockedStatic.verifyNoMoreInteractions();
-
 
         }
 
@@ -170,28 +175,26 @@ class PubSubServiceTest {
     @Test
     public void testSubscribe_failed() throws Exception {
         final String subscriptionName = "my-sub";
-        final ProjectSubscriptionName projectSubscriptionName = ProjectSubscriptionName.of(PROJECT_ID, subscriptionName);
+        final ProjectSubscriptionName projectSubscriptionName = ProjectSubscriptionName.of(PROJECT_ID,
+                subscriptionName);
         try (MockedStatic<Subscriber> subscriberMockedStatic = mockStatic(Subscriber.class)) {
-            subscriberMockedStatic.when(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock)).thenReturn(subscriberBuilderMock);
+            subscriberMockedStatic.when(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock))
+                    .thenReturn(subscriberBuilderMock);
             when(configMock.getProjectId()).thenReturn(PROJECT_ID);
             when(subscriberBuilderMock.build()).thenReturn(subscriberMock);
             final PubSubService pubSubServiceSpyClient = spy(new PubSubService(configMock));
             doThrow(new IOException()).when(pubSubServiceSpyClient).initSubscription(topic);
 
-
             pubSubServiceSpyClient.subscribe(topic, messageReceiverMock);
-
 
             verify(configMock, times(1)).getProjectId();
             verify(pubSubServiceSpyClient, times(1)).initSubscription(topic);
             verify(pubSubServiceSpyClient, times(1)).subscribe(topic, messageReceiverMock);
             verifyNoMoreInteractions(pubSubServiceSpyClient, subscriberMock);
 
-
             subscriberMockedStatic.verifyNoMoreInteractions();
         }
 
     }
-
 
 }

@@ -16,6 +16,7 @@
 
 package org.eclipse.hono.communication.core.utils;
 
+import org.eclipse.hono.communication.api.exception.DeviceNotAvailableException;
 import org.eclipse.hono.communication.api.exception.DeviceNotFoundException;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -24,11 +25,11 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.validation.BadRequestException;
 
-
 /**
  * HTTP Response utilities class.
  */
 public abstract class ResponseUtils {
+
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String APPLICATION_JSON_TYPE = "application/json";
 
@@ -38,29 +39,27 @@ public abstract class ResponseUtils {
     /**
      * Build success response using 200 as its status code and response object as body.
      *
-     * @param rc       The routing context
+     * @param rc The routing context
      * @param response The response object
      */
     public static void successResponse(final RoutingContext rc,
-                                       final Object response) {
+            final Object response) {
         rc.response()
                 .setStatusCode(HttpResponseStatus.OK.code())
                 .putHeader(CONTENT_TYPE_HEADER, APPLICATION_JSON_TYPE)
                 .end(Json.encodePrettily(response));
     }
 
-
     /**
-     * Build error response using 400 Bad Request, 404 Not Found or 500 Internal Server Error
-     * as its status code and throwable as its body.
+     * Build error response using 400 Bad Request, 404 Not Found or 500 Internal Server Error as its status code and
+     * throwable as its body.
      *
-     * @param rc    Routing context
+     * @param rc Routing context
      * @param error Throwable exception
      */
     public static void errorResponse(final RoutingContext rc, final Throwable error) {
         final int status;
         final String message;
-
 
         if (error instanceof IllegalArgumentException
                 || error instanceof IllegalStateException
@@ -73,6 +72,10 @@ public abstract class ResponseUtils {
         } else if (error instanceof DeviceNotFoundException) {
             // Not Found
             status = HttpResponseStatus.NOT_FOUND.code();
+            message = error.getMessage();
+        } else if (error instanceof DeviceNotAvailableException) {
+            // Gateway Timeout
+            status = HttpResponseStatus.GATEWAY_TIMEOUT.code();
             message = error.getMessage();
         } else {
             // Internal Server Error
@@ -90,6 +93,5 @@ public abstract class ResponseUtils {
                 .putHeader(CONTENT_TYPE_HEADER, APPLICATION_JSON_TYPE)
                 .end(new JsonObject().put("error", message).encodePrettily());
     }
-
 
 }

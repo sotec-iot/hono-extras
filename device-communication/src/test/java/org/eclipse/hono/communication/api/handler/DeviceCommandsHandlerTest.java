@@ -80,7 +80,6 @@ class DeviceCommandsHandlerTest {
                 routerBuilderMock,
                 routingContextMock,
                 operationMock);
-
     }
 
     @Test
@@ -128,11 +127,7 @@ class DeviceCommandsHandlerTest {
         verify(routingContextMock, times(1)).pathParam(ApiCommonConstants.TENANT_PATH_PARAMS);
         verify(routingContextMock, times(1)).pathParam(ApiCommonConstants.DEVICE_PATH_PARAMS);
 
-
         verify(responseMock, times(1)).setStatusCode(200);
         verify(responseMock, times(1)).end();
-
-
     }
-
 }

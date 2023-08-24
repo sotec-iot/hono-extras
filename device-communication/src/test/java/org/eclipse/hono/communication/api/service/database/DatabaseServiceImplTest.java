@@ -14,9 +14,13 @@
  *
  */
 
-package org.eclipse.hono.communication.api.service;
+package org.eclipse.hono.communication.api.service.database;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.eclipse.hono.communication.core.app.DatabaseConfig;
 import org.eclipse.hono.communication.core.utils.DbUtils;
@@ -27,7 +31,6 @@ import org.mockito.MockedStatic;
 
 import io.vertx.core.Vertx;
 import io.vertx.pgclient.PgPool;
-
 
 class DatabaseServiceImplTest {
 
@@ -41,21 +44,18 @@ class DatabaseServiceImplTest {
         vertxMock = mock(Vertx.class);
         databaseConfigMock = mock(DatabaseConfig.class);
         pgPoolMock = mock(PgPool.class);
-
-
     }
 
     @AfterEach
     void tearDown() {
         verifyNoMoreInteractions(vertxMock, databaseConfigMock, pgPoolMock);
-
     }
-
 
     @Test
     void getDbClient() {
         try (MockedStatic<DbUtils> dbUtilsMockedStatic = mockStatic(DbUtils.class)) {
-            dbUtilsMockedStatic.when(() -> DbUtils.createDbClient(vertxMock, databaseConfigMock)).thenReturn(pgPoolMock);
+            dbUtilsMockedStatic.when(() -> DbUtils.createDbClient(vertxMock, databaseConfigMock))
+                    .thenReturn(pgPoolMock);
             databaseService = new DatabaseServiceImpl(databaseConfigMock, vertxMock);
 
             final var client = databaseService.getDbClient();
@@ -71,7 +71,8 @@ class DatabaseServiceImplTest {
     void close() {
 
         try (MockedStatic<DbUtils> dbUtilsMockedStatic = mockStatic(DbUtils.class)) {
-            dbUtilsMockedStatic.when(() -> DbUtils.createDbClient(vertxMock, databaseConfigMock)).thenReturn(pgPoolMock);
+            dbUtilsMockedStatic.when(() -> DbUtils.createDbClient(vertxMock, databaseConfigMock))
+                    .thenReturn(pgPoolMock);
             databaseService = new DatabaseServiceImpl(databaseConfigMock, vertxMock);
 
             databaseService.close();

@@ -20,9 +20,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
-
-
 /**
  * Command json object structure.
  **/
@@ -31,6 +28,8 @@ public class DeviceCommandRequest {
 
     private String binaryData;
     private String subfolder;
+    private boolean responseRequired;
+    private Long correlationId;
 
     /**
      * Creates a new DeviceCommandRequest.
@@ -43,13 +42,17 @@ public class DeviceCommandRequest {
      * Creates a new DeviceCommandRequest.
      *
      * @param binaryData Binary data
-     * @param subfolder  THe subfolder
+     * @param subfolder The subfolder
+     * @param responseRequired If it is a request / response command
+     * @param correlationId The correlation id
      */
-    public DeviceCommandRequest(final String binaryData, final String subfolder) {
+    public DeviceCommandRequest(final String binaryData, final String subfolder, final boolean responseRequired,
+            final Long correlationId) {
         this.binaryData = binaryData;
         this.subfolder = subfolder;
+        this.responseRequired = responseRequired;
+        this.correlationId = correlationId;
     }
-
 
     @JsonProperty("binaryData")
     public String getBinaryData() {
@@ -60,7 +63,6 @@ public class DeviceCommandRequest {
         this.binaryData = binaryData;
     }
 
-
     @JsonProperty("subfolder")
     public String getSubfolder() {
         return subfolder;
@@ -70,6 +72,23 @@ public class DeviceCommandRequest {
         this.subfolder = subfolder;
     }
 
+    @JsonProperty("response-required")
+    public boolean isResponseRequired() {
+        return responseRequired;
+    }
+
+    public void setResponseRequired(final boolean responseRequired) {
+        this.responseRequired = responseRequired;
+    }
+
+    @JsonProperty("correlation-id")
+    public Long getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(final Long correlationId) {
+        this.correlationId = correlationId;
+    }
 
     @Override
     public boolean equals(final Object o) {
@@ -81,26 +100,35 @@ public class DeviceCommandRequest {
         }
         final DeviceCommandRequest deviceCommandRequest = (DeviceCommandRequest) o;
         return Objects.equals(binaryData, deviceCommandRequest.binaryData) &&
-                Objects.equals(subfolder, deviceCommandRequest.subfolder);
+                Objects.equals(subfolder, deviceCommandRequest.subfolder) &&
+                Objects.equals(responseRequired, deviceCommandRequest.responseRequired) &&
+                Objects.equals(correlationId, deviceCommandRequest.correlationId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(binaryData, subfolder);
+        return Objects.hash(binaryData, subfolder, responseRequired, correlationId);
     }
 
     @Override
     public String toString() {
-
-        return "class DeviceCommandRequest {\n" +
-                "    binaryData: " + toIndentedString(binaryData) + "\n" +
-                "    subfolder: " + toIndentedString(subfolder) + "\n" +
-                "}";
+        if (responseRequired) {
+            return "class DeviceCommandRequest {\n" +
+                    "    binaryData: " + toIndentedString(binaryData) + "\n" +
+                    "    subfolder: " + toIndentedString(subfolder) + "\n" +
+                    "    response-required: " + responseRequired + "\n" +
+                    "    correlation-id: " + correlationId + "\n" +
+                    "}";
+        } else {
+            return "class DeviceCommandRequest {\n" +
+                    "    binaryData: " + toIndentedString(binaryData) + "\n" +
+                    "    subfolder: " + toIndentedString(subfolder) + "\n" +
+                    "}";
+        }
     }
 
     /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
      */
     private String toIndentedString(final Object o) {
         if (o == null) {

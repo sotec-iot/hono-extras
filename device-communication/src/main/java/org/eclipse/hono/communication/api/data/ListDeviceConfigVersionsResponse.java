@@ -22,8 +22,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
-
 /**
  * A list of a device config versions.
  **/
@@ -48,7 +46,6 @@ public class ListDeviceConfigVersionsResponse {
         this.deviceConfigs = deviceConfigs;
     }
 
-
     @JsonProperty("deviceConfigs")
     public List<DeviceConfig> getDeviceConfigs() {
         return deviceConfigs;
@@ -57,7 +54,6 @@ public class ListDeviceConfigVersionsResponse {
     public void setDeviceConfigs(final List<DeviceConfig> deviceConfigs) {
         this.deviceConfigs = deviceConfigs;
     }
-
 
     @Override
     public boolean equals(final Object o) {
@@ -85,8 +81,7 @@ public class ListDeviceConfigVersionsResponse {
     }
 
     /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
+     * Convert the given object to string with each line indented by 4 spaces (except the first line).
      */
     private String toIndentedString(final Object o) {
         if (o == null) {

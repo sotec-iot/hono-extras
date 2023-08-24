@@ -21,7 +21,4 @@ package org.eclipse.hono.communication.api.service.communication;
  */
 public interface InternalMessaging extends InternalMessageSubscriber, InternalMessagePublisher {
 
-
 }
-
-

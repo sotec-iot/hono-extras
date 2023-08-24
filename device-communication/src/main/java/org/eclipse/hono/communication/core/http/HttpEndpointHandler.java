@@ -22,6 +22,7 @@ import io.vertx.ext.web.openapi.RouterBuilder;
  * An vertx endpoint that handles HTTP requests.
  */
 public interface HttpEndpointHandler {
+
     /**
      * Adds custom routes for handling requests that this endpoint can handle.
      *

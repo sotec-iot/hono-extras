@@ -22,7 +22,7 @@ app:
     command:
       topicFormat: ${COM_COMMAND_TOPIC_FORMAT:%s.command} # TENANT_NAME.command
       ackTopic: ${COM_CONFIG_ACK_TOPIC:%s.command_response} # TENANT_NAME.command_response
-      configAckDelay: ${COM_CONFIG_ACK_DELAY:10000}
+      commandConfigAckDelay: ${COM_COMMAND_CONFIG_ACK_DELAY:5000}
 
 vertx:
   openapi:

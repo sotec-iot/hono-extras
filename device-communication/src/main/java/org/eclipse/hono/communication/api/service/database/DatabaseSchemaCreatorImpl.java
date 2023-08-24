@@ -14,13 +14,14 @@
  *
  */
 
-package org.eclipse.hono.communication.api.service;
+package org.eclipse.hono.communication.api.service.database;
 
 import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.hono.communication.api.config.DeviceConfigsConstants;
+import org.eclipse.hono.communication.api.config.DeviceStatesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,23 +32,21 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.sqlclient.templates.SqlTemplate;
 
 /**
- * Creates all Database tables if they are not exist.
+ * Creates all Database tables if they do not exist.
  */
 
 @ApplicationScoped
 public class DatabaseSchemaCreatorImpl implements DatabaseSchemaCreator {
+
     private static final Logger log = LoggerFactory.getLogger(DatabaseSchemaCreatorImpl.class);
     private final Vertx vertx;
-    private final String tableCreationErrorMsg = "Table deviceConfig can not be created {}";
-    private final String tableCreationSuccessMsg = "Successfully migrate Table: deviceConfig.";
     private final DatabaseService db;
-
 
     /**
      * Creates a new DatabaseSchemaCreatorImpl.
      *
      * @param vertx The quarkus Vertx instance
-     * @param db    The database service
+     * @param db The database service
      */
     public DatabaseSchemaCreatorImpl(final Vertx vertx, final DatabaseService db) {
         this.vertx = vertx;
@@ -56,29 +55,30 @@ public class DatabaseSchemaCreatorImpl implements DatabaseSchemaCreator {
 
     @Override
     public void createDBTables() {
-        createDeviceConfigTable();
+        createTable(DeviceConfigsConstants.CREATE_SQL_SCRIPT_PATH, "device_config");
+        createTable(DeviceStatesConstants.CREATE_SQL_SCRIPT_PATH, "device_status");
     }
 
-
-    private void createDeviceConfigTable() {
-        log.info("Running database migration from file {}", DeviceConfigsConstants.CREATE_SQL_SCRIPT_PATH);
+    private void createTable(final String filePath, final String tableName) {
+        log.info("Running database migration from file {}", filePath);
 
         final Promise<Buffer> loadScriptTracker = Promise.promise();
-        vertx.fileSystem().readFile(DeviceConfigsConstants.CREATE_SQL_SCRIPT_PATH, loadScriptTracker);
+        vertx.fileSystem().readFile(filePath, loadScriptTracker);
+        createTableIfNotExist(loadScriptTracker, tableName);
+    }
+
+    private void createTableIfNotExist(final Promise<Buffer> loadScriptTracker, final String tableName) {
         db.getDbClient().withTransaction(
-                        sqlConnection ->
-                                loadScriptTracker.future()
-                                        .map(Buffer::toString)
-                                        .compose(script -> SqlTemplate
-                                                .forQuery(sqlConnection, script)
-                                                .execute(Map.of())))
-                .onSuccess(ok -> log.info(tableCreationSuccessMsg))
+                sqlConnection -> loadScriptTracker.future()
+                        .map(Buffer::toString)
+                        .compose(script -> SqlTemplate
+                                .forQuery(sqlConnection, script)
+                                .execute(Map.of())))
+                .onSuccess(ok -> log.info("Successfully migrate Table: {}.", tableName))
                 .onFailure(error -> {
-                    log.error(tableCreationErrorMsg, error.getMessage());
+                    log.error("Table {} can not be created. {}", tableName, error.getMessage());
                     db.close();
                     Quarkus.asyncExit(-1);
                 });
-
-
     }
 }

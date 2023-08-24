@@ -60,7 +60,6 @@ public class PubSubService implements InternalMessaging {
     private final String projectId;
     private TopicName topicName;
 
-
     /**
      * Creates a new PubSubService.
      *
@@ -86,7 +85,8 @@ public class PubSubService implements InternalMessaging {
     }
 
     @Override
-    public void publish(final String topic, final byte[] message, final Map<String, String> attributes) throws Exception {
+    public void publish(final String topic, final byte[] message, final Map<String, String> attributes)
+            throws Exception {
         final Publisher publisher = Publisher.newBuilder(TopicName.of(projectId, topic))
                 .build();
         try {
@@ -98,6 +98,7 @@ public class PubSubService implements InternalMessaging {
                     .build();
             final ApiFuture<String> messageIdFuture = publisher.publish(pubsubMessage);
             ApiFutures.addCallback(messageIdFuture, new ApiFutureCallback<>() {
+
                 public void onSuccess(final String messageId) {
                     log.debug("Message was published with id {}", messageId);
                 }
@@ -113,7 +114,6 @@ public class PubSubService implements InternalMessaging {
             publisher.awaitTermination(1, TimeUnit.MINUTES);
         }
     }
-
 
     @Override
     public void subscribe(final String topic, final MessageReceiver callbackHandler) {
@@ -143,11 +143,11 @@ public class PubSubService implements InternalMessaging {
     ProjectSubscriptionName initSubscription(final String topic) throws IOException {
         final var subscriptionName = ProjectSubscriptionName.of(
                 projectId,
-                String.format(COMMUNICATION_API_SUBSCRIPTION_NAME, topic)
-        );
+                String.format(COMMUNICATION_API_SUBSCRIPTION_NAME, topic));
         final var subscriptionAdminSettings = SubscriptionAdminSettings.newBuilder()
                 .build();
-        try (SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient.create(subscriptionAdminSettings)) {
+        try (SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient
+                .create(subscriptionAdminSettings)) {
             final var subscriptions = subscriptionAdminClient.listSubscriptions(ProjectName.of(projectId))
                     .iterateAll();
             final Optional<Subscription> existing = StreamSupport
@@ -161,8 +161,7 @@ public class PubSubService implements InternalMessaging {
                         subscriptionName.toString(),
                         topicName,
                         PushConfig.getDefaultInstance(),
-                        50
-                );
+                        50);
             }
         }
         return subscriptionName;

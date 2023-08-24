@@ -22,6 +22,7 @@ import io.vertx.pgclient.PgPool;
  * Database service interface.
  */
 public interface DatabaseService {
+
     /**
      * Gets the database client instance.
      *

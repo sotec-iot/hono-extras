@@ -34,7 +34,6 @@ import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.impl.JsonUtil;
 
-
 /**
  * Abstract Service application class.
  */
@@ -51,15 +50,14 @@ public abstract class AbstractServiceApplication {
     private final Logger log = LoggerFactory.getLogger(AbstractServiceApplication.class);
     private Closeable addedVertxCloseHook;
 
-
     /**
      * Creates a new AbstractServiceApplication.
      *
-     * @param vertx      The quarkus Vertx instance
+     * @param vertx The quarkus Vertx instance
      * @param appConfigs The application configs
      */
-    public AbstractServiceApplication(final Vertx vertx,
-                                      final ApplicationConfig appConfigs) {
+    protected AbstractServiceApplication(final Vertx vertx,
+            final ApplicationConfig appConfigs) {
         this.vertx = vertx;
         this.appConfigs = appConfigs;
     }
@@ -73,9 +71,9 @@ public abstract class AbstractServiceApplication {
             final String base64Encoder = Base64.getEncoder() == JsonUtil.BASE64_ENCODER ? "legacy" : "URL safe";
 
             log.info("""
-                            running on Java VM [version: {}, name: {}, vendor: {}, max memory: {}MiB, processors: {}] \
-                            with vert.x using {} Base64 encoder\
-                            """,
+                    running on Java VM [version: {}, name: {}, vendor: {}, max memory: {}MiB, processors: {}] \
+                    with vert.x using {} Base64 encoder\
+                    """,
                     System.getProperty("java.version"),
                     System.getProperty("java.vm.name"),
                     System.getProperty("java.vm.vendor"),
@@ -133,8 +131,7 @@ public abstract class AbstractServiceApplication {
     /**
      * Invoked during start up.
      * <p>
-     * Subclasses should override this method in order to initialize
-     * the component.
+     * Subclasses should override this method in order to initialize the component.
      */
     protected void doStart() {
         // do nothing
@@ -146,7 +143,6 @@ public abstract class AbstractServiceApplication {
     protected void doStop() {
         // do nothing
     }
-
 
     /**
      * Stops this component.

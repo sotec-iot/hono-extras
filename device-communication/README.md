@@ -100,7 +100,9 @@ Attributes:
 
 - deviceId
 - tenantId
-- subject (always set to "command")
+- subject (if not specified set to "command")
+- response-required (optional)
+- correlation-id (optional)
 
 Body:
 
@@ -152,7 +154,7 @@ quarkus:
   builder: docker
   build: true
   push: true
-  image: "gcr.io/sotec-iot-core-dev/hono-device-communication"
+  image: "eclipse/hono-device-communication"
 
 ````
 

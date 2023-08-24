@@ -28,7 +28,6 @@ import org.eclipse.hono.communication.core.utils.ResponseUtils;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.openapi.RouterBuilder;
 
-
 /**
  * Handler for device command endpoints.
  */
@@ -51,7 +50,6 @@ public class DeviceCommandHandler implements HttpEndpointHandler {
         routerBuilder.operation(DeviceCommandConstants.POST_DEVICE_COMMAND_OP_ID)
                 .handler(this::handlePostCommand);
     }
-
 
     /**
      * Handle Post device command.

@@ -39,7 +39,7 @@ public class DatabaseServiceImpl implements DatabaseService {
      * Creates a new DatabaseServiceImpl.
      *
      * @param databaseConfigs The database configs
-     * @param vertx           The quarkus Vertx instance
+     * @param vertx The quarkus Vertx instance
      */
     public DatabaseServiceImpl(final DatabaseConfig databaseConfigs, final Vertx vertx) {
         this.dbClient = DbUtils.createDbClient(vertx, databaseConfigs);

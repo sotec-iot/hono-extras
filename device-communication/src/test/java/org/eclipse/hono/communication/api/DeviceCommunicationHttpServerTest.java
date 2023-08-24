@@ -17,17 +17,26 @@
 package org.eclipse.hono.communication.api;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.eclipse.hono.communication.api.handler.DeviceCommandHandler;
-import org.eclipse.hono.communication.api.service.DatabaseSchemaCreator;
-import org.eclipse.hono.communication.api.service.DatabaseSchemaCreatorImpl;
-import org.eclipse.hono.communication.api.service.DatabaseService;
-import org.eclipse.hono.communication.api.service.DatabaseServiceImpl;
 import org.eclipse.hono.communication.api.service.VertxHttpHandlerManagerService;
+import org.eclipse.hono.communication.api.service.communication.InternalTopicManager;
+import org.eclipse.hono.communication.api.service.database.DatabaseSchemaCreator;
+import org.eclipse.hono.communication.api.service.database.DatabaseSchemaCreatorImpl;
+import org.eclipse.hono.communication.api.service.database.DatabaseService;
+import org.eclipse.hono.communication.api.service.database.DatabaseServiceImpl;
 import org.eclipse.hono.communication.core.app.ApplicationConfig;
 import org.eclipse.hono.communication.core.app.ServerConfig;
 import org.junit.jupiter.api.AfterEach;
@@ -52,7 +61,6 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.openapi.RouterBuilder;
 import io.vertx.ext.web.validation.BadRequestException;
 
-
 class DeviceCommunicationHttpServerTest {
 
     private ApplicationConfig appConfigsMock;
@@ -67,6 +75,7 @@ class DeviceCommunicationHttpServerTest {
     private HttpServerRequest httpServerRequestMock;
     private BadRequestException badRequestExceptionMock;
     private DatabaseSchemaCreator databaseSchemaCreatorMock;
+    private InternalTopicManager internalTopicManager;
     private Route routeMock;
     private JsonObject jsonObjMock;
 
@@ -89,15 +98,15 @@ class DeviceCommunicationHttpServerTest {
         jsonObjMock = mock(JsonObject.class);
         dbMock = mock(DatabaseServiceImpl.class);
         databaseSchemaCreatorMock = mock(DatabaseSchemaCreatorImpl.class);
+        internalTopicManager = mock(InternalTopicManager.class);
         routeMock = mock(Route.class);
         deviceCommunicationHttpServer = new DeviceCommunicationHttpServer(appConfigsMock,
                 vertxMock,
                 handlerServiceMock,
                 dbMock,
-                databaseSchemaCreatorMock);
+                databaseSchemaCreatorMock, internalTopicManager);
 
     }
-
 
     @AfterEach
     void tearDown() {
@@ -115,9 +124,8 @@ class DeviceCommunicationHttpServerTest {
                 dbMock,
                 serverConfigMock,
                 databaseSchemaCreatorMock,
-                routeMock);
+                routeMock, internalTopicManager);
     }
-
 
     @Test
     void startSucceeded() {
@@ -148,20 +156,19 @@ class DeviceCommunicationHttpServerTest {
                 when(routerMock.route(any())).thenReturn(routeMock);
 
                 try (MockedStatic<Quarkus> quarkusMockedStatic = mockStatic(Quarkus.class)) {
-                    final DeviceCommunicationHttpServer deviceCommunicationHttpServerSpy = spy(this.deviceCommunicationHttpServer);
+                    final DeviceCommunicationHttpServer deviceCommunicationHttpServerSpy = spy(
+                            this.deviceCommunicationHttpServer);
                     deviceCommunicationHttpServerSpy.start();
 
-
-                    verify(deviceCommunicationHttpServerSpy, times(1)).createRouterWithEndpoints(eq(routerBuilderMock), any());
+                    verify(deviceCommunicationHttpServerSpy, times(1)).createRouterWithEndpoints(eq(routerBuilderMock),
+                            any());
                     verify(deviceCommunicationHttpServerSpy, times(1)).startVertxServer(any());
                     mockedRouterBuilderStatic.verify(() -> RouterBuilder.create(vertxMock, "/myPath"), times(1));
                     routerMockedStatic.verify(() -> Router.router(vertxMock), times(1));
 
-
                     verify(databaseSchemaCreatorMock, times(1)).createDBTables();
                     verify(handlerServiceMock, times(1)).getAvailableHandlerServices();
                     verify(routerBuilderMock, times(1)).createRouter();
-
 
                     verify(vertxMock, times(1)).createHttpServer(any(HttpServerOptions.class));
                     verify(httpServerMock, times(1)).requestHandler(any());
@@ -178,6 +185,7 @@ class DeviceCommunicationHttpServerTest {
                     verify(routeMock, times(2)).handler(any());
                     verify(routerMock, times(1)).route(anyString());
                     verify(routeMock, times(1)).subRouter(any());
+                    verify(internalTopicManager).initPubSub();
                     quarkusMockedStatic.verify(Quarkus::waitForExit, times(1));
                     routerMockedStatic.verifyNoMoreInteractions();
                     mockedRouterBuilderStatic.verifyNoMoreInteractions();
@@ -185,11 +193,7 @@ class DeviceCommunicationHttpServerTest {
 
                 }
             }
-
-
         }
-
-
     }
 
     @Test
@@ -207,20 +211,18 @@ class DeviceCommunicationHttpServerTest {
             try (MockedStatic<Quarkus> quarkusMockedStatic = mockStatic(Quarkus.class)) {
                 this.deviceCommunicationHttpServer.start();
 
-
                 verify(dbMock, times(1)).close();
                 verify(databaseSchemaCreatorMock, times(1)).createDBTables();
                 verify(handlerServiceMock, times(1)).getAvailableHandlerServices();
                 verify(appConfigsMock, times(1)).getServerConfig();
                 verify(serverConfigMock, times(1)).getOpenApiFilePath();
+                verify(internalTopicManager).initPubSub();
                 quarkusMockedStatic.verify(() -> Quarkus.asyncExit(-1), times(1));
                 quarkusMockedStatic.verify(Quarkus::waitForExit, times(1));
                 quarkusMockedStatic.verifyNoMoreInteractions();
             }
-
         }
     }
-
 
     @Test
     void createServerFailed() {
@@ -245,17 +247,17 @@ class DeviceCommunicationHttpServerTest {
                     when(routeMock.handler(any())).thenReturn(routeMock);
                     when(vertxMock.createHttpServer(any(HttpServerOptions.class))).thenReturn(httpServerMock);
                     when(httpServerMock.requestHandler(routerMock)).thenReturn(httpServerMock);
-                    when(httpServerMock.listen()).thenReturn(Future.failedFuture(new Throwable("Test error on listen()")));
+                    when(httpServerMock.listen()).thenReturn(Future.failedFuture(new Throwable()));
                     when(serverConfigMock.getOpenApiFilePath()).thenReturn("/myPath");
                     when(serverConfigMock.getBasePath()).thenReturn("/basePath");
                     when(routerMock.route(any())).thenReturn(routeMock);
-                    final DeviceCommunicationHttpServer deviceCommunicationHttpServerSpy = spy(this.deviceCommunicationHttpServer);
+                    final DeviceCommunicationHttpServer deviceCommunicationHttpServerSpy = spy(
+                            this.deviceCommunicationHttpServer);
                     deviceCommunicationHttpServerSpy.start();
 
-
-                    verify(deviceCommunicationHttpServerSpy, times(1)).createRouterWithEndpoints(eq(routerBuilderMock), any());
+                    verify(deviceCommunicationHttpServerSpy, times(1)).createRouterWithEndpoints(eq(routerBuilderMock),
+                            any());
                     verify(deviceCommunicationHttpServerSpy, times(1)).startVertxServer(any());
-
 
                     mockedRouterBuilderStatic.verify(() -> RouterBuilder.create(vertxMock, "/myPath"), times(1));
 
@@ -276,6 +278,7 @@ class DeviceCommunicationHttpServerTest {
                     verify(routeMock, times(2)).handler(any());
                     verify(routeMock, times(1)).subRouter(any());
                     verify(routerMock, times(1)).route(anyString());
+                    verify(internalTopicManager).initPubSub();
                     routerMockedStatic.verify(() -> Router.router(vertxMock), times(1));
                     quarkusMockedStatic.verify(Quarkus::waitForExit, times(1));
                     mockedRouterBuilderStatic.verifyNoMoreInteractions();
@@ -283,10 +286,8 @@ class DeviceCommunicationHttpServerTest {
                     quarkusMockedStatic.verifyNoMoreInteractions();
                 }
             }
-
         }
     }
-
 
     @Test
     void addDefault400ExceptionHandler() {

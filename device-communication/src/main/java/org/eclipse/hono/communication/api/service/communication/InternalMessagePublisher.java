@@ -26,8 +26,8 @@ public interface InternalMessagePublisher {
     /**
      * Publish a message to a topic.
      *
-     * @param topic      The topic to publish the message
-     * @param message    The message to publish
+     * @param topic The topic to publish the message
+     * @param message The message to publish
      * @param attributes The message attributes
      * @throws Exception Throws Exception if subscription can't be created
      */

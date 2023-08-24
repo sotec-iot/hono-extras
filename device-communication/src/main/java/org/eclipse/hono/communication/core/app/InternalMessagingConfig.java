@@ -42,11 +42,9 @@ public class InternalMessagingConfig {
     @ConfigProperty(name = "app.internalMessaging.message.attributeKeys.ttdKey")
     String ttdKey;
 
-
-    //Event
+    // Event
     @ConfigProperty(name = "app.internalMessaging.event.topicFormat")
     String eventTopicFormat;
-
 
     // State
     @ConfigProperty(name = "app.internalMessaging.state.topicFormat")
@@ -55,8 +53,8 @@ public class InternalMessagingConfig {
     // Config
     @ConfigProperty(name = "app.internalMessaging.command.ackTopic")
     String commandAckTopicFormat;
-    @ConfigProperty(name = "app.internalMessaging.command.configAckDelay")
-    String configAckDelay;
+    @ConfigProperty(name = "app.internalMessaging.command.commandConfigAckDelay")
+    String commandConfigAckDelay;
 
     // Command
     @ConfigProperty(name = "app.internalMessaging.command.topicFormat")
@@ -69,8 +67,9 @@ public class InternalMessagingConfig {
     public String getCommandAckTopicFormat() {
         return commandAckTopicFormat;
     }
-    public long getConfigAckDelay() {
-        return Long.parseLong(configAckDelay);
+
+    public long getCommandConfigAckDelay() {
+        return Long.parseLong(commandConfigAckDelay);
     }
 
     public String getProjectId() {

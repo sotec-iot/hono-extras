@@ -34,14 +34,14 @@ public interface DeviceConfigRepository {
      *
      * @param deviceId The device id
      * @param tenantId The tenant id
-     * @param limit    The number of config to show
+     * @param limit The number of config to show
      * @return A Future with a List of DeviceConfigs
      */
     Future<List<DeviceConfig>> listAll(String deviceId, String tenantId, int limit);
 
-
     /**
-     * Creates a new config version and deletes the oldest version if the total num of versions in DB is bigger than the MAX_LIMIT.
+     * Creates a new config version and deletes the oldest version if the total num of versions in DB is bigger than the
+     * MAX_LIMIT.
      *
      * @param entity The instance to insert
      * @return A Future of the created DeviceConfigEntity
@@ -51,7 +51,7 @@ public interface DeviceConfigRepository {
     /**
      * Update the deviceAckTime field.
      *
-     * @param config        The device config
+     * @param config The device config
      * @param deviceAckTime The ack Time
      * @return Future of Void
      */
@@ -66,7 +66,6 @@ public interface DeviceConfigRepository {
      */
 
     Future<Void> updateDeviceConfigError(DeviceConfigInternalResponse configErrorResponse);
-
 
     /**
      * Get device latest config max(version).

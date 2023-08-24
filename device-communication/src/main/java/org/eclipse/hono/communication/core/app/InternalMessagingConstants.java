@@ -27,6 +27,12 @@ public class InternalMessagingConstants {
     public static final String CORRELATION_ID = "correlation-id";
     public static final String RESPONSE_REQUIRED = "response-required";
     public static final String STATUS = "status";
+    public static final String CONTENT_TYPE = "content-type";
+    private static final String DELIVERY_FAILURE_NOTIFICATION_METADATA = "delivery-failure-notification-metadata";
+    public static final String DELIVERY_FAILURE_NOTIFICATION_METADATA_SUBJECT = DELIVERY_FAILURE_NOTIFICATION_METADATA
+            + "-" + SUBJECT;
+    public static final String DELIVERY_FAILURE_NOTIFICATION_METADATA_TASK_ID = DELIVERY_FAILURE_NOTIFICATION_METADATA
+            + "-task-id";
 
     private InternalMessagingConstants() {
     }

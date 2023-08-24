@@ -20,7 +20,6 @@ import javax.inject.Singleton;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-
 /**
  * Server configurations.
  */
@@ -37,7 +36,6 @@ public class ServerConfig {
 
     @ConfigProperty(name = "vertx.server.paths.readiness", defaultValue = "/readiness")
     String readinessPath;
-
 
     @ConfigProperty(name = "vertx.server.paths.liveness", defaultValue = "/liveness")
     String livenessPath;

@@ -14,15 +14,24 @@
  *
  */
 
+package org.eclipse.hono.communication.core.utils;
 
-CREATE TABLE IF NOT EXISTS device_configs
-(
-    version           INT          not null,
-    tenant_id         VARCHAR(100) not null,
-    device_id         VARCHAR(100) not null,
-    cloud_update_time VARCHAR(100) not null,
-    device_ack_time   VARCHAR(100),
-    binary_data       VARCHAR      not null,
+import java.util.Random;
 
-    PRIMARY KEY (version, tenant_id, device_id)
-)
+import javax.enterprise.inject.Produces;
+
+/**
+ * Injection utilities class.
+ */
+public class InjectionUtils {
+
+    /**
+     * Producer for Random object.
+     *
+     * @return A Random object
+     */
+    @Produces
+    public Random produceRandom() {
+        return new Random();
+    }
+}
