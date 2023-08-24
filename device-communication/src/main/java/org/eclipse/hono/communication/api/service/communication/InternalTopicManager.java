@@ -14,19 +14,26 @@
  *
  */
 
-package org.eclipse.hono.communication.api.service;
+package org.eclipse.hono.communication.api.service.communication;
 
-import io.vertx.ext.web.RoutingContext;
+import com.google.cloud.pubsub.v1.AckReplyConsumer;
+import com.google.pubsub.v1.PubsubMessage;
 
 /**
- * Device commands interface.
+ * Internal topic manager interface.
  */
-public interface DeviceCommandService {
+public interface InternalTopicManager {
 
     /**
-     * Post device command.
-     *
-     * @param routingContext The RoutingContext
+     * Initializes topics and subscriptions.
      */
-    void postCommand(RoutingContext routingContext);
+    void init();
+
+    /**
+     * Handles incoming tenant change notifications.
+     *
+     * @param pubsubMessage The message to handle
+     * @param consumer      The message consumer
+     */
+    void onTenantChanges(PubsubMessage pubsubMessage, AckReplyConsumer consumer);
 }

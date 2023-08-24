@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.hono.communication.core.utils.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-
 
 /**
  * A list of a device config versions.
@@ -36,7 +36,6 @@ public class ListDeviceConfigVersionsResponse {
      * Creates a new ListDeviceConfigVersionsResponse.
      */
     public ListDeviceConfigVersionsResponse() {
-
     }
 
     /**
@@ -48,7 +47,6 @@ public class ListDeviceConfigVersionsResponse {
         this.deviceConfigs = deviceConfigs;
     }
 
-
     @JsonProperty("deviceConfigs")
     public List<DeviceConfig> getDeviceConfigs() {
         return deviceConfigs;
@@ -57,7 +55,6 @@ public class ListDeviceConfigVersionsResponse {
     public void setDeviceConfigs(final List<DeviceConfig> deviceConfigs) {
         this.deviceConfigs = deviceConfigs;
     }
-
 
     @Override
     public boolean equals(final Object o) {
@@ -80,18 +77,7 @@ public class ListDeviceConfigVersionsResponse {
     public String toString() {
 
         return "class ListDeviceConfigVersionsResponse {\n" +
-                "    deviceConfigs: " + toIndentedString(deviceConfigs) + "\n" +
+                "    deviceConfigs: " + StringUtils.toIndentedString(deviceConfigs) + "\n" +
                 "}";
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(final Object o) {
-        if (o == null) {
-            return "null";
-        }
-        return o.toString().replace("\n", "\n    ");
     }
 }

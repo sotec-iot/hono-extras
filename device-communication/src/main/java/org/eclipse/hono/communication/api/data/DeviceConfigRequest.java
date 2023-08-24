@@ -18,10 +18,10 @@ package org.eclipse.hono.communication.api.data;
 
 import java.util.Objects;
 
+import org.eclipse.hono.communication.core.utils.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-
 
 /**
  * Request body for modifying device configs.
@@ -36,20 +36,18 @@ public class DeviceConfigRequest {
      * Creates a new DeviceConfigRequest.
      */
     public DeviceConfigRequest() {
-
     }
 
     /**
      * Creates a new DeviceConfigRequest.
      *
      * @param versionToUpdate Version to update
-     * @param binaryData      The binary data
+     * @param binaryData The binary data
      */
     public DeviceConfigRequest(final String versionToUpdate, final String binaryData) {
         this.versionToUpdate = versionToUpdate;
         this.binaryData = binaryData;
     }
-
 
     @JsonProperty("versionToUpdate")
     public String getVersionToUpdate() {
@@ -60,7 +58,6 @@ public class DeviceConfigRequest {
         this.versionToUpdate = versionToUpdate;
     }
 
-
     @JsonProperty("binaryData")
     public String getBinaryData() {
         return binaryData;
@@ -69,7 +66,6 @@ public class DeviceConfigRequest {
     public void setBinaryData(final String binaryData) {
         this.binaryData = binaryData;
     }
-
 
     @Override
     public boolean equals(final Object o) {
@@ -93,19 +89,8 @@ public class DeviceConfigRequest {
     public String toString() {
 
         return "class DeviceConfigRequest {\n" +
-                "    versionToUpdate: " + toIndentedString(versionToUpdate) + "\n" +
-                "    binaryData: " + toIndentedString(binaryData) + "\n" +
+                "    versionToUpdate: " + StringUtils.toIndentedString(versionToUpdate) + "\n" +
+                "    binaryData: " + StringUtils.toIndentedString(binaryData) + "\n" +
                 "}";
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(final Object o) {
-        if (o == null) {
-            return "null";
-        }
-        return o.toString().replace("\n", "\n    ");
     }
 }

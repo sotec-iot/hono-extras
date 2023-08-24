@@ -16,10 +16,9 @@
 
 package org.eclipse.hono.communication.core.app;
 
-import javax.inject.Singleton;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import jakarta.inject.Singleton;
 
 /**
  * Server configurations.
@@ -27,7 +26,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @Singleton
 public class ServerConfig {
 
-    // Vertx server properties
+    // Vert.x server properties
     @ConfigProperty(name = "vertx.openapi.file")
     String openApiFilePath;
     @ConfigProperty(name = "vertx.server.url")
@@ -37,7 +36,6 @@ public class ServerConfig {
 
     @ConfigProperty(name = "vertx.server.paths.readiness", defaultValue = "/readiness")
     String readinessPath;
-
 
     @ConfigProperty(name = "vertx.server.paths.liveness", defaultValue = "/liveness")
     String livenessPath;

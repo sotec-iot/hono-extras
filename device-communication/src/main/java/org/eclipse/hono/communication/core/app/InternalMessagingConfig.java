@@ -16,11 +16,9 @@
 
 package org.eclipse.hono.communication.core.app;
 
-import javax.inject.Singleton;
-
-import org.eclipse.hono.util.CommandConstants;
-import org.eclipse.hono.util.EventConstants;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.inject.Singleton;
 
 /**
  * Configs for internal communication service.
@@ -32,7 +30,6 @@ public class InternalMessagingConfig {
     String projectId;
 
     // Message Attributes
-
     @ConfigProperty(name = "app.internalMessaging.message.attributeKeys.contentTypeKey")
     String contentTypeKey;
     @ConfigProperty(name = "app.internalMessaging.message.attributeKeys.origAdapterKey")
@@ -42,25 +39,31 @@ public class InternalMessagingConfig {
     @ConfigProperty(name = "app.internalMessaging.message.attributeKeys.ttdKey")
     String ttdKey;
 
-
-    //Event
+    // Event
     @ConfigProperty(name = "app.internalMessaging.event.topicFormat")
     String eventTopicFormat;
-
 
     // State
     @ConfigProperty(name = "app.internalMessaging.state.topicFormat")
     String stateTopicFormat;
 
-    // Config
-    @ConfigProperty(name = "app.internalMessaging.command.ackTopic")
-    String commandAckTopicFormat;
-    @ConfigProperty(name = "app.internalMessaging.command.configAckDelay")
-    String configAckDelay;
-
     // Command
     @ConfigProperty(name = "app.internalMessaging.command.topicFormat")
     String commandTopicFormat;
+    @ConfigProperty(name = "app.internalMessaging.command.ackTopic")
+    String commandAckTopicFormat;
+    @ConfigProperty(name = "app.internalMessaging.command.defaultAckTimeout")
+    String commandDefaultAckTimeout;
+
+    // Config
+    @ConfigProperty(name = "app.internalMessaging.command.config.initialRetryDelay")
+    String configInternalRetryDelay;
+    @ConfigProperty(name = "app.internalMessaging.command.config.onDeviceRequestRetries")
+    String configOnDeviceRequestRetries;
+
+    // PubSub
+    @ConfigProperty(name = "app.internalMessaging.pubsub.batchInitTenantThreshold")
+    int batchInitTenantThreshold;
 
     public String getCommandTopicFormat() {
         return commandTopicFormat;
@@ -69,8 +72,17 @@ public class InternalMessagingConfig {
     public String getCommandAckTopicFormat() {
         return commandAckTopicFormat;
     }
-    public long getConfigAckDelay() {
-        return Long.parseLong(configAckDelay);
+
+    public long getCommandDefaultAckTimeout() {
+        return Long.parseLong(commandDefaultAckTimeout);
+    }
+
+    public long getConfigInternalRetryDelay() {
+        return Long.parseLong(configInternalRetryDelay);
+    }
+
+    public int getConfigOnDeviceRequestRetries() {
+        return Integer.parseInt(configOnDeviceRequestRetries);
     }
 
     public String getProjectId() {
@@ -97,15 +109,11 @@ public class InternalMessagingConfig {
         return eventTopicFormat;
     }
 
-    public String getEmptyNotificationEventContentType() {
-        return EventConstants.CONTENT_TYPE_EMPTY_NOTIFICATION;
-    }
-
-    public String getDeliveryFailureNotificationContentType() {
-        return CommandConstants.CONTENT_TYPE_DELIVERY_FAILURE_NOTIFICATION;
-    }
-
     public String getStateTopicFormat() {
         return stateTopicFormat;
+    }
+
+    public int getBatchInitTenantThreshold() {
+        return batchInitTenantThreshold;
     }
 }

@@ -1,7 +1,7 @@
 app:
   name: "Device Communication"
   version: ${COM_APP_VERSION:"v1"}
-  projectId: ${COM_PROJECT_ID:project-id}
+  projectId: ${QUARKUS_GOOGLE_CLOUD_PROJECT_ID:}
 
   internalMessaging:
     message:
@@ -15,14 +15,17 @@ app:
         ttdKey: ${COM_EVENT_ATTRIBUTE_TTD:ttd}
     event:
       topicFormat: ${COM_EVENT_ON_CONNECT_TOPIC_FORMAT:%s.event} # TENANT_NAME.event
-      emptyNotificationEventContentType: ${COM_EVENT_EMPTY_NOTIFICATION_CONTENT_TYPE:application/vnd.eclipse-hono-empty-notification}
-
     state:
       topicFormat: ${COM_STATE_TOPIC_FORMAT:%s.event.state}  # TENANT_NAME.event.state
     command:
       topicFormat: ${COM_COMMAND_TOPIC_FORMAT:%s.command} # TENANT_NAME.command
       ackTopic: ${COM_CONFIG_ACK_TOPIC:%s.command_response} # TENANT_NAME.command_response
-      configAckDelay: ${COM_CONFIG_ACK_DELAY:10000}
+      defaultAckTimeout: ${COM_COMMAND_DEFAULT_ACK_TIMEOUT:5000}
+      config:
+        initialRetryDelay: ${COM_COMMAND_CONFIG_INITIAL_RETRY_DELAY:10000}
+        onDeviceRequestRetries: ${COM_COMMAND_CONFIG_ON_DEVICE_REQUEST_RETRIES:4}
+    pubsub:
+      batchInitTenantThreshold: ${COM_PUBSUB_BATCH_INIT_TENANT_THRESHOLD:3}
 
 vertx:
   openapi:
@@ -38,6 +41,9 @@ vertx:
 
   database:
     pool-max-size: ${COM_POOL_MAX_SIZE:5}
+    pool-initial-size: ${COM_POOL_INITIAL_SIZE:1}
+    cache-prepared-statements: ${COM_CACHE_PREPARED_STATEMENTS:true}
+    connection-idle-timeout: ${COM_CONNECTION_IDLE_TIMEOUT:3600}
     name: ${COM_DB_NAME:hono}
     host: ${COM_DB_HOST:host.docker.internal}
     port: ${COM_DB_PORT:5432}
@@ -57,6 +63,10 @@ vertx:
     device-id-column: ${COM_DB_DEVICE_REG_DEVICE_COL_NAME:device_id}
 
 quarkus:
+  log:
+    category:
+      "org.eclipse.hono.communication":
+        level: ${COM_LOG_LEVEL:INFO}
   container-image:
     builder: docker
     build: false

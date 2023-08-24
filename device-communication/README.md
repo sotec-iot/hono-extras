@@ -1,18 +1,18 @@
 # Device Communication API
 
 Device communication API enables users and applications to send configurations and commands to devices via HTTP(S)
-endpoints.
+endpoints as well as retrieve states of devices.
 
 ![img.png](img.png)
 
 ### Application
 
-The application is reactive and uses Quarkus Framework for the application and Vertx tools for the HTTP server.
+The application is reactive and uses the Quarkus framework for the application and Vert.x tools for the HTTP server.
 
 ### Hono internal communication
 
-API uses [Google's PubSub](https://cloud.google.com/pubsub/docs/overview?hl=de) service to communicate with the command
-router.
+The application uses [Google's PubSub](https://cloud.google.com/pubsub/docs/overview?hl=de) service to communicate with
+the command router.
 
 ## API endpoints
 
@@ -32,32 +32,41 @@ router.
 
 - POST: create a device config version
 
-For more information please see resources/api/openApi file.
+For more information please see resources/api/hono-endpoint.yaml file.
 
 ## Pub/Sub - Internal Messaging
 
-API communicates with hono components via the internal messaging interface (implemented from Google's PubSub).
-All the settings for the InternalMessaging component are in the application.yaml file. By publish/subscribe to a topic
-application sends or expects some message attributes.
+The application communicates with hono components via the internal messaging interface (implemented for Google PubSub).
+The settings for the internal messaging component can be found in the application.yaml file.
 
 ### Events
 
-API will subscribe to all tenants' event topic at startup.
+The application subscribes to all tenants' event topic at startup to listen for config requests.
 
-Expected message Attributes:
+#### MQTT config request (empty notification)
+
+Expected message attributes:
 
 - deviceId
 - tenantId
-- content-type
+- content-type (must be "application/vnd.eclipse-hono-empty-notification")
+- ttd (must be -1)
 
-Application will <b>proceed only empty Notifications events (content-type is
-application/vnd.eclipse-hono-empty-notification)</b>.
+#### HTTP config request
+
+Expected message attributes:
+
+- deviceId
+- tenantId
+- ttd (must not be blank or empty)
+- orig_adapter (must be "hono-http")
+- orig_address (must contain "config")
 
 ### States
 
-API will subscribe to all tenants' state topic at startup.
+The application subscribes to all tenants' state topic at startup.
 
-Expected message Attributes:
+Expected message attributes:
 
 - deviceId
 - tenantId
@@ -66,21 +75,26 @@ States are read only.
 
 ### Configs
 
-Application will publish the latest device configuration when:
+The application publishes the latest device configuration when:
 
-- an empty Notifications event was received
-- a new device config was created
+- An empty notification event is received (MQTT device subscribed to the command topic)
+- A config request from an HTTP device is received
+- A new device config is created
 
-Message will be published with the following attributes:
+Message attributes:
 
 - deviceId
 - tenantId
-- config-version
+- correlation-id (the config version)
+- subject (always set to "config")
+- ack-required (always set to true)
 
-The Body will be a JSON object with the device config object.
+Body:
 
-After publishing device configs, application subscribes to config_response topic and waits for the device to ack the
-configs.
+A JSON object with the device config object.
+
+After publishing a device config, the application waits internally for an acknowledgement from the device on the
+command_response topic to update the "device_ack_time" in the database.
 
 ### Config ACK
 
@@ -88,27 +102,44 @@ Expected message attributes:
 
 - deviceId
 - tenantId
-- configVersion (the config version received from device)
-
-If configVersion is not set, application will ack always the latest config.
+- correlation-id (the config version)
+- content-type (must be "application/vnd.eclipse-hono-delivery-success-notification+json")
+- subject (must be "config")
 
 ### Commands
 
-A command will be published from API to the command topic.
+A command will be published from the application to the command topic.
 
 Attributes:
 
 - deviceId
 - tenantId
-- subject (always set to "command")
+- subject (if not specified set to "command")
+- response-required (optional)
+- ack-required (optional)
+- correlation-id (optional)
+- timeout (optional)
 
 Body:
 
 The command as string.
 
+If ack-required is set to "true", the request will wait for the duration of the specified timeout (in milliseconds)
+for an acknowledgement from the device on the command_response topic.
+
+### Command ACK
+
+Expected message attributes:
+
+- deviceId
+- tenantId
+- correlation-id
+- content-type (must be "application/vnd.eclipse-hono-delivery-success-notification+json")
+- subject (must not be "config")
+
 ## Database
 
-Application uses PostgresSQL database. All the database configurations can be found in application.yaml file.
+The application uses a PostgreSQL database. All the database configurations can be found in the application.yaml file.
 
 ### Tables
 
@@ -121,11 +152,11 @@ Application uses PostgresSQL database. All the database configurations can be fo
 
 ### Migrations
 
-When Applications starts tables will be created by the DatabaseSchemaCreator service.
+When the application starts the tables will be created by the DatabaseSchemaCreator service.
 
-### Running postgresSQL container local
+### Running PostgresSQL container locally
 
-For running the PostgresSQL Database local with docker run:
+The docker run command for running the PostgreSQL database locally:
 
 ``````
 
@@ -133,17 +164,17 @@ docker run -p 5432:5432 --name some-postgres -e POSTGRES_PASSWORD=mysecretpasswo
 
 ``````
 
-After the container is running, log in to the container and with psql create the database. Then we have
-to set the application settings.
+After the container is running, log in to the container and with psql create the database. Then we have to set the
+application settings.
 
-Default postgresSQl values:
+Default PostgreSQl values:
 
 - userName = postgres
 - password = mysecretpassword
 
-## Build and Push API Docker Image
+## Build and push the application's Docker image
 
-Mavens auto build and push functionality can be enabled from application.yaml settings:
+Mavens auto build and push functionality can be enabled in the application.yaml settings:
 
 ````
 quarkus:
@@ -154,45 +185,49 @@ quarkus:
   image: "eclipse/hono-device-communication"
 ````
 
-By running maven package, install or deploy will automatically build the docker image and if push is enabled it will
-push the image
-to the given registry.
+By running maven package, install or deploy the docker image will automatically be built and if push is enabled it will
+push the image to the registry specified in the image path.
 
 ## OpenApi Contract-first
 
-For creating the endpoints, Vertx takes the openApi definition file and maps every endpoint operation-ID with a specific
-Handler
-function.
+For creating the endpoints, Vert.x takes the openApi definition file and maps every endpoint operation-ID with a
+specific handler function.
 
 ## Handlers
 
-Handlers are providing callBack functions for every endpoint. Functions are going to be called automatically from vertx
-server every time a request is received.
+Handlers are providing callBack functions for every endpoint. Functions are going to be called automatically from the
+Vert.x server every time a request is received.
 
-## Adding a new Endpoint
+## Adding a new endpoint
 
-Adding new Endpoint steps:
+Adding new endpoint steps:
 
-1. Add Endpoint in openApi file and set an operationId
-2. Use an existing const Class or create a new one under /config and set the operation id name
-3. Implement an HttpEndpointHandler and set the Routes
+1. Add endpoint in openApi (hono-device-communication-v1.yaml) and swagger (hono-endpoint.yaml) file and set an
+   operationId in the openApi file
+2. Depending on the endpoint, create a new HttpEndpointHandler or use an existing one (in case it's a new one, add it to
+   the availableHandlerServices within the VertxHttpHandlerManagerService)
+3. Implement the method and set the routes within the handler
 
 ## PubSub Events
 
-Application subscribes and uses to the following topics:
+The application publishes and subscribes to the following topics:
 
-1. TENANT_ID.command
-2. TENANT_ID.command_response
-3. TENANT_ID.event
-4. TENANT_ID.event.state
-5. registry-tenant.notification
+publish:
+* TENANT_ID.command
 
-## Automatically create PubSub topics and subscriptions
+subscribe:
+* TENANT_ID.command_response
+* TENANT_ID.event
+* TENANT_ID.event.state
+* registry-tenant.notification
 
-Application creates all tenants topics and subscriptions when:
+## Automatically create and delete PubSub topics and subscriptions
 
-1. Application starts if are not exist
-2. New tenant is created
+The application creates tenant topics and subscriptions when:
 
+* The application starts, if they do not exist already
+* A new tenant is created
 
+The application deletes tenant topics and subscriptions when:
 
+* A tenant is deleted

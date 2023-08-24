@@ -22,12 +22,12 @@ package org.eclipse.hono.communication.core.http;
 public interface HttpServer {
 
     /**
-     * Starts the http server.
+     * Starts the HTTP server.
      */
     void start();
 
     /**
-     * Stops the http server.
+     * Stops the HTTP server.
      */
     void stop();
 

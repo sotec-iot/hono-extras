@@ -19,7 +19,7 @@ package org.eclipse.hono.communication.api.repository;
 import java.util.List;
 
 import io.vertx.core.Future;
-
+import io.vertx.sqlclient.SqlConnection;
 
 /**
  * Device repository interface.
@@ -27,13 +27,14 @@ import io.vertx.core.Future;
 public interface DeviceRepository {
 
     /**
-     * Check if device exist.
+     * Checks if device exists.
      *
      * @param deviceId The device id
      * @param tenantId The tenant id
+     * @param sqlConnection Optional SQL connection
      * @return Future of integer
      */
-    Future<Integer> searchForDevice(String deviceId, String tenantId);
+    Future<Integer> searchForDevice(String deviceId, String tenantId, SqlConnection sqlConnection);
 
     /**
      * Lists all unique tenants.

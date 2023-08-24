@@ -16,8 +16,6 @@
 
 package org.eclipse.hono.communication.api.service.database;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.core.app.DatabaseConfig;
 import org.eclipse.hono.communication.core.utils.DbUtils;
 
@@ -25,6 +23,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Service for database.
@@ -39,7 +38,7 @@ public class DatabaseServiceImpl implements DatabaseService {
      * Creates a new DatabaseServiceImpl.
      *
      * @param databaseConfigs The database configs
-     * @param vertx           The quarkus Vertx instance
+     * @param vertx The Quarkus Vert.x instance
      */
     public DatabaseServiceImpl(final DatabaseConfig databaseConfigs, final Vertx vertx) {
         this.dbClient = DbUtils.createDbClient(vertx, databaseConfigs);

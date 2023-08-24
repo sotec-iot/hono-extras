@@ -26,12 +26,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
- * Mapper for device config objects.
+ * Mapper for device configuration objects.
  */
-@Mapper(componentModel = "cdi",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "jakarta", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface DeviceConfigMapper {
-
 
     /**
      * Convert device config entity to device config.

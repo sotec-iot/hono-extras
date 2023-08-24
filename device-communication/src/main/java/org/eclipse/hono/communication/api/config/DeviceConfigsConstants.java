@@ -26,28 +26,22 @@ public final class DeviceConfigsConstants {
      */
     public static final String LIST_CONFIG_VERSIONS_OP_ID = "listConfigVersions";
     /**
-     * Path parameter name for tenantId.
-     */
-    public static final String TENANT_PATH_PARAMS = "tenantid";
-    /**
-     * Path parameter name for deviceId.
-     */
-    public static final String DEVICE_PATH_PARAMS = "deviceid";
-    /**
      * Path parameter name for number of versions.
      */
     public static final String NUM_VERSION_QUERY_PARAMS = "numVersions";
-
     /**
      * Sql migrations script path.
      */
-    public static final String CREATE_SQL_SCRIPT_PATH = "db/create_device_config_table.sql";
+    public static final String CREATE_SQL_SCRIPT_PATH = "db/v1_create_config_table.sql";
     /**
      * OpenApi POST device configs operation id.
      */
     public static final String POST_MODIFY_DEVICE_CONFIG_OP_ID = "modifyCloudToDeviceConfig";
+    /**
+     * Subject of config commands.
+     */
+    public static final String CONFIG_SUBJECT = "config";
 
     private DeviceConfigsConstants() {
-        // avoid instantiation
     }
 }

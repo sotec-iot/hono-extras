@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.eclipse.hono.communication.api.data.DeviceConfig;
 import org.eclipse.hono.communication.api.data.DeviceConfigEntity;
-import org.eclipse.hono.communication.api.data.DeviceConfigInternalResponse;
 
 import io.vertx.core.Future;
 
@@ -30,18 +29,18 @@ import io.vertx.core.Future;
 public interface DeviceConfigRepository {
 
     /**
-     * Lists all config versions for a specific device. Result is order by version desc
+     * Lists config versions for a specific device. Result is ordered by version desc.
      *
      * @param deviceId The device id
      * @param tenantId The tenant id
-     * @param limit    The number of config to show
+     * @param limit The maximum number of configs to get
      * @return A Future with a List of DeviceConfigs
      */
     Future<List<DeviceConfig>> listAll(String deviceId, String tenantId, int limit);
 
-
     /**
-     * Creates a new config version and deletes the oldest version if the total num of versions in DB is bigger than the MAX_LIMIT.
+     * Creates a new config version and deletes the oldest version if the total num of versions in DB is bigger than the
+     * MAX_LIMIT.
      *
      * @param entity The instance to insert
      * @return A Future of the created DeviceConfigEntity
@@ -51,22 +50,14 @@ public interface DeviceConfigRepository {
     /**
      * Update the deviceAckTime field.
      *
-     * @param config        The device config
-     * @param deviceAckTime The ack Time
+     * @param tenantId The tenant ID of the device config
+     * @param deviceId The device ID of the device config
+     * @param configVersion The version of the device config
+     * @param deviceAckTime The ack time
      * @return Future of Void
      */
 
-    Future<Void> updateDeviceAckTime(DeviceConfigEntity config, String deviceAckTime);
-
-    /**
-     * Update the error field.
-     *
-     * @param configErrorResponse The error response object
-     * @return Future of Void
-     */
-
-    Future<Void> updateDeviceConfigError(DeviceConfigInternalResponse configErrorResponse);
-
+    Future<Void> updateDeviceAckTime(String tenantId, String deviceId, int configVersion, String deviceAckTime);
 
     /**
      * Get device latest config max(version).
@@ -76,14 +67,4 @@ public interface DeviceConfigRepository {
      * @return Future of DeviceConfigEntity
      */
     Future<DeviceConfigEntity> getDeviceLatestConfig(String tenantId, String deviceId);
-
-    /**
-     * Get a specific device config.
-     *
-     * @param tenantId The tenant id
-     * @param deviceId The device id
-     * @param version The config version
-     * @return Future of DeviceConfigEntity
-     */
-    Future<DeviceConfigEntity> getDeviceConfig(String tenantId, String deviceId, int version);
 }

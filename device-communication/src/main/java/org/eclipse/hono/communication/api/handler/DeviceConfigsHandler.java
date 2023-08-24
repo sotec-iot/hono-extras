@@ -16,25 +16,22 @@
 
 package org.eclipse.hono.communication.api.handler;
 
-import javax.enterprise.context.ApplicationScoped;
-
+import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.config.DeviceConfigsConstants;
 import org.eclipse.hono.communication.api.data.DeviceConfig;
 import org.eclipse.hono.communication.api.data.DeviceConfigRequest;
 import org.eclipse.hono.communication.api.data.ListDeviceConfigVersionsResponse;
-import org.eclipse.hono.communication.api.service.DeviceConfigService;
+import org.eclipse.hono.communication.api.service.config.DeviceConfigService;
 import org.eclipse.hono.communication.core.http.HttpEndpointHandler;
 import org.eclipse.hono.communication.core.utils.ResponseUtils;
 
 import io.vertx.core.Future;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.openapi.RouterBuilder;
-
-
-
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
- * Handler for device config endpoints.
+ * Handler for device configuration endpoints.
  */
 @ApplicationScoped
 public class DeviceConfigsHandler implements HttpEndpointHandler {
@@ -44,12 +41,11 @@ public class DeviceConfigsHandler implements HttpEndpointHandler {
     /**
      * Creates a new DeviceConfigsHandler.
      *
-     * @param configService The device configs
+     * @param configService The device configuration service
      */
     public DeviceConfigsHandler(final DeviceConfigService configService) {
         this.configService = configService;
     }
-
 
     @Override
     public void addRoutes(final RouterBuilder routerBuilder) {
@@ -60,14 +56,14 @@ public class DeviceConfigsHandler implements HttpEndpointHandler {
     }
 
     /**
-     * Handles post device configs.
+     * Handles post device configuration.
      *
      * @param routingContext The RoutingContext
      * @return Future of DeviceConfig
      */
     public Future<DeviceConfig> handleModifyCloudToDeviceConfig(final RoutingContext routingContext) {
-        final var tenantId = routingContext.pathParam(DeviceConfigsConstants.TENANT_PATH_PARAMS);
-        final var deviceId = routingContext.pathParam(DeviceConfigsConstants.DEVICE_PATH_PARAMS);
+        final var tenantId = routingContext.pathParam(ApiCommonConstants.TENANT_PATH_PARAMS);
+        final var deviceId = routingContext.pathParam(ApiCommonConstants.DEVICE_PATH_PARAMS);
 
         final DeviceConfigRequest deviceConfig = routingContext.body()
                 .asJsonObject()
@@ -79,7 +75,7 @@ public class DeviceConfigsHandler implements HttpEndpointHandler {
     }
 
     /**
-     * Handles get device configs.
+     * Handles get device configurations.
      *
      * @param routingContext The RoutingContext
      * @return Future of ListDeviceConfigVersionsResponse
@@ -88,8 +84,8 @@ public class DeviceConfigsHandler implements HttpEndpointHandler {
         final var numVersions = routingContext.queryParams().get(DeviceConfigsConstants.NUM_VERSION_QUERY_PARAMS);
 
         final var limit = numVersions == null ? 0 : Integer.parseInt(numVersions);
-        final var tenantId = routingContext.pathParam(DeviceConfigsConstants.TENANT_PATH_PARAMS);
-        final var deviceId = routingContext.pathParam(DeviceConfigsConstants.DEVICE_PATH_PARAMS);
+        final var tenantId = routingContext.pathParam(ApiCommonConstants.TENANT_PATH_PARAMS);
+        final var deviceId = routingContext.pathParam(ApiCommonConstants.DEVICE_PATH_PARAMS);
 
         return configService.listAll(deviceId, tenantId, limit)
                 .onSuccess(result -> ResponseUtils.successResponse(routingContext, result))

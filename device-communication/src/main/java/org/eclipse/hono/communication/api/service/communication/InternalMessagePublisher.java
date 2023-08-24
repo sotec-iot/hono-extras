@@ -16,6 +16,7 @@
 
 package org.eclipse.hono.communication.api.service.communication;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -24,12 +25,13 @@ import java.util.Map;
 public interface InternalMessagePublisher {
 
     /**
-     * Publish a message to a topic.
+     * Publishes a message to a topic.
      *
-     * @param topic      The topic to publish the message
-     * @param message    The message to publish
+     * @param topic The topic to publish the message to
+     * @param message The message to publish
      * @param attributes The message attributes
-     * @throws Exception Throws Exception if subscription can't be created
+     * @throws IOException If the publisher cannot be built correctly
+     * @throws InterruptedException If the publisher cannot be shutdown correctly
      */
-    void publish(String topic, byte[] message, Map<String, String> attributes) throws Exception;
+    void publish(String topic, byte[] message, Map<String, String> attributes) throws IOException, InterruptedException;
 }

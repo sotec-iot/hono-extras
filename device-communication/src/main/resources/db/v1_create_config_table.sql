@@ -18,11 +18,12 @@
 CREATE TABLE IF NOT EXISTS device_configs
 (
     version           INT          not null,
-    tenant_id         VARCHAR(100) not null,
-    device_id         VARCHAR(100) not null,
+    tenant_id         VARCHAR(256) not null,
+    device_id         VARCHAR(256) not null,
     cloud_update_time VARCHAR(100) not null,
     device_ack_time   VARCHAR(100),
     binary_data       VARCHAR      not null,
 
-    PRIMARY KEY (version, tenant_id, device_id)
+    PRIMARY KEY (version, tenant_id, device_id),
+    FOREIGN KEY (tenant_id, device_id) REFERENCES device_registrations (TENANT_ID, DEVICE_ID) ON DELETE CASCADE
 )

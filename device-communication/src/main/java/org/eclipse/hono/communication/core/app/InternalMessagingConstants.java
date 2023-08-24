@@ -16,6 +16,9 @@
 
 package org.eclipse.hono.communication.core.app;
 
+import org.eclipse.hono.util.CommandConstants;
+import org.eclipse.hono.util.EventConstants;
+
 /**
  * Internal Messaging Constant values.
  */
@@ -26,7 +29,10 @@ public class InternalMessagingConstants {
     public static final String SUBJECT = "subject";
     public static final String CORRELATION_ID = "correlation-id";
     public static final String RESPONSE_REQUIRED = "response-required";
-    public static final String STATUS = "status";
+    public static final String ACK_REQUIRED = "ack-required";
+    public static final String CONTENT_TYPE = "content-type";
+    public static final String EMPTY_NOTIFICATION_EVENT_CONTENT_TYPE = EventConstants.CONTENT_TYPE_EMPTY_NOTIFICATION;
+    public static final String DELIVERY_SUCCESS_NOTIFICATION_CONTENT_TYPE = CommandConstants.CONTENT_TYPE_DELIVERY_SUCCESS_NOTIFICATION;
 
     private InternalMessagingConstants() {
     }
