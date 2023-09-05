@@ -18,6 +18,9 @@ resource "google_pubsub_subscription" "registry_tenant_notification" {
   retry_policy {
     minimum_backoff = "10s"
   }
+  expiration_policy {
+    ttl = ""
+  }
 
   enable_message_ordering = false
 }
@@ -31,6 +34,9 @@ resource "google_pubsub_subscription" "registry-tenant_notification_communicatio
   retry_policy {
     minimum_backoff = "10s"
   }
+  expiration_policy {
+    ttl = ""
+  }
 
   enable_message_ordering = false
 }
@@ -43,6 +49,9 @@ resource "google_pubsub_subscription" "registry-device_notification" {
   ack_deadline_seconds = 10
   retry_policy {
     minimum_backoff = "10s"
+  }
+  expiration_policy {
+    ttl = ""
   }
 
   enable_message_ordering = false
