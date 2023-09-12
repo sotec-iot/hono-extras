@@ -19,18 +19,17 @@ package org.eclipse.hono.communication.api.repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.service.database.DatabaseService;
 import org.eclipse.hono.communication.core.app.DatabaseConfig;
 
 import io.vertx.core.Future;
+import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowIterator;
 import io.vertx.sqlclient.SqlConnection;
-import io.vertx.sqlclient.templates.RowMapper;
+import io.vertx.sqlclient.Tuple;
 import io.vertx.sqlclient.templates.SqlTemplate;
 
 /**
@@ -42,7 +41,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
     private static final String SQL_LIST_TENANTS = "SELECT %s FROM %s";
     private final DatabaseConfig databaseConfig;
     private final DatabaseService db;
-    private final String sqlCountDevicesWithPkFilter;
+    private final String sqlFindDeviceWithPkFilter;
 
     /**
      * Creates a new DeviceRepositoryImpl.
@@ -55,8 +54,8 @@ public class DeviceRepositoryImpl implements DeviceRepository {
         this.databaseConfig = databaseConfig;
         this.db = databaseService;
 
-        sqlCountDevicesWithPkFilter = String.format(
-                "SELECT COUNT(*) as total FROM public.%s where %s = #{tenantId} and %s = #{deviceId}",
+        sqlFindDeviceWithPkFilter = String.format(
+                "SELECT 1 as total FROM public.%s where %s = $1 and %s = $2 LIMIT 1",
                 databaseConfig.getDeviceRegistrationTableName(),
                 databaseConfig.getDeviceRegistrationTenantIdColumn(),
                 databaseConfig.getDeviceRegistrationDeviceIdColumn());
@@ -73,15 +72,15 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 
     private Future<Integer> queryDevice(final String deviceId, final String tenantId,
             final SqlConnection sqlConnection) {
-        final RowMapper<Integer> rowMapper = row -> row.getInteger("total");
-        return SqlTemplate
-                .forQuery(sqlConnection, sqlCountDevicesWithPkFilter)
-                .mapTo(rowMapper)
-                .execute(Map.of(ApiCommonConstants.DEVICE_ID_CAPTION, deviceId,
-                                ApiCommonConstants.TENANT_ID_CAPTION, tenantId))
+        return sqlConnection
+                .preparedQuery(sqlFindDeviceWithPkFilter)
+                .execute(Tuple.of(tenantId, deviceId))
                 .map(rowSet -> {
-                    final RowIterator<Integer> iterator = rowSet.iterator();
-                    return iterator.next();
+                    final RowIterator<Row> iterator = rowSet.iterator();
+                    if (iterator.hasNext()) {
+                        return iterator.next().getInteger("total");
+                    }
+                    return 0;
                 });
     }
 

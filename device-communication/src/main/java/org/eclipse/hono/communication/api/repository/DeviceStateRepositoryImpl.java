@@ -32,9 +32,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.vertx.core.Future;
+import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowIterator;
 import io.vertx.sqlclient.SqlConnection;
-import io.vertx.sqlclient.templates.RowMapper;
+import io.vertx.sqlclient.Tuple;
 import io.vertx.sqlclient.templates.SqlTemplate;
 
 /**
@@ -44,16 +45,16 @@ import io.vertx.sqlclient.templates.SqlTemplate;
 public class DeviceStateRepositoryImpl implements DeviceStateRepository {
 
     private static final Logger log = LoggerFactory.getLogger(DeviceStateRepositoryImpl.class);
-    private static final String SQL_COUNT_STATES_WITH_PK_FILTER = "SELECT COUNT(*) AS total FROM device_status WHERE tenant_id = #{tenantId} AND device_id = #{deviceId}";
+    private static final String SQL_COUNT_STATES_WITH_PK_FILTER = "SELECT COUNT(*) AS total FROM device_status WHERE tenant_id = $1 AND device_id = $2";
     private static final String SQL_INSERT = "INSERT INTO device_status (id, tenant_id, device_id, update_time, binary_data) "
             +
-            "VALUES (#{id}, #{tenantId}, #{deviceId}, #{updateTime}, #{binaryData}) RETURNING id";
+            "VALUES ($1, $2, $3, $4, $5) RETURNING id";
     private static final String SQL_LIST = "SELECT update_time, binary_data FROM device_status " +
             "WHERE device_id = #{deviceId} and tenant_id = #{tenantId} ORDER BY update_time DESC LIMIT #{limit}";
 
-    private static final String SQL_DELETE = "DELETE FROM device_status WHERE device_id = #{deviceId} AND tenant_id = #{tenantId} AND id NOT IN "
+    private static final String SQL_DELETE = "DELETE FROM device_status WHERE tenant_id = $1 AND device_id = $2  AND id NOT IN "
             +
-            "(SELECT id FROM device_status WHERE device_id = #{deviceId} AND tenant_id = #{tenantId} ORDER BY update_time DESC LIMIT 9)";
+            "(SELECT id FROM device_status WHERE tenant_id = $1 AND device_id = $2 ORDER BY update_time DESC LIMIT 9)";
     private static final int MAX_LIMIT = 10;
     private final DatabaseService db;
     private final DeviceRepository deviceRepository;
@@ -107,7 +108,8 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
     @Override
     public Future<DeviceStateEntity> createNew(final DeviceStateEntity entity) {
         return db.getDbClient().withTransaction(
-                sqlConnection -> deviceRepository.searchForDevice(entity.getDeviceId(), entity.getTenantId(), sqlConnection)
+                sqlConnection -> deviceRepository
+                        .searchForDevice(entity.getDeviceId(), entity.getTenantId(), sqlConnection)
                         .compose(
                                 deviceCounter -> {
                                     if (deviceCounter < 1) {
@@ -117,36 +119,32 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
                                                         entity.getDeviceId(),
                                                         entity.getTenantId()));
                                     }
-                                    return countStates(entity.getDeviceId(), entity.getTenantId()).compose(
-                                            stateCounter -> {
-                                                if (stateCounter >= 10) {
-                                                    deleteStates(sqlConnection, entity);
-                                                }
-                                                return insert(sqlConnection, entity);
-                                            });
-                                })
-                        .onFailure(error -> log.error(error.getMessage(), error)));
+                                    return countStates(entity.getDeviceId(), entity.getTenantId(), sqlConnection)
+                                            .compose(
+                                                    stateCounter -> {
+                                                        if (stateCounter >= 10) {
+                                                            deleteStates(sqlConnection, entity);
+                                                        }
+                                                        return insert(sqlConnection, entity);
+                                                    });
+                                }));
     }
 
-    private Future<Integer> countStates(final String deviceId, final String tenantId) {
-        final RowMapper<Integer> rowMapper = row -> row.getInteger("total");
-        return db.getDbClient().withConnection(
-                sqlConnection -> SqlTemplate
-                        .forQuery(sqlConnection, SQL_COUNT_STATES_WITH_PK_FILTER)
-                        .mapTo(rowMapper)
-                        .execute(Map.of(ApiCommonConstants.DEVICE_ID_CAPTION, deviceId,
-                                ApiCommonConstants.TENANT_ID_CAPTION, tenantId))
-                        .map(rowSet -> {
-                            final RowIterator<Integer> iterator = rowSet.iterator();
-                            return iterator.next();
-                        }));
+    private Future<Integer> countStates(final String deviceId, final String tenantId,
+            final SqlConnection sqlConnection) {
+        return sqlConnection
+                .preparedQuery(SQL_COUNT_STATES_WITH_PK_FILTER)
+                .execute(Tuple.of(tenantId, deviceId))
+                .map(rowSet -> {
+                    final RowIterator<Row> iterator = rowSet.iterator();
+                    return iterator.next().getInteger("total");
+                });
     }
 
     private void deleteStates(final SqlConnection sqlConnection, final DeviceStateEntity entity) {
-        SqlTemplate.forQuery(sqlConnection, SQL_DELETE)
-                .execute(Map.of(ApiCommonConstants.DEVICE_ID_CAPTION, entity.getDeviceId(),
-                        ApiCommonConstants.TENANT_ID_CAPTION,
-                        entity.getTenantId()));
+        sqlConnection
+                .preparedQuery(SQL_DELETE)
+                .execute(Tuple.of(entity.getTenantId(), entity.getDeviceId()));
     }
 
     /**
@@ -158,21 +156,17 @@ public class DeviceStateRepositoryImpl implements DeviceStateRepository {
      */
     private Future<DeviceStateEntity> insert(final SqlConnection sqlConnection, final DeviceStateEntity entity) {
         entity.setId(UUID.randomUUID().toString());
-        return SqlTemplate
-                .forUpdate(sqlConnection, SQL_INSERT)
-                .mapFrom(DeviceStateEntity.class)
-                .mapTo(DeviceStateEntity.class)
-                .execute(entity)
+        return sqlConnection
+                .preparedQuery(SQL_INSERT)
+                .execute(Tuple.of(entity.getId(), entity.getTenantId(), entity.getDeviceId(), entity.getUpdateTime(),
+                        entity.getBinaryData()))
                 .map(rowSet -> {
-                    final RowIterator<DeviceStateEntity> iterator = rowSet.iterator();
+                    final RowIterator<Row> iterator = rowSet.iterator();
                     if (iterator.hasNext()) {
                         return entity;
                     } else {
                         throw new IllegalStateException(String.format("Can't create device state: %s", entity));
                     }
-                })
-                .onSuccess(success -> log.debug("Device state created successfully: {}", success))
-                .onFailure(throwable -> log.error(throwable.getMessage()));
-
+                });
     }
 }

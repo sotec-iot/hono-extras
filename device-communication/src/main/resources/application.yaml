@@ -37,7 +37,10 @@ vertx:
       readiness: ${COM_SERVER_READINESS_PATH:/ready}
 
   database:
-    pool-max-size: ${COM_POOL_MAX_SIZE:5}
+    pool-max-size: ${COM_POOL_MAX_SIZE:20}
+    pool-initial-size: ${COM_POOL_INITIAL_SIZE:1}
+    cache-prepared-statements: ${COM_CACHE_PREPARED_STATEMENTS:true}
+    connection-idle-timeout: ${COM_CONNECTION_IDLE_TIMEOUT:3600}
     name: ${COM_DB_NAME:hono}
     host: ${COM_DB_HOST:host.docker.internal}
     port: ${COM_DB_PORT:5432}

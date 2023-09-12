@@ -85,7 +85,7 @@ public class DeviceCommunicationHttpServer extends AbstractVertxHttpServer imple
 
     @Override
     public void start() {
-        databaseSchemaCreator.createDBTables();
+        databaseSchemaCreator.setupDBTables();
 
         internalTopicManager.initPubSub();
 

@@ -96,6 +96,7 @@ public class DeviceStateServiceImpl extends DeviceServiceAbstract
         }
 
         repository.createNew(mapper.pubSubMessageToDeviceStateEntity(pubsubMessage))
+                .onSuccess(success -> log.debug("Device state created successfully: {}", success))
                 .onFailure(err -> log.error("Can't save state in DB: {}", err.getMessage(), err));
     }
 }

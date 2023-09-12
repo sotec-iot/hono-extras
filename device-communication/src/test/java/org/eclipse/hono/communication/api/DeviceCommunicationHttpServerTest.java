@@ -166,7 +166,7 @@ class DeviceCommunicationHttpServerTest {
                     mockedRouterBuilderStatic.verify(() -> RouterBuilder.create(vertxMock, "/myPath"), times(1));
                     routerMockedStatic.verify(() -> Router.router(vertxMock), times(1));
 
-                    verify(databaseSchemaCreatorMock, times(1)).createDBTables();
+                    verify(databaseSchemaCreatorMock, times(1)).setupDBTables();
                     verify(handlerServiceMock, times(1)).getAvailableHandlerServices();
                     verify(routerBuilderMock, times(1)).createRouter();
 
@@ -212,7 +212,7 @@ class DeviceCommunicationHttpServerTest {
                 this.deviceCommunicationHttpServer.start();
 
                 verify(dbMock, times(1)).close();
-                verify(databaseSchemaCreatorMock, times(1)).createDBTables();
+                verify(databaseSchemaCreatorMock, times(1)).setupDBTables();
                 verify(handlerServiceMock, times(1)).getAvailableHandlerServices();
                 verify(appConfigsMock, times(1)).getServerConfig();
                 verify(serverConfigMock, times(1)).getOpenApiFilePath();
@@ -261,7 +261,7 @@ class DeviceCommunicationHttpServerTest {
 
                     mockedRouterBuilderStatic.verify(() -> RouterBuilder.create(vertxMock, "/myPath"), times(1));
 
-                    verify(databaseSchemaCreatorMock, times(1)).createDBTables();
+                    verify(databaseSchemaCreatorMock, times(1)).setupDBTables();
                     verify(handlerServiceMock, times(1)).getAvailableHandlerServices();
                     verify(routerBuilderMock, times(1)).createRouter();
                     verify(vertxMock, times(1)).createHttpServer(any(HttpServerOptions.class));

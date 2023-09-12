@@ -39,6 +39,12 @@ public class DatabaseConfig {
     String name;
     @ConfigProperty(name = "vertx.database.pool-max-size")
     int poolMaxSize;
+    @ConfigProperty(name = "vertx.database.pool-initial-size")
+    int poolInitialSize;
+    @ConfigProperty(name = "vertx.database.connection-idle-timeout")
+    int connectionIdleTimeout;
+    @ConfigProperty(name = "vertx.database.cache-prepared-statements")
+    boolean cachePreparedStatements;
     @ConfigProperty(name = "vertx.device-registration.table")
     String deviceRegistrationTableName;
     @ConfigProperty(name = "vertx.tenant.table")
@@ -72,6 +78,18 @@ public class DatabaseConfig {
 
     public int getPoolMaxSize() {
         return poolMaxSize;
+    }
+
+    public int getPoolInitialSize() {
+        return poolInitialSize;
+    }
+
+    public int getConnectionIdleTimeout() {
+        return connectionIdleTimeout;
+    }
+
+    public boolean getCachePreparedStatements() {
+        return cachePreparedStatements;
     }
 
     public int getPort() {

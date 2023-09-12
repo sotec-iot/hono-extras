@@ -17,12 +17,20 @@
 package org.eclipse.hono.communication.api.service.database;
 
 /**
- * Interface for creating Database Tables at application startup.
+ * Interface for setting up Database Tables at application startup.
  */
 public interface DatabaseSchemaCreator {
 
     /**
-     * Create database tables.
+     * Sets up database tables.
      */
-    void createDBTables();
+    void setupDBTables();
+
+    /**
+     * Sets up a db table.
+     *
+     * @param filePath Path to the SQL script file
+     * @param tableName Name of the table
+     */
+    void setupTable(String filePath, String tableName);
 }

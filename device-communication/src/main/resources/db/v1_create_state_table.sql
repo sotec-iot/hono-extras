@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS device_status
     update_time VARCHAR(100) not null,
     binary_data VARCHAR      not null,
 
-    PRIMARY KEY (id, tenant_id, device_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (tenant_id, device_id) REFERENCES device_registrations (TENANT_ID, DEVICE_ID) ON DELETE CASCADE
 );
+
+CREATE INDEX IF NOT EXISTS idx_device_status_tenant_and_device ON device_status (TENANT_ID, DEVICE_ID);
