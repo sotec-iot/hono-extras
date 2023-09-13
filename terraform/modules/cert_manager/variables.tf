@@ -61,7 +61,7 @@ variable "cert_manager_cert_duration" {
 
 variable "cert_manager_cert_renew_before" {
   type        = string
-  description = "When to renew the certificate based on its remaining validity period (e.g. 360h for 15 days before expiration)."
+  description = "When to renew the certificate based on its remaining validity period (e.g. 720h for 30 days before expiration)."
 }
 
 variable "wildcard_domain" {
