@@ -127,7 +127,7 @@ public class PubSubService implements InternalMessaging {
             final Subscriber subscriber = Subscriber.newBuilder(subscriptionName, callbackHandler).build();
             subscriber.startAsync().awaitRunning();
             activeSubscriptions.put(topic, subscriber);
-            log.info("Successfully subscribe to topic: {}", topicName.getTopic());
+            log.info("Successfully subscribe to topic: {}.", topicName.getTopic());
         } catch (Exception ex) {
             log.error("Error subscribe to topic {}: {}", topic, ex.getMessage());
         }

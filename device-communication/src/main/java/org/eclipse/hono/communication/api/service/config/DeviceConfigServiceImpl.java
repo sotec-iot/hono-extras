@@ -19,6 +19,7 @@ package org.eclipse.hono.communication.api.service.config;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import javax.inject.Singleton;
@@ -187,7 +188,14 @@ public class DeviceConfigServiceImpl extends DeviceServiceAbstract
                     log.debug("Handle config request event");
                     publish(topicToPublish, config, attributes);
                 })
-                .onFailure(err -> log.error("Can't publish configs: {}", err.getMessage()));
+                .onFailure(err -> {
+                    final String logMessage = "Can't publish configs: " +  err.getMessage();
+                    if (err instanceof NoSuchElementException) {
+                        log.debug(logMessage);
+                    } else {
+                        log.error(logMessage);
+                    }
+                });
     }
 
     private boolean isNotConfigRequest(final Map<String, String> messageAttributes, final String tenantId,

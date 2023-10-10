@@ -16,11 +16,13 @@
 
 package org.eclipse.hono.communication.api.service.communication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManager;
+import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManagerFactory;
 import org.eclipse.hono.client.pubsub.PubSubMessageHelper;
 import org.eclipse.hono.communication.api.config.PubSubConstants;
 import org.eclipse.hono.communication.api.handler.CommandTopicEventHandler;
@@ -41,6 +43,8 @@ import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.SubscriptionName;
 import com.google.pubsub.v1.TopicName;
 
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 
 /**
@@ -57,7 +61,9 @@ public class InternalTopicManagerImpl implements InternalTopicManager {
     private final StateTopicEventHandler stateTopicEventHandler;
     private final InternalMessaging internalMessaging;
     private final InternalMessagingConfig internalMessagingConfig;
+    private final PubSubBasedAdminClientManagerFactory adminClientManagerFactory;
     private final Vertx vertx;
+    private final String projectId;
 
     /**
      * Creates a new InternalTopicManagerImpl.
@@ -68,13 +74,16 @@ public class InternalTopicManagerImpl implements InternalTopicManager {
      * @param stateTopicEventHandler The state topic event handler.
      * @param internalMessaging The internal messaging interface.
      * @param internalMessagingConfig The internal messaging config.
+     * @param adminClientManagerFactory The factory to create Pub/Sub based admin client manager to manage topics and
+     *            subscriptions.
      * @param vertx The quarkus Vertx instance.
      */
     public InternalTopicManagerImpl(final DeviceRepository deviceRepository,
             final CommandTopicEventHandler commandTopicEventHandler,
             final ConfigTopicEventHandler configTopicEventHandler,
             final StateTopicEventHandler stateTopicEventHandler, final InternalMessaging internalMessaging,
-            final InternalMessagingConfig internalMessagingConfig, final Vertx vertx) {
+            final InternalMessagingConfig internalMessagingConfig,
+            final PubSubBasedAdminClientManagerFactory adminClientManagerFactory, final Vertx vertx) {
         this.deviceRepository = deviceRepository;
         this.commandTopicEventHandler = commandTopicEventHandler;
         this.configTopicEventHandler = configTopicEventHandler;
@@ -82,6 +91,8 @@ public class InternalTopicManagerImpl implements InternalTopicManager {
         this.internalMessaging = internalMessaging;
         this.internalMessagingConfig = internalMessagingConfig;
         this.vertx = vertx;
+        this.projectId = internalMessagingConfig.getProjectId();
+        this.adminClientManagerFactory = adminClientManagerFactory;
     }
 
     @Override
@@ -89,59 +100,12 @@ public class InternalTopicManagerImpl implements InternalTopicManager {
         log.info("Initialize tenant topics and subscriptions.");
         internalMessaging.subscribe(PubSubConstants.TENANT_NOTIFICATIONS, this::onTenantChanges);
         deviceRepository.listDistinctTenants()
+                .onFailure(err -> log.error("Error getting tenants for topic creation: {}", err.getMessage()))
                 .onSuccess(tenants -> {
-                    vertx.executeBlocking(promise -> {
-                        tenants.forEach(tenant -> {
-                            createPubSubResourceForTenant(tenant, PubSubResourceType.TOPIC);
-                            createPubSubResourceForTenant(tenant, PubSubResourceType.SUBSCRIPTION);
-                            subscribeToTenantTopics(tenant);
-                        });
-                        promise.complete();
-                    });
-                    log.info("Initialization of tenant topics and subscriptions completed.");
-                })
-                .onFailure(err -> log.error("Error getting tenants for topic creation: {}", err.getMessage()));
-    }
-
-    /**
-     * Creates Pub/Sub resources (topics or subscriptions) for the provided tenant.
-     *
-     * @param tenantId The tenant.
-     * @param pubSubResourceType Which Pub Sub resource type should be created (topic or subscription).
-     */
-    private void createPubSubResourceForTenant(final String tenantId, final PubSubResourceType pubSubResourceType) {
-        final String projectId = internalMessagingConfig.getProjectId();
-        if (projectId == null) {
-            log.error("project ID is null");
-            return;
-        }
-        PubSubMessageHelper.getCredentialsProvider()
-                .ifPresentOrElse(provider -> {
-                    final List<String> topics = PubSubConstants.getTenantTopics();
-                    topics.forEach(topic -> {
-                        final var pubSubBasedAdminClientManager = new PubSubBasedAdminClientManager(projectId,
-                                provider);
-                        if (pubSubResourceType == PubSubResourceType.TOPIC) {
-                            pubSubBasedAdminClientManager.getOrCreateTopic(topic, tenantId);
-                        } else {
-                            pubSubBasedAdminClientManager.getOrCreateSubscription(topic, tenantId);
-                        }
-                        pubSubBasedAdminClientManager.closeAdminClients();
-                    });
-                    log.info("All {}s created for {}", pubSubResourceType.toString().toLowerCase(), tenantId);
-                }, () -> log.error("credentials provider is empty"));
-    }
-
-    private void subscribeToTenantTopics(final String tenant) {
-        internalMessaging.subscribe(
-                internalMessagingConfig.getEventTopicFormat().formatted(tenant),
-                configTopicEventHandler::onDeviceConfigRequest);
-        internalMessaging.subscribe(
-                internalMessagingConfig.getCommandAckTopicFormat().formatted(tenant),
-                commandTopicEventHandler::onDeviceCommandResponse);
-        internalMessaging.subscribe(
-                internalMessagingConfig.getStateTopicFormat().formatted(tenant),
-                stateTopicEventHandler::onStateMessage);
+                    for (String tenant : tenants) {
+                        initPubSubForTenant(tenant);
+                    }
+                });
     }
 
     /**
@@ -164,27 +128,88 @@ public class InternalTopicManagerImpl implements InternalTopicManager {
         final String tenant = notification.getTenantId();
         if (notification.getChange() == LifecycleChange.CREATE && !Strings.isNullOrEmpty(tenant)) {
             log.info("Tenant {} was created. All its topics and subscriptions will be created.", tenant);
-            createPubSubResourceForTenant(tenant, PubSubResourceType.TOPIC);
-            createPubSubResourceForTenant(tenant, PubSubResourceType.SUBSCRIPTION);
-            subscribeToTenantTopics(tenant);
+            initPubSubForTenant(tenant);
         } else if (notification.getChange() == LifecycleChange.DELETE && !Strings.isNullOrEmpty(tenant)) {
             log.info("Tenant {} was deleted. All its topics and subscriptions will be deleted.", tenant);
             cleanupPubSubResources(tenant);
         }
     }
 
+    private void initPubSubForTenant(final String tenant) {
+        PubSubMessageHelper.getCredentialsProvider()
+                .ifPresentOrElse(provider -> {
+                    final var pubSubBasedAdminClientManager = adminClientManagerFactory.createAdminClientManager();
+                    createPubSubResourceForTenant(tenant, PubSubResourceType.TOPIC,
+                            pubSubBasedAdminClientManager)
+                            .onFailure(thr -> log.error("Creation of tenant topics failed.", thr))
+                            .compose(v -> createPubSubResourceForTenant(tenant,
+                                    PubSubResourceType.SUBSCRIPTION, pubSubBasedAdminClientManager)
+                                    .onComplete(v1 -> vertx.executeBlocking(
+                                            p -> pubSubBasedAdminClientManager.closeAdminClients()))
+                                    .onFailure(thr -> log
+                                            .error("Creation of tenant subscriptions failed.", thr))
+                                    .onSuccess(v2 -> vertx.executeBlocking(p -> {
+                                        subscribeToTenantTopics(tenant);
+                                        p.complete();
+                                    })));
+                }, () -> log.error("Credentials provider is empty"));
+    }
+
+    /**
+     * Creates Pub/Sub resources (topics or subscriptions) for the provided tenant.
+     *
+     * @param tenantId The tenant.
+     * @param pubSubResourceType Which Pub/Sub resource type should be created (topic or subscription).
+     * @return A succeeded Future if the Pub/Sub resources were successfully created or already existed, or a failed
+     *         Future if they could not be created.
+     */
+    private Future<Void> createPubSubResourceForTenant(final String tenantId,
+            final PubSubResourceType pubSubResourceType,
+            final PubSubBasedAdminClientManager pubSubBasedAdminClientManager) {
+        final List<Future> futureList = new ArrayList<>();
+        final List<String> topics = PubSubConstants.getTenantTopics();
+        for (String topic : topics) {
+            if (pubSubResourceType == PubSubResourceType.TOPIC) {
+                futureList.add(pubSubBasedAdminClientManager.getOrCreateTopic(topic, tenantId));
+            } else {
+                futureList.add(pubSubBasedAdminClientManager.getOrCreateSubscription(topic, tenantId));
+            }
+        }
+        return CompositeFuture.join(futureList)
+                .recover(thr -> {
+                    log.error("One or more {}s could not be created for tenant {}.",
+                            pubSubResourceType.toString().toLowerCase(), tenantId);
+                    return Future.failedFuture(thr);
+                })
+                .compose(compositeFuture -> {
+                    log.info("All {}s created for tenant {}", pubSubResourceType.toString().toLowerCase(), tenantId);
+                    return Future.succeededFuture();
+                });
+    }
+
+    private void subscribeToTenantTopics(final String tenant) {
+        internalMessaging.subscribe(
+                internalMessagingConfig.getEventTopicFormat().formatted(tenant),
+                configTopicEventHandler::onDeviceConfigRequest);
+        internalMessaging.subscribe(
+                internalMessagingConfig.getCommandAckTopicFormat().formatted(tenant),
+                commandTopicEventHandler::onDeviceCommandResponse);
+        internalMessaging.subscribe(
+                internalMessagingConfig.getStateTopicFormat().formatted(tenant),
+                stateTopicEventHandler::onStateMessage);
+    }
+
     private void cleanupPubSubResources(final String tenant) {
-        final String projectId = internalMessagingConfig.getProjectId();
         final List<String> pubSubTopicsToDelete = PubSubConstants.getTenantTopics().stream()
                 .map(id -> TopicName.of(projectId, "%s.%s".formatted(tenant, id)).toString()).toList();
         final List<String> pubSubSubscriptionsToDelete = PubSubConstants.getTenantTopics().stream()
                 .map(id -> SubscriptionName.of(projectId, "%s.%s".formatted(tenant, id)).toString()).toList();
         PubSubMessageHelper.getCredentialsProvider()
                 .ifPresentOrElse(provider -> {
-                    final PubSubBasedAdminClientManager pubSubBasedAdminClientManager = new PubSubBasedAdminClientManager(
-                            projectId, provider);
-                    pubSubBasedAdminClientManager.deleteTopics(pubSubTopicsToDelete);
-                    pubSubBasedAdminClientManager.deleteSubscriptions(pubSubSubscriptionsToDelete);
+                    final PubSubBasedAdminClientManager pubSubBasedAdminClientManager = adminClientManagerFactory
+                            .createAdminClientManager();
+//                    pubSubBasedAdminClientManager.deleteTopics(pubSubTopicsToDelete);
+//                    pubSubBasedAdminClientManager.deleteSubscriptions(pubSubSubscriptionsToDelete);
                     log.info("All topics and subscriptions for tenant {} were deleted successfully.", tenant);
                     pubSubBasedAdminClientManager.closeAdminClients();
                 }, () -> log.error("credentials provider is empty"));
