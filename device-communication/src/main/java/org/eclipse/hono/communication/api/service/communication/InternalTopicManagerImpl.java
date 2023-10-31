@@ -19,10 +19,7 @@ package org.eclipse.hono.communication.api.service.communication;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManager;
-import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManagerFactory;
 import org.eclipse.hono.client.pubsub.PubSubMessageHelper;
 import org.eclipse.hono.communication.api.config.PubSubConstants;
 import org.eclipse.hono.communication.api.handler.CommandTopicEventHandler;
@@ -46,6 +43,7 @@ import com.google.pubsub.v1.TopicName;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Internal topic manager interface.
@@ -208,8 +206,8 @@ public class InternalTopicManagerImpl implements InternalTopicManager {
                 .ifPresentOrElse(provider -> {
                     final PubSubBasedAdminClientManager pubSubBasedAdminClientManager = adminClientManagerFactory
                             .createAdminClientManager();
-//                    pubSubBasedAdminClientManager.deleteTopics(pubSubTopicsToDelete);
-//                    pubSubBasedAdminClientManager.deleteSubscriptions(pubSubSubscriptionsToDelete);
+                    pubSubBasedAdminClientManager.deleteTopics(pubSubTopicsToDelete);
+                    pubSubBasedAdminClientManager.deleteSubscriptions(pubSubSubscriptionsToDelete);
                     log.info("All topics and subscriptions for tenant {} were deleted successfully.", tenant);
                     pubSubBasedAdminClientManager.closeAdminClients();
                 }, () -> log.error("credentials provider is empty"));

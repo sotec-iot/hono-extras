@@ -30,7 +30,6 @@ import java.time.Instant;
 import java.util.Optional;
 
 import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManager;
-import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManagerFactoryImpl;
 import org.eclipse.hono.client.pubsub.PubSubMessageHelper;
 import org.eclipse.hono.communication.api.handler.CommandTopicEventHandler;
 import org.eclipse.hono.communication.api.handler.ConfigTopicEventHandler;
@@ -70,7 +69,7 @@ class InternalTopicManagerImplTest {
     private final ConfigTopicEventHandler configTopicEventHandler;
     private final StateTopicEventHandler stateTopicEventHandler;
     private final InternalTopicManagerImpl internalTopicManager;
-    private final PubSubBasedAdminClientManagerFactoryImpl adminClientManagerFactory;
+    private final PubSubBasedAdminClientManagerFactory adminClientManagerFactory;
     private final PubSubBasedAdminClientManager adminClientManager;
     private final Vertx vertxMock;
 
@@ -86,7 +85,7 @@ class InternalTopicManagerImplTest {
         this.commandTopicEventHandler = mock(CommandTopicEventHandler.class);
         this.configTopicEventHandler = mock(ConfigTopicEventHandler.class);
         this.stateTopicEventHandler = mock(StateTopicEventHandler.class);
-        this.adminClientManagerFactory = mock(PubSubBasedAdminClientManagerFactoryImpl.class);
+        this.adminClientManagerFactory = mock(PubSubBasedAdminClientManagerFactory.class);
         this.vertxMock = mock(Vertx.class);
         this.internalTopicManager = new InternalTopicManagerImpl(deviceRepositoryMock, commandTopicEventHandler,
                 configTopicEventHandler, stateTopicEventHandler, internalCommunicationMock, internalMessagingConfigMock,

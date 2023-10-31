@@ -16,8 +16,6 @@
 
 package org.eclipse.hono.communication.api.service.state;
 
-import javax.inject.Singleton;
-
 import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.data.ListDeviceStatesResponse;
 import org.eclipse.hono.communication.api.handler.StateTopicEventHandler;
@@ -34,6 +32,7 @@ import com.google.common.base.Strings;
 import com.google.pubsub.v1.PubsubMessage;
 
 import io.vertx.core.Future;
+import jakarta.inject.Singleton;
 
 /**
  * Service for device commands.

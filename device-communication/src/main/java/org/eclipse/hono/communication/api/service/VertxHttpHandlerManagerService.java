@@ -18,12 +18,12 @@ package org.eclipse.hono.communication.api.service;
 
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.api.handler.DeviceCommandHandler;
 import org.eclipse.hono.communication.api.handler.DeviceConfigsHandler;
 import org.eclipse.hono.communication.api.handler.DeviceStatesHandler;
 import org.eclipse.hono.communication.core.http.HttpEndpointHandler;
+
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Provides and Manages available HTTP vertx handlers.

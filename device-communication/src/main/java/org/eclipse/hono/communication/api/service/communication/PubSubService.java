@@ -23,9 +23,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.core.app.InternalMessagingConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +43,9 @@ import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.PushConfig;
 import com.google.pubsub.v1.Subscription;
 import com.google.pubsub.v1.TopicName;
+
+import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Internal messaging interface implementation.

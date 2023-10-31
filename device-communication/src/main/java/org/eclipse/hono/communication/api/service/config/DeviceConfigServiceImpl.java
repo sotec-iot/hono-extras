@@ -22,8 +22,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-import javax.inject.Singleton;
-
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.config.DeviceConfigsConstants;
@@ -50,6 +48,7 @@ import com.google.pubsub.v1.PubsubMessage;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import jakarta.inject.Singleton;
 
 /**
  * Service for device commands.
@@ -189,7 +188,7 @@ public class DeviceConfigServiceImpl extends DeviceServiceAbstract
                     publish(topicToPublish, config, attributes);
                 })
                 .onFailure(err -> {
-                    final String logMessage = "Can't publish configs: " +  err.getMessage();
+                    final String logMessage = "Can't publish configs: " + err.getMessage();
                     if (err instanceof NoSuchElementException) {
                         log.debug(logMessage);
                     } else {

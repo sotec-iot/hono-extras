@@ -20,8 +20,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
-import javax.inject.Singleton;
-
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.hono.communication.api.config.DeviceConfigsConstants;
 import org.eclipse.hono.communication.api.data.DeviceCommandRequest;
@@ -45,6 +43,7 @@ import com.google.pubsub.v1.PubsubMessage;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import jakarta.inject.Singleton;
 
 /**
  * Service for device commands.

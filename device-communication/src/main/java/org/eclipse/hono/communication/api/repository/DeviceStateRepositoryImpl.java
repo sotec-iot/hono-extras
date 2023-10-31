@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.data.DeviceState;
 import org.eclipse.hono.communication.api.data.DeviceStateEntity;
@@ -37,6 +35,7 @@ import io.vertx.sqlclient.RowIterator;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Tuple;
 import io.vertx.sqlclient.templates.SqlTemplate;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Repository class for making CRUD operations for device state entities.

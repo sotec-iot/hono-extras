@@ -29,7 +29,7 @@ import com.google.pubsub.v1.PubsubMessage;
 /**
  * Mapper for device state objects.
  */
-@Mapper(componentModel = "cdi", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "jakarta", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface DeviceStateMapper {
 
     /**

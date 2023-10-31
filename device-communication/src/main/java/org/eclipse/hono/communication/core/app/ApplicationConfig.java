@@ -16,9 +16,9 @@
 
 package org.eclipse.hono.communication.core.app;
 
-import javax.inject.Singleton;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.inject.Singleton;
 
 /**
  * Application configurations.
@@ -30,6 +30,7 @@ public class ApplicationConfig {
     String version;
     @ConfigProperty(name = "app.name")
     String componentName;
+
     private final ServerConfig serverConfig;
     private final DatabaseConfig databaseConfig;
 

@@ -16,8 +16,6 @@
 
 package org.eclipse.hono.communication.api.service.database;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.core.app.DatabaseConfig;
 import org.eclipse.hono.communication.core.utils.DbUtils;
 
@@ -25,6 +23,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Service for database.

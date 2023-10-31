@@ -16,11 +16,11 @@
 
 package org.eclipse.hono.communication.core.app;
 
-import javax.inject.Singleton;
-
 import org.eclipse.hono.util.CommandConstants;
 import org.eclipse.hono.util.EventConstants;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.inject.Singleton;
 
 /**
  * Configs for internal communication service.

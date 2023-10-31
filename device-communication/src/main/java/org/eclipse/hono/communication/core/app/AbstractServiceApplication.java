@@ -21,8 +21,6 @@ import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import javax.enterprise.event.Observes;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +31,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.impl.JsonUtil;
+import jakarta.enterprise.event.Observes;
 
 /**
  * Abstract Service application class.

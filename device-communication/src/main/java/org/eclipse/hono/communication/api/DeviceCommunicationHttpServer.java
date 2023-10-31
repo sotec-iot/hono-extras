@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.inject.Singleton;
-
 import org.eclipse.hono.communication.api.service.VertxHttpHandlerManagerService;
 import org.eclipse.hono.communication.api.service.communication.InternalTopicManager;
 import org.eclipse.hono.communication.api.service.database.DatabaseSchemaCreator;
@@ -45,6 +43,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.openapi.RouterBuilder;
 import io.vertx.ext.web.validation.BadRequestException;
+import jakarta.inject.Singleton;
 
 /**
  * Vertx HTTP Server for the device communication api.

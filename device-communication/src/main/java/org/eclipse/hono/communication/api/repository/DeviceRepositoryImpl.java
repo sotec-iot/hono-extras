@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.api.service.database.DatabaseService;
 import org.eclipse.hono.communication.core.app.DatabaseConfig;
 
@@ -31,6 +29,7 @@ import io.vertx.sqlclient.RowIterator;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Tuple;
 import io.vertx.sqlclient.templates.SqlTemplate;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Device registrations repository.

@@ -16,9 +16,9 @@
 
 package org.eclipse.hono.communication.core.app;
 
-import javax.inject.Singleton;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import jakarta.inject.Singleton;
 
 /**
  * Server configurations.

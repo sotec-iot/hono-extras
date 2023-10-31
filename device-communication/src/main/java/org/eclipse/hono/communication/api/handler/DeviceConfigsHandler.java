@@ -16,8 +16,6 @@
 
 package org.eclipse.hono.communication.api.handler;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.config.DeviceConfigsConstants;
 import org.eclipse.hono.communication.api.data.DeviceConfig;
@@ -30,6 +28,7 @@ import org.eclipse.hono.communication.core.utils.ResponseUtils;
 import io.vertx.core.Future;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.openapi.RouterBuilder;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Handler for device config endpoints.

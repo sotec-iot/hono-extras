@@ -19,8 +19,6 @@ package org.eclipse.hono.communication.api.service.database;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.api.config.DeviceConfigsConstants;
 import org.eclipse.hono.communication.api.config.DeviceStatesConstants;
 import org.slf4j.Logger;
@@ -29,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.runtime.Quarkus;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Creates all Database tables if they do not exist.

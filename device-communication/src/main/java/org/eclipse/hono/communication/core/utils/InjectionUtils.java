@@ -18,7 +18,7 @@ package org.eclipse.hono.communication.core.utils;
 
 import java.util.Random;
 
-import javax.enterprise.inject.Produces;
+import jakarta.enterprise.inject.Produces;
 
 /**
  * Injection utilities class.

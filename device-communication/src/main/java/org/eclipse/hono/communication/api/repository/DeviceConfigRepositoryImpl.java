@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.data.DeviceConfig;
 import org.eclipse.hono.communication.api.data.DeviceConfigEntity;
@@ -39,6 +37,7 @@ import io.vertx.sqlclient.RowIterator;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.templates.RowMapper;
 import io.vertx.sqlclient.templates.SqlTemplate;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Repository class for making CRUD operations for device config entities.
@@ -187,7 +186,8 @@ public class DeviceConfigRepositoryImpl implements DeviceConfigRepository {
     @Override
     public Future<DeviceConfigEntity> createNew(final DeviceConfigEntity entity) {
         return db.getDbClient().withTransaction(
-                sqlConnection -> deviceRepository.searchForDevice(entity.getDeviceId(), entity.getTenantId(), sqlConnection)
+                sqlConnection -> deviceRepository
+                        .searchForDevice(entity.getDeviceId(), entity.getTenantId(), sqlConnection)
                         .compose(
                                 counter -> {
                                     if (counter < 1) {

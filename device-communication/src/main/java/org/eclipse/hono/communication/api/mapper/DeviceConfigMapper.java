@@ -28,7 +28,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 /**
  * Mapper for device config objects.
  */
-@Mapper(componentModel = "cdi", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "jakarta", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface DeviceConfigMapper {
 
     /**
