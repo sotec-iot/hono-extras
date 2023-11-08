@@ -1,3 +1,4 @@
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 No requirements.
@@ -12,6 +13,7 @@ No providers.
 |------|--------|---------|
 | <a name="module_cert-manager"></a> [cert-manager](#module\_cert-manager) | ../modules/cert_manager | n/a |
 | <a name="module_hono"></a> [hono](#module\_hono) | ../modules/hono | n/a |
+| <a name="module_load-balancer"></a> [load-balancer](#module\_load-balancer) | ../modules/load_balancer | n/a |
 | <a name="module_namespace"></a> [namespace](#module\_namespace) | ../modules/namespace | n/a |
 | <a name="module_stakater-reloader"></a> [stakater-reloader](#module\_stakater-reloader) | ../modules/stakater_reloader | n/a |
 
@@ -40,6 +42,7 @@ No resources.
 | <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the use of cert manager. | `bool` | `false` | no |
 | <a name="input_enable_http_adapter"></a> [enable\_http\_adapter](#input\_enable\_http\_adapter) | Used to enable the http adapter | `bool` | `false` | no |
 | <a name="input_enable_mqtt_adapter"></a> [enable\_mqtt\_adapter](#input\_enable\_mqtt\_adapter) | Used to enable the mqtt adapter | `bool` | `true` | no |
+| <a name="input_enhanced_mqtt_load_balancer"></a> [enhanced\_mqtt\_load\_balancer](#input\_enhanced\_mqtt\_load\_balancer) | Configuration options for the enhanced MQTT load balancer.<br>  enabled: Enables the use of the enhanced MQTT load balancer.<br>  chart\_version: Version of the chart to deploy.<br>  algorithm: Load balancing algorithm used by the enhanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .<br>  replicaCount: Number of replicas to deploy.<br>  port\_configs: List of MQTT port config objects for the enhanced MQTT load balancer service.<br>  tcp\_configmap\_data: Data of the TCP configMap for the enhanced MQTT load balancer. | <pre>object({<br>    enabled = optional(bool, true),<br>    chart_version = optional(string, "1.34.1"),<br>    algorithm = optional(string, "leastconn"),<br>    replicaCount = optional(number, 1),<br>    port_configs = optional(list(object({<br>      name       = string,<br>      port       = number,<br>      targetPort = optional(number, 8883)<br>    })), [<br>            {<br>              name: "mqtt"<br>              port: 8883<br>              targetPort: 8883<br>            }<br>          ]),<br>    tcp_configmap_data = optional(map(string), {<br>            8883 = "hono/eclipse-hono-adapter-mqtt:8883"<br>          })<br>  })</pre> | `{}` | no |
 | <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Name of the DNS host for Grafana | `string` | `""` | no |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
 | <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. | `string` | n/a | yes |
@@ -86,3 +89,4 @@ No resources.
 | <a name="output_hono_tls_crt_in_storage"></a> [hono\_tls\_crt\_in\_storage](#output\_hono\_tls\_crt\_in\_storage) | n/a |
 | <a name="output_hono_tls_key_in_storage"></a> [hono\_tls\_key\_in\_storage](#output\_hono\_tls\_key\_in\_storage) | n/a |
 | <a name="output_values"></a> [values](#output\_values) | n/a |
+<!-- END_TF_DOCS -->

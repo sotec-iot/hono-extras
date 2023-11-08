@@ -38,6 +38,10 @@ locals {
         mqtt = {
           enabled = var.enable_mqtt_adapter
           svc = {
+            annotations = {
+              "haproxy.org/load-balance" = var.enhanced_mqtt_load_balancer.algorithm
+            }
+            type = var.enhanced_mqtt_load_balancer.enabled ? "ClusterIP" : "LoadBalancer"
             loadBalancerIP = var.mqtt_static_ip # sets a static IP loadbalancerIP for mqtt adapter
           }
           deployment = local.deployment

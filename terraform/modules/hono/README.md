@@ -1,3 +1,4 @@
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 No requirements.
@@ -34,6 +35,7 @@ No modules.
 | <a name="input_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#input\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress | `string` | n/a | yes |
 | <a name="input_enable_http_adapter"></a> [enable\_http\_adapter](#input\_enable\_http\_adapter) | Used to enable the http adapter | `bool` | n/a | yes |
 | <a name="input_enable_mqtt_adapter"></a> [enable\_mqtt\_adapter](#input\_enable\_mqtt\_adapter) | Used to enable the mqtt adapter | `bool` | n/a | yes |
+| <a name="input_enhanced_mqtt_load_balancer"></a> [enhanced\_mqtt\_load\_balancer](#input\_enhanced\_mqtt\_load\_balancer) | Configuration options for the enhanced MQTT load balancer.<br>  enabled: Enables the use of the enhanced MQTT load balancer.<br>  algorithm: Load balancing algorithm used by the enhanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance . | <pre>object({<br>    enabled       = bool<br>    algorithm     = string<br>  })</pre> | n/a | yes |
 | <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Name of the DNS host for Grafana | `string` | n/a | yes |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
 | <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. | `string` | n/a | yes |
@@ -75,3 +77,4 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_values"></a> [values](#output\_values) | n/a |
+<!-- END_TF_DOCS -->

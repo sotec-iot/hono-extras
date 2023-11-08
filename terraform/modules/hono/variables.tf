@@ -207,3 +207,15 @@ variable "grafana_dns_name" {
   type        = string
   description = "Name of the DNS host for Grafana"
 }
+
+variable "enhanced_mqtt_load_balancer" {
+  type = object({
+    enabled       = bool
+    algorithm     = string
+  })
+  description = <<EOT
+Configuration options for the enhanced MQTT load balancer.
+  enabled: Enables the use of the enhanced MQTT load balancer.
+  algorithm: Load balancing algorithm used by the enhanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .
+EOT
+}

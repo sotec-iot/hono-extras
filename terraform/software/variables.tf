@@ -343,3 +343,36 @@ variable "grafana_dns_name" {
   description = "Name of the DNS host for Grafana"
   default     = ""
 }
+
+variable "enhanced_mqtt_load_balancer" {
+  type = object({
+    enabled = optional(bool, false),
+    chart_version = optional(string, "1.34.1"),
+    algorithm = optional(string, "leastconn"),
+    replicaCount = optional(number, 1),
+    port_configs = optional(list(object({
+      name       = string,
+      port       = number,
+      targetPort = optional(number, 8883)
+    })), [
+            {
+              name: "mqtt"
+              port: 8883
+              targetPort: 8883
+            }
+          ]),
+    tcp_configmap_data = optional(map(string), {
+            8883 = "hono/eclipse-hono-adapter-mqtt:8883"
+          })
+  })
+  description = <<EOT
+Configuration options for the enhanced MQTT load balancer.
+  enabled: Enables the use of the enhanced MQTT load balancer.
+  chart_version: Version of the chart to deploy.
+  algorithm: Load balancing algorithm used by the enhanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .
+  replicaCount: Number of replicas to deploy.
+  port_configs: List of MQTT port config objects for the enhanced MQTT load balancer service.
+  tcp_configmap_data: Data of the TCP configMap for the enhanced MQTT load balancer.
+EOT
+  default = {}
+}
