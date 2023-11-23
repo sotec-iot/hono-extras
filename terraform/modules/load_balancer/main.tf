@@ -2,10 +2,10 @@ locals {
   values = [yamlencode(
     {
       controller = {
-        replicaCount = var.enhanced_mqtt_load_balancer.replicaCount
+        replicaCount = var.advanced_load_balancer.replicaCount
         service = {
           tcpPorts = [
-            for port_config in var.enhanced_mqtt_load_balancer.port_configs :
+            for port_config in var.advanced_load_balancer.port_configs :
             port_config
           ]
           type: "LoadBalancer"
@@ -31,7 +31,7 @@ resource "kubernetes_config_map" "tcp" {
     namespace = var.hono_namespace
   }
   data = {
-    for key, value in var.enhanced_mqtt_load_balancer.tcp_configmap_data :
+    for key, value in var.advanced_load_balancer.tcp_configmap_data :
     key => value
   }
 }
@@ -40,7 +40,7 @@ resource "helm_release" "load-balancer" {
   name             = "haproxy"
   repository       = "https://haproxytech.github.io/helm-charts"
   chart            = "kubernetes-ingress"
-  version          = var.enhanced_mqtt_load_balancer.chart_version
+  version          = var.advanced_load_balancer.chart_version
   namespace        = var.hono_namespace
   create_namespace = false
   timeout          = 120

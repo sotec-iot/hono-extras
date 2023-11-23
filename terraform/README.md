@@ -106,8 +106,12 @@ grafana_expose_externally = local.grafana_expose_externally
 
 ### Changing an object variable
 To change the properties within a variable of type object you have to follow the same steps as for a simple variable (described above) except you have to provide an object in the locals.tf file.
-For object variables that have optional properties you can just provide the non-optional properties and the ones you want to change.<br/>
-So for example the properties of `chart_version` and `algorithm` within the variable `enhanced_mqtt_load_balancer` can be change like seen below:
+For object variables that have optional properties, it is sufficient to provide only the non-optional properties and the properties you want to change.<br/>
+Example 1 - change the property `enabled` within the variable `mqtt_adapter`:
 ```
-enhanced_mqtt_load_balancer = {chart_version = "1.0.0", algorithm = "roundrobin"}
+mqtt_adapter = {enabled = true}
+```
+Example 2 - change the properties of `chart_version` and `algorithm` within the object property `advanced_load_balancer` within the variable `mqtt_adapter`:
+```
+mqtt_adapter = {advanced_load_balancer = {chart_version = "1.0.0", algorithm = "roundrobin"}}
 ```

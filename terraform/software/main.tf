@@ -16,7 +16,6 @@ module "hono" {
   cluster_name                          = var.cluster_name
   project_id                            = var.project_id
   enable_http_adapter                   = var.enable_http_adapter
-  enable_mqtt_adapter                   = var.enable_mqtt_adapter
   http_static_ip                        = var.http_static_ip
   mqtt_static_ip                        = var.mqtt_static_ip
   sql_user                              = var.sql_user
@@ -54,7 +53,7 @@ module "hono" {
   grafana_expose_externally             = var.grafana_expose_externally
   grafana_static_ip_name                = var.grafana_static_ip_name
   grafana_dns_name                      = var.grafana_dns_name
-  enhanced_mqtt_load_balancer           = var.enhanced_mqtt_load_balancer
+  mqtt_adapter                          = var.mqtt_adapter
 
   depends_on = [module.namespace, module.cert-manager]
 }
@@ -92,11 +91,10 @@ module "stakater-reloader" {
 
 module "load-balancer" {
     source                    = "../modules/load_balancer"
-  count                       = var.enhanced_mqtt_load_balancer.enabled && var.enable_mqtt_adapter ? 1 : 0
+  count                       = var.mqtt_adapter.advanced_load_balancer.enabled && var.mqtt_adapter.enabled ? 1 : 0
   hono_namespace              = var.hono_namespace
-  enable_mqtt_adapter         = var.enable_mqtt_adapter
+  advanced_load_balancer      = var.mqtt_adapter.advanced_load_balancer
   mqtt_static_ip              = var.mqtt_static_ip
-  enhanced_mqtt_load_balancer = var.enhanced_mqtt_load_balancer
 
   depends_on = [module.namespace]
 }
