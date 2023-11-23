@@ -13,14 +13,27 @@ variable "project_id" {
   description = "Project ID in which the cluster is present"
 }
 
+variable "mqtt_adapter" {
+  type        = object({
+    enabled = optional(bool, true),
+    advanced_load_balancer = optional(object({
+      enabled = optional(bool, false),
+      algorithm = optional(string, "leastconn")
+    }), {}),
+  })
+  description = <<EOT
+Configuration options for the MQTT adapter.
+  enabled: Enables the MQTT adapter.
+  advanced_load_balancer:
+    enabled: Enables the use of the advanced MQTT load balancer.
+    algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .
+EOT
+  default = {}
+}
+
 variable "enable_http_adapter" {
   type        = bool
   description = "Used to enable the http adapter"
-}
-
-variable "enable_mqtt_adapter" {
-  type        = bool
-  description = "Used to enable the mqtt adapter"
 }
 
 variable "cert_manager_enabled" {

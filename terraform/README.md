@@ -10,7 +10,6 @@ Prerequisites:
 
 
 The following steps need to be followed:
-
 1. Replace the placeholders in the following files with the name of the newly created bucket:
     * backend.tf in environment-template/infrastructure,
     * backend.tf and locals.tf in environment-template/software.
@@ -81,3 +80,38 @@ The following steps need to be followed:
 
 
 More Details to Variables and Locals can be found in the template README´s
+
+## Customizing the deployment further
+
+To see a full list of variables that can be changed to customize the deployment see:
+
+Infrastructure part: [https://github.com/sotec-iot/hono-extras/blob/terraform/terraform/infrastructure/variables.tf](https://github.com/sotec-iot/hono-extras/blob/terraform/terraform/software/variables.tf)<br/>
+Software part: [https://github.com/sotec-iot/hono-extras/blob/terraform/terraform/software/variables.tf](https://github.com/sotec-iot/hono-extras/blob/terraform/terraform/software/variables.tf)
+
+### Changing a variable
+To change the value of a variable, e.g. grafana_expose_externally, add the variable in the corresponding locals.tf file and assign it a new value.<br/>
+For our example:
+```
+grafana_expose_externally = true
+```
+Now go to the corresponding main.tf file and add the following line
+```
+VARIABLE = local.VARIABLE
+```
+Replace `VARIABLE` with the name of the variable you want to change.<br/>
+For our example:
+```
+grafana_expose_externally = local.grafana_expose_externally
+```
+
+### Changing an object variable
+To change the properties within a variable of type object you have to follow the same steps as for a simple variable (described above) except you have to provide an object in the locals.tf file.
+For object variables that have optional properties, it is sufficient to provide only the non-optional properties and the properties you want to change.<br/>
+Example 1 - change the property `enabled` within the variable `mqtt_adapter`:
+```
+mqtt_adapter = {enabled = true}
+```
+Example 2 - change the properties of `chart_version` and `algorithm` within the object property `advanced_load_balancer` within the variable `mqtt_adapter`:
+```
+mqtt_adapter = {advanced_load_balancer = {chart_version = "1.0.0", algorithm = "roundrobin"}}
+```

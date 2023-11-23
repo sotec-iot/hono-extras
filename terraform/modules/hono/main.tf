@@ -36,8 +36,12 @@ locals {
           tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
         }
         mqtt = {
-          enabled = var.enable_mqtt_adapter
+          enabled = var.mqtt_adapter.enabled
           svc = {
+            annotations = {
+              "haproxy.org/load-balance" = var.mqtt_adapter.advanced_load_balancer.algorithm
+            }
+            type = var.mqtt_adapter.advanced_load_balancer.enabled ? "ClusterIP" : "LoadBalancer"
             loadBalancerIP = var.mqtt_static_ip # sets a static IP loadbalancerIP for mqtt adapter
           }
           deployment = local.deployment
