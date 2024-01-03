@@ -16,13 +16,12 @@
 
 package org.eclipse.hono.communication.api.service.communication;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.StreamSupport;
+import java.util.concurrent.TimeoutException;
 
+import org.eclipse.hono.communication.api.config.PubSubConstants;
 import org.eclipse.hono.communication.core.app.InternalMessagingConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +32,10 @@ import com.google.api.core.ApiFutures;
 import com.google.cloud.pubsub.v1.MessageReceiver;
 import com.google.cloud.pubsub.v1.Publisher;
 import com.google.cloud.pubsub.v1.Subscriber;
-import com.google.cloud.pubsub.v1.SubscriptionAdminClient;
-import com.google.cloud.pubsub.v1.SubscriptionAdminSettings;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.protobuf.ByteString;
-import com.google.pubsub.v1.ProjectName;
 import com.google.pubsub.v1.ProjectSubscriptionName;
 import com.google.pubsub.v1.PubsubMessage;
-import com.google.pubsub.v1.PushConfig;
-import com.google.pubsub.v1.Subscription;
 import com.google.pubsub.v1.TopicName;
 
 import jakarta.annotation.PreDestroy;
@@ -53,12 +47,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PubSubService implements InternalMessaging {
 
-    public static final String COMMUNICATION_API_SUBSCRIPTION_NAME = "%s-communication-api";
     private final Logger log = LoggerFactory.getLogger(PubSubService.class);
     private final Map<String, Subscriber> activeSubscriptions = new HashMap<>();
 
     private final String projectId;
-    private TopicName topicName;
 
     /**
      * Creates a new PubSubService.
@@ -74,14 +66,19 @@ public class PubSubService implements InternalMessaging {
      */
     @PreDestroy
     void destroy() {
-
-        activeSubscriptions.forEach((topic, subscriber) -> {
-            if (subscriber != null) {
-                subscriber.stopAsync();
-            }
-        });
-
+        activeSubscriptions.forEach((topic, subscriber) -> closeSubscriber(subscriber));
         activeSubscriptions.clear();
+    }
+
+    private void closeSubscriber(final Subscriber subscriber) {
+        if (subscriber != null) {
+            subscriber.stopAsync();
+            try {
+                subscriber.awaitTerminated(30, TimeUnit.SECONDS);
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
@@ -117,53 +114,31 @@ public class PubSubService implements InternalMessaging {
 
     @Override
     public void subscribe(final String topic, final MessageReceiver callbackHandler) {
-        if (activeSubscriptions.containsKey(topic)) {
+        final String subscription = String.format(PubSubConstants.COMMUNICATION_API_SUBSCRIPTION_NAME, topic);
+        if (activeSubscriptions.containsKey(subscription)) {
             return;
         }
-        topicName = TopicName.of(projectId, topic);
         final ProjectSubscriptionName subscriptionName;
         try {
-            subscriptionName = initSubscription(topic);
+            subscriptionName = ProjectSubscriptionName.of(
+                    projectId,
+                    subscription);
             final Subscriber subscriber = Subscriber.newBuilder(subscriptionName, callbackHandler).build();
             subscriber.startAsync().awaitRunning();
-            activeSubscriptions.put(topic, subscriber);
-            log.info("Successfully subscribe to topic: {}.", topicName.getTopic());
+            activeSubscriptions.put(subscription, subscriber);
+            log.info("Successfully subscribe to topic: {}.", topic);
         } catch (Exception ex) {
             log.error("Error subscribe to topic {}: {}", topic, ex.getMessage());
         }
     }
 
-    /**
-     * If the subscription doesn't exist creates a new one.
-     *
-     * @param topic Topic name, it will be used for creating the subscription topic_name-sub
-     * @return The ProjectSubscriptionName object
-     * @throws IOException if subscription can't be created
-     */
-    ProjectSubscriptionName initSubscription(final String topic) throws IOException {
-        final var subscriptionName = ProjectSubscriptionName.of(
-                projectId,
-                String.format(COMMUNICATION_API_SUBSCRIPTION_NAME, topic));
-        final var subscriptionAdminSettings = SubscriptionAdminSettings.newBuilder()
-                .build();
-        try (SubscriptionAdminClient subscriptionAdminClient = SubscriptionAdminClient
-                .create(subscriptionAdminSettings)) {
-            final var subscriptions = subscriptionAdminClient.listSubscriptions(ProjectName.of(projectId))
-                    .iterateAll();
-            final Optional<Subscription> existing = StreamSupport
-                    .stream(subscriptions.spliterator(), false)
-                    .filter(sub -> sub.getName().equals(subscriptionName.toString()))
-                    .findFirst();
-
-            if (existing.isEmpty()) {
-
-                subscriptionAdminClient.createSubscription(
-                        subscriptionName.toString(),
-                        topicName,
-                        PushConfig.getDefaultInstance(),
-                        50);
-            }
+    @Override
+    public void closeSubscribersForTenant(final String tenant) {
+        for (String endpoint : PubSubConstants.getEndpointsWithAdditionalSubscription()) {
+            final String subscription = String.format(PubSubConstants.COMMUNICATION_API_SUBSCRIPTION_NAME,
+                    String.format("%s.%s", tenant, endpoint));
+            final Subscriber subscriber = activeSubscriptions.get(subscription);
+            closeSubscriber(subscriber);
         }
-        return subscriptionName;
     }
 }

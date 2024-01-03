@@ -15,7 +15,6 @@ package org.eclipse.hono.communication.api.service.communication;
 
 import java.util.Objects;
 
-import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManager;
 import org.eclipse.hono.client.pubsub.PubSubConfigProperties;
 
 import com.google.api.gax.core.CredentialsProvider;

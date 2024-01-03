@@ -14,8 +14,6 @@
 
 package org.eclipse.hono.communication.api.service.communication;
 
-import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManager;
-
 /**
  * A factory to create PubSubBasedAdminClientManager instances.
  */

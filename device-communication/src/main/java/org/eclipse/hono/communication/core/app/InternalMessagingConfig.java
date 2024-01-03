@@ -60,6 +60,10 @@ public class InternalMessagingConfig {
     @ConfigProperty(name = "app.internalMessaging.command.topicFormat")
     String commandTopicFormat;
 
+    // PubSub
+    @ConfigProperty(name = "app.internalMessaging.pubsub.batchInitTenantThreshold")
+    int batchInitTenantThreshold;
+
     public String getCommandTopicFormat() {
         return commandTopicFormat;
     }
@@ -106,5 +110,9 @@ public class InternalMessagingConfig {
 
     public String getStateTopicFormat() {
         return stateTopicFormat;
+    }
+
+    public int getBatchInitTenantThreshold() {
+        return batchInitTenantThreshold;
     }
 }

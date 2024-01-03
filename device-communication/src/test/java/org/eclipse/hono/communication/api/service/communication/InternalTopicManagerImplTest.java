@@ -18,6 +18,7 @@ package org.eclipse.hono.communication.api.service.communication;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
@@ -29,7 +30,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 
-import org.eclipse.hono.client.pubsub.PubSubBasedAdminClientManager;
 import org.eclipse.hono.client.pubsub.PubSubMessageHelper;
 import org.eclipse.hono.communication.api.handler.CommandTopicEventHandler;
 import org.eclipse.hono.communication.api.handler.ConfigTopicEventHandler;
@@ -68,10 +68,10 @@ class InternalTopicManagerImplTest {
     private final CommandTopicEventHandler commandTopicEventHandler;
     private final ConfigTopicEventHandler configTopicEventHandler;
     private final StateTopicEventHandler stateTopicEventHandler;
-    private final InternalTopicManagerImpl internalTopicManager;
     private final PubSubBasedAdminClientManagerFactory adminClientManagerFactory;
     private final PubSubBasedAdminClientManager adminClientManager;
     private final Vertx vertxMock;
+    private InternalTopicManagerImpl internalTopicManager;
 
     InternalTopicManagerImplTest() {
         this.deviceRepositoryMock = mock(DeviceRepository.class);
@@ -87,10 +87,6 @@ class InternalTopicManagerImplTest {
         this.stateTopicEventHandler = mock(StateTopicEventHandler.class);
         this.adminClientManagerFactory = mock(PubSubBasedAdminClientManagerFactory.class);
         this.vertxMock = mock(Vertx.class);
-        this.internalTopicManager = new InternalTopicManagerImpl(deviceRepositoryMock, commandTopicEventHandler,
-                configTopicEventHandler, stateTopicEventHandler, internalCommunicationMock, internalMessagingConfigMock,
-                adminClientManagerFactory,
-                vertxMock);
         this.adminClientManager = mock(PubSubBasedAdminClientManager.class);
     }
 
@@ -98,6 +94,10 @@ class InternalTopicManagerImplTest {
     void setup() {
         when(pubsubMessageMock.getData()).thenReturn(byteStringMock);
         when(internalMessagingConfigMock.getProjectId()).thenReturn("project_ID");
+        this.internalTopicManager = new InternalTopicManagerImpl(deviceRepositoryMock, commandTopicEventHandler,
+                configTopicEventHandler, stateTopicEventHandler, internalCommunicationMock, internalMessagingConfigMock,
+                adminClientManagerFactory,
+                vertxMock);
     }
 
     @AfterEach
@@ -158,7 +158,7 @@ class InternalTopicManagerImplTest {
             when(byteStringMock.toStringUtf8()).thenReturn(new ObjectMapper().writeValueAsString(notification));
             when(adminClientManagerFactory.createAdminClientManager()).thenReturn(adminClientManager);
             when(adminClientManager.getOrCreateTopic(anyString(), anyString())).thenReturn(Future.succeededFuture());
-            when(adminClientManager.getOrCreateSubscription(anyString(), anyString()))
+            when(adminClientManager.getOrCreateSubscription(anyString(), anyString(), anyString()))
                     .thenReturn(Future.succeededFuture());
 
             internalTopicManager.onTenantChanges(pubsubMessageMock, ackReplyConsumerMock);
@@ -169,8 +169,38 @@ class InternalTopicManagerImplTest {
             verify(byteStringMock).toStringUtf8();
             verify(adminClientManagerFactory).createAdminClientManager();
             verify(adminClientManager, times(5)).getOrCreateTopic(anyString(), anyString());
-            verify(adminClientManager, times(5)).getOrCreateSubscription(anyString(), anyString());
+            verify(adminClientManager, times(8)).getOrCreateSubscription(anyString(), anyString(), anyString());
             verify(vertxMock, times(2)).executeBlocking(any());
+        }
+    }
+
+    @Test
+    void testOnTenantChange_tenantDelete_success() throws IOException {
+        try (MockedStatic<PubSubMessageHelper> mockedPubSubMessageHelper = mockStatic(PubSubMessageHelper.class)) {
+            final var credMock = mock(FixedCredentialsProvider.class);
+            mockedPubSubMessageHelper.when(() -> PubSubMessageHelper.getTopicName(anyString(), anyString()))
+                    .thenReturn("test");
+            mockedPubSubMessageHelper.when(PubSubMessageHelper::getCredentialsProvider)
+                    .thenReturn(Optional.of(credMock));
+            final TenantChangeNotification notification = new TenantChangeNotification(LifecycleChange.DELETE, tenantId,
+                    Instant.now(), false, true);
+            doNothing().when(internalCommunicationMock).closeSubscribersForTenant(anyString());
+            when(byteStringMock.toStringUtf8()).thenReturn(new ObjectMapper().writeValueAsString(notification));
+            when(adminClientManagerFactory.createAdminClientManager()).thenReturn(adminClientManager);
+            when(adminClientManager.deleteTopics(any())).thenReturn(Future.succeededFuture());
+            when(adminClientManager.deleteSubscriptions(any())).thenReturn(Future.succeededFuture());
+
+            internalTopicManager.onTenantChanges(pubsubMessageMock, ackReplyConsumerMock);
+
+            verify(internalMessagingConfigMock).getProjectId();
+            verify(ackReplyConsumerMock).ack();
+            verify(pubsubMessageMock).getData();
+            verify(internalCommunicationMock).closeSubscribersForTenant(anyString());
+            verify(byteStringMock).toStringUtf8();
+            verify(adminClientManagerFactory).createAdminClientManager();
+            verify(adminClientManager).closeAdminClients();
+            verify(adminClientManager).deleteTopics(any());
+            verify(adminClientManager).deleteSubscriptions(any());
         }
     }
 }

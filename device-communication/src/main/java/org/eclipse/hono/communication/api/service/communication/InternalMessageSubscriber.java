@@ -30,4 +30,11 @@ public interface InternalMessageSubscriber {
      * @param callbackHandler The function to be called when a message is received
      */
     void subscribe(String topic, MessageReceiver callbackHandler);
+
+    /**
+     * Closes all active subscribers for the given tenant.
+     *
+     * @param tenant The tenant whose active subscribers should be closed.
+     */
+    void closeSubscribersForTenant(String tenant);
 }

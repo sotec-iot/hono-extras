@@ -16,13 +16,14 @@ app:
     event:
       topicFormat: ${COM_EVENT_ON_CONNECT_TOPIC_FORMAT:%s.event} # TENANT_NAME.event
       emptyNotificationEventContentType: ${COM_EVENT_EMPTY_NOTIFICATION_CONTENT_TYPE:application/vnd.eclipse-hono-empty-notification}
-
     state:
       topicFormat: ${COM_STATE_TOPIC_FORMAT:%s.event.state}  # TENANT_NAME.event.state
     command:
       topicFormat: ${COM_COMMAND_TOPIC_FORMAT:%s.command} # TENANT_NAME.command
       ackTopic: ${COM_CONFIG_ACK_TOPIC:%s.command_response} # TENANT_NAME.command_response
       commandConfigAckDelay: ${COM_COMMAND_CONFIG_ACK_DELAY:5000}
+    pubsub:
+      batchInitTenantThreshold: ${COM_PUBSUB_BATCH_INIT_TENANT_THRESHOLD:3}
 
 vertx:
   openapi:
@@ -63,5 +64,5 @@ quarkus:
   container-image:
     builder: docker
     build: true
-    push: true
-    image: "gcr.io/sotec-iot-core-dev/hono-device-communication:2.5.1-SNAPSHOT-test"
+    push: false
+    image: "gcr.io/sotec-iot-core-dev/hono-device-communication:2.6.0-SNAPSHOT-dev"

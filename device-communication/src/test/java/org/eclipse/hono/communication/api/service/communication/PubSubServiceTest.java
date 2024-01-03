@@ -16,7 +16,6 @@
 
 package org.eclipse.hono.communication.api.service.communication;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -26,11 +25,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.hono.communication.api.config.PubSubConstants;
 import org.eclipse.hono.communication.core.app.InternalMessagingConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -144,51 +143,46 @@ class PubSubServiceTest {
     }
 
     @Test
-    public void testSubscribe_success() throws Exception {
-        final String subscriptionName = "my-sub";
+    public void testSubscribe_success() {
         final ProjectSubscriptionName projectSubscriptionName = ProjectSubscriptionName.of(PROJECT_ID,
-                subscriptionName);
+                String.format(PubSubConstants.COMMUNICATION_API_SUBSCRIPTION_NAME, topic));
         try (MockedStatic<Subscriber> subscriberMockedStatic = mockStatic(Subscriber.class)) {
             subscriberMockedStatic.when(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock))
                     .thenReturn(subscriberBuilderMock);
             when(configMock.getProjectId()).thenReturn(PROJECT_ID);
             when(subscriberBuilderMock.build()).thenReturn(subscriberMock);
             final PubSubService pubSubServiceSpyClient = spy(new PubSubService(configMock));
-            doReturn(projectSubscriptionName).when(pubSubServiceSpyClient).initSubscription(topic);
 
             pubSubServiceSpyClient.subscribe(topic, messageReceiverMock);
 
             verify(configMock).getProjectId();
             verify(subscriberBuilderMock).build();
-            verify(pubSubServiceSpyClient, times(1)).initSubscription(topic);
             subscriberMockedStatic.verify(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock));
             verify(subscriberMock, times(1)).startAsync();
             verify(pubSubServiceSpyClient).subscribe(topic, messageReceiverMock);
             verifyNoMoreInteractions(pubSubServiceSpyClient, subscriberMock);
 
             subscriberMockedStatic.verifyNoMoreInteractions();
-
         }
-
     }
 
     @Test
-    public void testSubscribe_failed() throws Exception {
-        final String subscriptionName = "my-sub";
+    public void testSubscribe_failed() {
         final ProjectSubscriptionName projectSubscriptionName = ProjectSubscriptionName.of(PROJECT_ID,
-                subscriptionName);
+                String.format(PubSubConstants.COMMUNICATION_API_SUBSCRIPTION_NAME, topic));
         try (MockedStatic<Subscriber> subscriberMockedStatic = mockStatic(Subscriber.class)) {
             subscriberMockedStatic.when(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock))
                     .thenReturn(subscriberBuilderMock);
             when(configMock.getProjectId()).thenReturn(PROJECT_ID);
             when(subscriberBuilderMock.build()).thenReturn(subscriberMock);
+            doThrow(new NullPointerException()).when(subscriberBuilderMock).build();
             final PubSubService pubSubServiceSpyClient = spy(new PubSubService(configMock));
-            doThrow(new IOException()).when(pubSubServiceSpyClient).initSubscription(topic);
 
             pubSubServiceSpyClient.subscribe(topic, messageReceiverMock);
 
             verify(configMock, times(1)).getProjectId();
-            verify(pubSubServiceSpyClient, times(1)).initSubscription(topic);
+            subscriberMockedStatic.verify(() -> Subscriber.newBuilder(projectSubscriptionName, messageReceiverMock));
+            verify(subscriberBuilderMock).build();
             verify(pubSubServiceSpyClient, times(1)).subscribe(topic, messageReceiverMock);
             verifyNoMoreInteractions(pubSubServiceSpyClient, subscriberMock);
 
