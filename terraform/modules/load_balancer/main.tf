@@ -3,6 +3,7 @@ locals {
     {
       controller = {
         replicaCount = var.advanced_load_balancer.replicaCount
+        resources = var.advanced_load_balancer.resources
         service = {
           tcpPorts = [
             for port_config in var.advanced_load_balancer.port_configs :
