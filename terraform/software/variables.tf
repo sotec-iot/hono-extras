@@ -346,6 +346,16 @@ variable "mqtt_adapter" {
       chart_version = optional(string, "1.34.1"),
       algorithm = optional(string, "leastconn"),
       replicaCount = optional(number, 1),
+      resources = optional(object({
+        limits = optional(object({
+          cpu = optional(string, null),
+          memory = optional(string, null)
+        }), {}),
+        requests = optional(object({
+          cpu = optional(string, "500m"),
+          memory = optional(string, "1000Mi")
+        }), {})
+      }), {}),
       port_configs = optional(list(object({
         name       = string,
         port       = number,
@@ -370,6 +380,7 @@ Configuration options for the MQTT adapter.
     chart_version: Version of the chart to deploy.
     algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .
     replicaCount: Number of replicas to deploy.
+    resources: Resource requests and limits.
     port_configs: List of MQTT port config objects for the advanced MQTT load balancer service.
     tcp_configmap_data: Data of the TCP configMap for the advanced MQTT load balancer.
 EOT

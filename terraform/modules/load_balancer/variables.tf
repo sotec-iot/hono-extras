@@ -12,6 +12,16 @@ variable "advanced_load_balancer" {
   type        = object({
     chart_version = string,
     replicaCount = number,
+    resources = object({
+      limits = object({
+        cpu = string,
+        memory = string
+      }),
+      requests = object({
+        cpu = string
+        memory = string
+      })
+    }),
     port_configs = list(object({
       name       = string,
       port       = number,
@@ -23,6 +33,7 @@ variable "advanced_load_balancer" {
 Configuration options for the advanced MQTT load balancer.
   chart_version: Version of the chart to deploy.
   replicaCount: Number of replicas to deploy.
+  resources: Resource requests and limits.
   port_configs: List of MQTT port config objects for the advanced MQTT load balancer service.
   tcp_configmap_data: Data of the TCP configMap for the advanced MQTT load balancer.
 EOT
