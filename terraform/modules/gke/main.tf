@@ -19,6 +19,16 @@ resource "google_container_cluster" "hono_cluster" {
       issue_client_certificate = true
     }
   }
+  dynamic "maintenance_policy" {
+    for_each = var.gke_cluster_maintenance_policy_recurring_window != null ? [1] : []
+    content {
+      recurring_window {
+        start_time = var.gke_cluster_maintenance_policy_recurring_window.start_time
+        end_time   = var.gke_cluster_maintenance_policy_recurring_window.end_time
+        recurrence = var.gke_cluster_maintenance_policy_recurring_window.recurrence
+      }
+    }
+  }
 }
 resource "google_container_node_pool" "standard_node_pool" {
   name               = var.gke_node_pool_name

@@ -8,6 +8,15 @@ variable "gke_cluster_name" {
   description = "Name of the GKE Cluster"
 }
 
+variable "gke_cluster_maintenance_policy_recurring_window" {
+  type = object({
+    start_time = string,
+    end_time = string,
+    recurrence = string
+  })
+  description = "The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy"
+}
+
 variable "region" {
   type        = string
   description = "The region to deploy to"

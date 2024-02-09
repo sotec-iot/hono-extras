@@ -23,6 +23,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_gke_cluster_maintenance_policy_recurring_window"></a> [gke\_cluster\_maintenance\_policy\_recurring\_window](#input\_gke\_cluster\_maintenance\_policy\_recurring\_window) | The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy | <pre>object({<br>    start_time = string,<br>    end_time = string,<br>    recurrence = string<br>  })</pre> | n/a | yes |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | n/a | yes |
 | <a name="input_gke_machine_type"></a> [gke\_machine\_type](#input\_gke\_machine\_type) | Machine Type for node\_pools | `string` | n/a | yes |
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | n/a | yes |
