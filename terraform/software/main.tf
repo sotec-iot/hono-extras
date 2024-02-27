@@ -96,5 +96,5 @@ module "load-balancer" {
   advanced_load_balancer      = var.mqtt_adapter.advanced_load_balancer
   mqtt_static_ip              = var.mqtt_static_ip
 
-  depends_on = [module.namespace]
+  depends_on = [module.namespace, module.hono]
 }
