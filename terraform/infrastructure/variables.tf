@@ -54,11 +54,11 @@ variable "gke_cluster_name" {
 variable "gke_cluster_maintenance_policy_recurring_window" {
   type = object({
     start_time = string,
-    end_time = string,
+    end_time   = string,
     recurrence = string
   })
   description = "The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy"
-  default = null
+  default     = null
 }
 
 variable "sql_instance_name" {
@@ -101,6 +101,16 @@ variable "sql_instance_ipv4_enable" {
   type        = bool
   description = "Whether this Cloud SQL instance should be assigned a public IPV4 address. At least ipv4_enabled must be enabled or a private_network must be configured."
   default     = false
+}
+
+variable "sql_instance_maintenance_window" {
+  type = object({
+    day          = number,
+    hour         = number,
+    update_track = optional(string, "stable")
+  })
+  description = "The maintenance window settings for the cloud sql instance. For details see: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance"
+  default     = null
 }
 
 variable "sql_db_user_name" {
