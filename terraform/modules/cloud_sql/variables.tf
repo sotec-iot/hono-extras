@@ -90,3 +90,12 @@ variable "sql_instance_backup_count" {
   type        = number
   description = "The number of backups the Cloud SQL instance should retain."
 }
+
+variable "sql_instance_maintenance_window" {
+  type = object({
+    day          = number,
+    hour         = number,
+    update_track = string
+  })
+  description = "The maintenance window settings for the cloud sql instance. For details see: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance"
+}
