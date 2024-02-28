@@ -12,6 +12,15 @@ resource "google_sql_database_instance" "hono_sql" {
     activation_policy           = var.sql_instance_activation_policy
     deletion_protection_enabled = var.sql_instance_deletion_protection_enabled
 
+    dynamic "maintenance_window" {
+      for_each = var.sql_instance_maintenance_window != null ? [1] : []
+      content {
+        day          = var.sql_instance_maintenance_window.day
+        hour         = var.sql_instance_maintenance_window.hour
+        update_track = var.sql_instance_maintenance_window.update_track
+      }
+    }
+
     ip_configuration {
       ipv4_enabled    = var.sql_public_ip_enable
       private_network = var.network_id

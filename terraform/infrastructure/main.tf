@@ -49,6 +49,7 @@ module "cloud_sql" {
   sql_instance_disk_type                   = var.sql_instance_disk_type
   sql_instance_deletion_protection_enabled = var.sql_instance_deletion_protection_enabled
   sql_instance_activation_policy           = var.sql_instance_activation_policy
+  sql_instance_maintenance_window          = var.sql_instance_maintenance_window
   sql_public_ip_enable                     = var.sql_instance_ipv4_enable
   sql_db_user_name                         = var.sql_db_user_name
   sql_hono_database_name                   = var.sql_hono_database_name
