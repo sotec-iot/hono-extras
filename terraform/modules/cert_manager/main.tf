@@ -19,6 +19,10 @@ resource "helm_release" "cert-manager" {
     name  = "installCRDs"
     value = "true"
   }
+  set {
+    name  = "global.leaderElection.namespace"
+    value = var.cert_manager_namespace
+  }
 }
 
 resource "kubernetes_secret" "cert_manager_sa_key_secret" {
