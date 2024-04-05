@@ -30,6 +30,26 @@ variable "mqtt_static_ip" {
   description = "static ip address for the mqtt loadbalancer"
 }
 
+variable "database_type" {
+  type        = string
+  description = "Database type. Valid values are: mongodb or postgresql"
+}
+
+variable "mongodb_pw" {
+  type        = string
+  description = "Password of the MongoDB user."
+}
+
+variable "mongodb_user" {
+  type        = string
+  description = "User name of the MongoDB user."
+}
+
+variable "mongodb_cluster_connection_string" {
+  type        = string
+  description = "Connection string for the MongoDB cluster."
+}
+
 variable "sql_user" {
   type        = string
   description = "username of the sql database username"
@@ -266,9 +286,9 @@ variable "hpa_metrics_mqtt" {
       }
     },
     {
-      type     = "Resource"
+      type = "Resource"
       resource = {
-        name   = "cpu"
+        name = "cpu"
         target = {
           type               = "Utilization"
           averageUtilization = 80
@@ -276,9 +296,9 @@ variable "hpa_metrics_mqtt" {
       }
     },
     {
-      type     = "Resource"
+      type = "Resource"
       resource = {
-        name   = "memory"
+        name = "memory"
         target = {
           type               = "Utilization"
           averageUtilization = 85
@@ -311,10 +331,10 @@ variable "prometheus_adapter_custom_metrics" {
   default     = [
     {
       seriesQuery = "hono_connections_authenticated{kubernetes_namespace!=\"\",kubernetes_pod_name!=\"\"}"
-      resources   = {
+      resources = {
         overrides = {
           kubernetes_namespace = { resource : "namespace" }
-          kubernetes_pod_name  = { resource : "pod" }
+          kubernetes_pod_name = { resource : "pod" }
         }
       }
       metricsQuery = "sum(hono_connections_authenticated{<<.LabelMatchers>>}) by (<<.GroupBy>>)"
@@ -339,20 +359,20 @@ variable "grafana_dns_name" {
 }
 
 variable "mqtt_adapter" {
-  type        = object({
-    enabled = optional(bool, true),
+  type = object({
+    enabled                = optional(bool, true),
     advanced_load_balancer = optional(object({
-      enabled = optional(bool, false),
+      enabled       = optional(bool, false),
       chart_version = optional(string, "1.34.1"),
-      algorithm = optional(string, "leastconn"),
-      replicaCount = optional(number, 1),
-      resources = optional(object({
+      algorithm     = optional(string, "leastconn"),
+      replicaCount  = optional(number, 1),
+      resources     = optional(object({
         limits = optional(object({
-          cpu = optional(string, null),
+          cpu    = optional(string, null),
           memory = optional(string, null)
         }), {}),
         requests = optional(object({
-          cpu = optional(string, "500m"),
+          cpu    = optional(string, "500m"),
           memory = optional(string, "1000Mi")
         }), {})
       }), {}),
@@ -362,9 +382,9 @@ variable "mqtt_adapter" {
         targetPort = optional(number, 8883)
       })), [
         {
-          name: "mqtt"
-          port: 8883
-          targetPort: 8883
+          name : "mqtt"
+          port : 8883
+          targetPort : 8883
         }
       ]),
       tcp_configmap_data = optional(map(string), {

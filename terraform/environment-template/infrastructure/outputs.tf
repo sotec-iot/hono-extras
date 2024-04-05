@@ -28,6 +28,27 @@ output "mqtt_static_ip" {
   description = "Static IP for the MQTT Workload"
 }
 
+output "database_type" {
+  value       = module.infrastructure.database_type
+  description = "Database type. Valid values are: mongodb or postgresql"
+}
+
+output "mongodb_pw" {
+  value       = module.infrastructure.mongodb_pw
+  description = "Output of the MongoDB user password."
+  sensitive   = true
+}
+
+output "mongodb_user" {
+  value       = module.infrastructure.mongodb_user
+  description = "Output of the MongoDB user name."
+}
+
+output "mongodb_cluster_connection_string" {
+  value       = module.infrastructure.mongodb_cluster_connection_string
+  description = "Connection string for the MongoDB cluster."
+}
+
 output "sql_db_pw" {
   value       = module.infrastructure.sql_db_pw
   sensitive   = true

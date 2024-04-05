@@ -4,6 +4,7 @@
 |------|---------|
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 4 |
 | <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | ~> 4 |
+| <a name="requirement_mongodbatlas"></a> [mongodbatlas](#requirement\_mongodbatlas) | ~> 1 |
 
 ## Providers
 
@@ -32,12 +33,16 @@ No inputs.
 | <a name="output_cert_manager_sa_key_file"></a> [cert\_manager\_sa\_key\_file](#output\_cert\_manager\_sa\_key\_file) | Service Account Key File for cert-manager Service Account |
 | <a name="output_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#output\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account |
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | Name of the GKE Cluster |
+| <a name="output_database_type"></a> [database\_type](#output\_database\_type) | Database type. Valid values are: mongodb or postgresql |
 | <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for External Ingress |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress |
 | <a name="output_grafana_expose_externally"></a> [grafana\_expose\_externally](#output\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. |
 | <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for grafana external ingress. |
 | <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for grafana external ingress. |
 | <a name="output_http_static_ip"></a> [http\_static\_ip](#output\_http\_static\_ip) | Static IP for the HTTP Workload |
+| <a name="output_mongodb_cluster_connection_string"></a> [mongodb\_cluster\_connection\_string](#output\_mongodb\_cluster\_connection\_string) | Connection string for the MongoDB cluster. |
+| <a name="output_mongodb_pw"></a> [mongodb\_pw](#output\_mongodb\_pw) | Output of the MongoDB user password. |
+| <a name="output_mongodb_user"></a> [mongodb\_user](#output\_mongodb\_user) | Output of the MongoDB user name. |
 | <a name="output_mqtt_static_ip"></a> [mqtt\_static\_ip](#output\_mqtt\_static\_ip) | Static IP for the MQTT Workload |
 | <a name="output_project_id"></a> [project\_id](#output\_project\_id) | ID of the Project |
 | <a name="output_region"></a> [region](#output\_region) | Region in which the Cluster will be deployed |

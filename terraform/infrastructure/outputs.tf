@@ -13,29 +13,50 @@ output "mqtt_static_ip" {
   description = "Output of the MQTT static IP address."
 }
 
+output "database_type" {
+  value       = var.database_type
+  description = "Database type. Valid values are: mongodb or postgresql"
+}
+
+output "mongodb_pw" {
+  value       = module.atlas_mongodb[*].mongodb_pw
+  description = "Output of the MongoDB user password."
+  sensitive   = true
+}
+
+output "mongodb_user" {
+  value       = module.atlas_mongodb[*].mongodb_user
+  description = "Output of the MongoDB user name."
+}
+
+output "mongodb_cluster_connection_string" {
+  value       = module.atlas_mongodb[*].mongodb_cluster_connection_string
+  description = "Connection string for the MongoDB cluster."
+}
+
 output "sql_db_pw" {
-  value       = module.cloud_sql.sql_db_pw
+  value       = module.cloud_sql[*].sql_db_pw
   sensitive   = true
   description = "Output of the SQL user password."
 }
 
 output "sql_user" {
-  value       = module.cloud_sql.sql_user
+  value       = module.cloud_sql[*].sql_user
   description = "Output of the SQL user name."
 }
 
 output "sql_ip" {
-  value       = module.cloud_sql.sql_ip
+  value       = module.cloud_sql[*].sql_ip
   description = "URL of the Postgres database."
 }
 
 output "sql_hono_database" {
-  value       = module.cloud_sql.sql_hono_database
+  value       = module.cloud_sql[*].sql_hono_database
   description = "Name of the hono Postgres database."
 }
 
 output "sql_grafana_database" {
-  value       = module.cloud_sql.sql_grafana_database
+  value       = module.cloud_sql[*].sql_grafana_database
   description = "Name of the Grafana Postgres database."
 }
 

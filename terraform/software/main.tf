@@ -11,49 +11,53 @@ module "namespace" {
 }
 
 module "hono" {
-  source                                = "../modules/hono"
-  hono_namespace                        = var.hono_namespace
-  cluster_name                          = var.cluster_name
-  project_id                            = var.project_id
-  enable_http_adapter                   = var.enable_http_adapter
-  http_static_ip                        = var.http_static_ip
-  mqtt_static_ip                        = var.mqtt_static_ip
-  sql_user                              = var.sql_user
-  sql_db_pw                             = var.sql_db_pw
-  sql_hono_database                     = var.sql_hono_database
-  sql_grafana_database                  = var.sql_grafana_database
-  sql_ip                                = var.sql_ip
-  service_name_communication            = var.service_name_communication
-  device_communication_static_ip_name   = var.device_communication_static_ip_name
-  helm_package_repository               = var.helm_package_repository
-  hono_chart_name                       = var.hono_chart_name
-  hono_chart_version                    = var.hono_chart_version
-  oauth_app_name                        = var.oauth_app_name
-  device_communication_dns_name         = var.device_communication_dns_name
-  hono_tls_key                          = var.hono_tls_key
-  hono_tls_crt                          = var.hono_tls_crt
-  hono_tls_key_from_storage             = var.hono_tls_key_from_storage
-  hono_tls_crt_from_storage             = var.hono_tls_crt_from_storage
-  cloud_endpoints_key_file              = var.cloud_endpoints_key_file
-  hono_domain_secret_name               = var.hono_domain_secret_name
-  hono_domain_managed_secret_name       = var.hono_domain_managed_secret_name
-  hono_trust_store_config_map_name      = var.hono_trust_store_config_map_name
-  oauth_client_id                       = var.oauth_client_id
-  oauth_client_secret                   = var.oauth_client_secret
-  cert_manager_enabled                  = var.enable_cert_manager
-  ssl_policy_name                       = var.ssl_policy_name
-  hpa_enabled                           = var.hpa_enabled
-  hpa_minReplicas_mqtt                  = var.hpa_minReplicas_mqtt
-  hpa_maxReplicas_mqtt                  = var.hpa_maxReplicas_mqtt
-  hpa_metrics_mqtt                      = var.hpa_metrics_mqtt
-  hpa_minReplicas_device_registry       = var.hpa_minReplicas_device_registry
-  hpa_maxReplicas_device_registry       = var.hpa_maxReplicas_device_registry
-  prometheus_adapter_version            = var.prometheus_adapter_version
-  prometheus_adapter_custom_metrics     = var.prometheus_adapter_custom_metrics
-  grafana_expose_externally             = var.grafana_expose_externally
-  grafana_static_ip_name                = var.grafana_static_ip_name
-  grafana_dns_name                      = var.grafana_dns_name
-  mqtt_adapter                          = var.mqtt_adapter
+  source                              = "../modules/hono"
+  hono_namespace                      = var.hono_namespace
+  cluster_name                        = var.cluster_name
+  project_id                          = var.project_id
+  enable_http_adapter                 = var.enable_http_adapter
+  http_static_ip                      = var.http_static_ip
+  mqtt_static_ip                      = var.mqtt_static_ip
+  database_type                       = var.database_type
+  mongodb_pw                          = var.mongodb_pw
+  mongodb_user                        = var.mongodb_user
+  mongodb_cluster_connection_string   = var.mongodb_cluster_connection_string
+  sql_user                            = var.sql_user
+  sql_db_pw                           = var.sql_db_pw
+  sql_hono_database                   = var.sql_hono_database
+  sql_grafana_database                = var.sql_grafana_database
+  sql_ip                              = var.sql_ip
+  service_name_communication          = var.service_name_communication
+  device_communication_static_ip_name = var.device_communication_static_ip_name
+  helm_package_repository             = var.helm_package_repository
+  hono_chart_name                     = var.hono_chart_name
+  hono_chart_version                  = var.hono_chart_version
+  oauth_app_name                      = var.oauth_app_name
+  device_communication_dns_name       = var.device_communication_dns_name
+  hono_tls_key                        = var.hono_tls_key
+  hono_tls_crt                        = var.hono_tls_crt
+  hono_tls_key_from_storage           = var.hono_tls_key_from_storage
+  hono_tls_crt_from_storage           = var.hono_tls_crt_from_storage
+  cloud_endpoints_key_file            = var.cloud_endpoints_key_file
+  hono_domain_secret_name             = var.hono_domain_secret_name
+  hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
+  hono_trust_store_config_map_name    = var.hono_trust_store_config_map_name
+  oauth_client_id                     = var.oauth_client_id
+  oauth_client_secret                 = var.oauth_client_secret
+  cert_manager_enabled                = var.enable_cert_manager
+  ssl_policy_name                     = var.ssl_policy_name
+  hpa_enabled                         = var.hpa_enabled
+  hpa_minReplicas_mqtt                = var.hpa_minReplicas_mqtt
+  hpa_maxReplicas_mqtt                = var.hpa_maxReplicas_mqtt
+  hpa_metrics_mqtt                    = var.hpa_metrics_mqtt
+  hpa_minReplicas_device_registry     = var.hpa_minReplicas_device_registry
+  hpa_maxReplicas_device_registry     = var.hpa_maxReplicas_device_registry
+  prometheus_adapter_version          = var.prometheus_adapter_version
+  prometheus_adapter_custom_metrics   = var.prometheus_adapter_custom_metrics
+  grafana_expose_externally           = var.grafana_expose_externally
+  grafana_static_ip_name              = var.grafana_static_ip_name
+  grafana_dns_name                    = var.grafana_dns_name
+  mqtt_adapter                        = var.mqtt_adapter
 
   depends_on = [module.namespace, module.cert-manager]
 }
@@ -86,15 +90,15 @@ module "stakater-reloader" {
   hono_namespace   = var.hono_namespace
   reloader_version = var.reloader_version
 
-  depends_on       = [module.namespace]
+  depends_on = [module.namespace]
 }
 
 module "load-balancer" {
-    source                    = "../modules/load_balancer"
-  count                       = var.mqtt_adapter.advanced_load_balancer.enabled && var.mqtt_adapter.enabled ? 1 : 0
-  hono_namespace              = var.hono_namespace
-  advanced_load_balancer      = var.mqtt_adapter.advanced_load_balancer
-  mqtt_static_ip              = var.mqtt_static_ip
+  source                 = "../modules/load_balancer"
+  count                  = var.mqtt_adapter.advanced_load_balancer.enabled && var.mqtt_adapter.enabled ? 1 : 0
+  hono_namespace         = var.hono_namespace
+  advanced_load_balancer = var.mqtt_adapter.advanced_load_balancer
+  mqtt_static_ip         = var.mqtt_static_ip
 
   depends_on = [module.namespace, module.hono]
 }

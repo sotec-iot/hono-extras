@@ -60,6 +60,7 @@ locals {
         tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
       }
       deviceRegistryExample = {
+        type = var.database_type == "mongodb" ? "mongodb" : "jdbc"
         tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
         tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
         # sets database connection config
@@ -72,6 +73,12 @@ locals {
             minReplicas = var.hpa_minReplicas_device_registry
             maxReplicas = var.hpa_maxReplicas_device_registry
           }
+        }
+        mongoDBBasedDeviceRegistry = {
+          mongodb = {
+            connectionString = var.database_type == "mongodb" ? "${split("//", var.mongodb_cluster_connection_string)[0]}//${var.mongodb_user}:${var.mongodb_pw}@${split("//", var.mongodb_cluster_connection_string)[1]}/hono-db" : ""
+          }
+          deployment = local.deployment
         }
       }
       commandRouterService = {
@@ -96,7 +103,7 @@ locals {
         }
         "grafana.ini" = {
           database = {
-            type = "postgres"
+            type = var.database_type == "postgresql" ? "postgres" : "sqlite3"
             host = "${var.sql_ip}:5432"
             name = var.sql_grafana_database
             user = var.sql_user
@@ -106,6 +113,7 @@ locals {
         }
       }
       deviceCommunication = {
+        enabled = var.database_type == "postgresql" ? true : false
         app = {
           name = var.oauth_app_name
         }

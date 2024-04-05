@@ -61,6 +61,54 @@ variable "gke_cluster_maintenance_policy_recurring_window" {
   default     = null
 }
 
+variable "database_type" {
+  type        = string
+  description = "Database type. Valid values are: mongodb or postgresql"
+  default     = "postgresql"
+}
+
+variable "atlas_mongodb_org_id" {
+  type        = string
+  description = "Atlas Organization ID"
+  default     = null
+}
+
+variable "atlas_mongodb_project_name" {
+  type        = string
+  description = "Atlas Project Name"
+  default     = "hono-mongodb"
+}
+
+variable "atlas_mongodb_cluster_cidr_block" {
+  type        = string
+  description = "Cluster CIDR Block"
+  default     = "10.11.0.0/18"
+}
+
+variable "atlas_mongodb_cluster_instance_size_name" {
+  type        = string
+  description = "Cluster instance size name"
+  default     = "M10"
+}
+
+variable "atlas_mongodb_cluster_instance_node_count" {
+  type        = number
+  description = "Cluster instance node count"
+  default     = 3
+}
+
+variable "atlas_mongodb_region" {
+  type        = string
+  description = "Atlas region where resources will be created"
+  default     = "WESTERN_EUROPE"
+}
+
+variable "atlas_mongodb_version" {
+  type        = string
+  description = "MongoDB Version"
+  default     = "7.0"
+}
+
 variable "sql_instance_name" {
   type        = string
   description = "Name of the SQL Instance"
@@ -88,7 +136,7 @@ variable "sql_instance_machine_type" {
 variable "sql_instance_disk_type" {
   type        = string
   description = "Disk Type of the SQL Instance"
-  default     = "PD-SSD"
+  default     = "PD_SSD"
 }
 
 variable "sql_instance_activation_policy" {

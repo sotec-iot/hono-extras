@@ -12,6 +12,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_atlas_mongodb"></a> [atlas\_mongodb](#module\_atlas\_mongodb) | ../modules/atlas_mongodb | n/a |
 | <a name="module_cloud_endpoint"></a> [cloud\_endpoint](#module\_cloud\_endpoint) | ../modules/cloud_endpoint | n/a |
 | <a name="module_cloud_sql"></a> [cloud\_sql](#module\_cloud\_sql) | ../modules/cloud_sql | n/a |
 | <a name="module_gke"></a> [gke](#module\_gke) | ../modules/gke | n/a |
@@ -29,8 +30,16 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_atlas_mongodb_cluster_cidr_block"></a> [atlas\_mongodb\_cluster\_cidr\_block](#input\_atlas\_mongodb\_cluster\_cidr\_block) | Cluster CIDR Block | `string` | `"10.11.0.0/18"` | no |
+| <a name="input_atlas_mongodb_cluster_instance_node_count"></a> [atlas\_mongodb\_cluster\_instance\_node\_count](#input\_atlas\_mongodb\_cluster\_instance\_node\_count) | Cluster instance node count | `number` | `3` | no |
+| <a name="input_atlas_mongodb_cluster_instance_size_name"></a> [atlas\_mongodb\_cluster\_instance\_size\_name](#input\_atlas\_mongodb\_cluster\_instance\_size\_name) | Cluster instance size name | `string` | `"M10"` | no |
+| <a name="input_atlas_mongodb_org_id"></a> [atlas\_mongodb\_org\_id](#input\_atlas\_mongodb\_org\_id) | Atlas Organization ID | `string` | `null` | no |
+| <a name="input_atlas_mongodb_project_name"></a> [atlas\_mongodb\_project\_name](#input\_atlas\_mongodb\_project\_name) | Atlas Project Name | `string` | `"hono-mongodb"` | no |
+| <a name="input_atlas_mongodb_region"></a> [atlas\_mongodb\_region](#input\_atlas\_mongodb\_region) | Atlas region where resources will be created | `string` | `"WESTERN_EUROPE"` | no |
+| <a name="input_atlas_mongodb_version"></a> [atlas\_mongodb\_version](#input\_atlas\_mongodb\_version) | MongoDB Version | `string` | `"7.0"` | no |
 | <a name="input_cert_manager_issuer_project_id"></a> [cert\_manager\_issuer\_project\_id](#input\_cert\_manager\_issuer\_project\_id) | Project ID in which the Cloud DNS zone to manage the DNS entries is located. Defaults to use the same project ID as the Hono instance. | `string` | `null` | no |
 | <a name="input_cert_manager_sa_account_id"></a> [cert\_manager\_sa\_account\_id](#input\_cert\_manager\_sa\_account\_id) | ID under which the cert-manager service account is going to be created. | `string` | `"hono-cert-manager-dns-solver"` | no |
+| <a name="input_database_type"></a> [database\_type](#input\_database\_type) | Database type. Valid values are: mongodb or postgresql | `string` | `"postgresql"` | no |
 | <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the service account needed for the use of cert manager | `bool` | `false` | no |
 | <a name="input_enable_http_ip_creation"></a> [enable\_http\_ip\_creation](#input\_enable\_http\_ip\_creation) | Used to enable the creation of a static ip for the http adapter | `string` | `false` | no |
 | <a name="input_enable_mqtt_ip_creation"></a> [enable\_mqtt\_ip\_creation](#input\_enable\_mqtt\_ip\_creation) | Used to enable the creation of a static ip for the mqtt adapter | `string` | `true` | no |
@@ -68,7 +77,7 @@ No requirements.
 | <a name="input_sql_instance_backup_location"></a> [sql\_instance\_backup\_location](#input\_sql\_instance\_backup\_location) | Location where the Cloud SQL instance backups are stored. | `string` | `null` | no |
 | <a name="input_sql_instance_backup_start_time"></a> [sql\_instance\_backup\_start\_time](#input\_sql\_instance\_backup\_start\_time) | The time at which the Cloud SQL instance should start the daily backup. | `string` | `"03:00"` | no |
 | <a name="input_sql_instance_deletion_protection_enabled"></a> [sql\_instance\_deletion\_protection\_enabled](#input\_sql\_instance\_deletion\_protection\_enabled) | Enables the deletion protection for the SQL instance. | `bool` | `true` | no |
-| <a name="input_sql_instance_disk_type"></a> [sql\_instance\_disk\_type](#input\_sql\_instance\_disk\_type) | Disk Type of the SQL Instance | `string` | `"PD-SSD"` | no |
+| <a name="input_sql_instance_disk_type"></a> [sql\_instance\_disk\_type](#input\_sql\_instance\_disk\_type) | Disk Type of the SQL Instance | `string` | `"PD_SSD"` | no |
 | <a name="input_sql_instance_ipv4_enable"></a> [sql\_instance\_ipv4\_enable](#input\_sql\_instance\_ipv4\_enable) | Whether this Cloud SQL instance should be assigned a public IPV4 address. At least ipv4\_enabled must be enabled or a private\_network must be configured. | `bool` | `false` | no |
 | <a name="input_sql_instance_machine_type"></a> [sql\_instance\_machine\_type](#input\_sql\_instance\_machine\_type) | Machine Type of the SQL Instance | `string` | `"db-custom-1-3840"` | no |
 | <a name="input_sql_instance_maintenance_window"></a> [sql\_instance\_maintenance\_window](#input\_sql\_instance\_maintenance\_window) | The maintenance window settings for the cloud sql instance. For details see: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance | <pre>object({<br>    day          = number,<br>    hour         = number,<br>    update_track = optional(string, "stable")<br>  })</pre> | `null` | no |
@@ -87,6 +96,7 @@ No requirements.
 | <a name="output_cert_manager_sa_account_id"></a> [cert\_manager\_sa\_account\_id](#output\_cert\_manager\_sa\_account\_id) | Account ID of the cert-manager Service Account. |
 | <a name="output_cert_manager_sa_key_file"></a> [cert\_manager\_sa\_key\_file](#output\_cert\_manager\_sa\_key\_file) | Service Account Key File for cert-manager Service Account. |
 | <a name="output_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#output\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account. |
+| <a name="output_database_type"></a> [database\_type](#output\_database\_type) | Database type. Valid values are: mongodb or postgresql |
 | <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for external ingress. |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the static IP for external ingress. |
 | <a name="output_gke_cluster_ca_certificate"></a> [gke\_cluster\_ca\_certificate](#output\_gke\_cluster\_ca\_certificate) | CA-Certificate for the cluster. |
@@ -96,6 +106,9 @@ No requirements.
 | <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for Grafana external ingress. |
 | <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for Grafana external ingress. |
 | <a name="output_http_static_ip"></a> [http\_static\_ip](#output\_http\_static\_ip) | Output of the MQTT static IP address. |
+| <a name="output_mongodb_cluster_connection_string"></a> [mongodb\_cluster\_connection\_string](#output\_mongodb\_cluster\_connection\_string) | Connection string for the MongoDB cluster. |
+| <a name="output_mongodb_pw"></a> [mongodb\_pw](#output\_mongodb\_pw) | Output of the MongoDB user password. |
+| <a name="output_mongodb_user"></a> [mongodb\_user](#output\_mongodb\_user) | Output of the MongoDB user name. |
 | <a name="output_mqtt_static_ip"></a> [mqtt\_static\_ip](#output\_mqtt\_static\_ip) | Output of the MQTT static IP address. |
 | <a name="output_service_name_communication"></a> [service\_name\_communication](#output\_service\_name\_communication) | Name of the Cloud Endpoint service for device communication. |
 | <a name="output_sql_db_pw"></a> [sql\_db\_pw](#output\_sql\_db\_pw) | Output of the SQL user password. |

@@ -35,8 +35,29 @@ module "networking" {
   ]
 }
 
+module "atlas_mongodb" {
+  source = "../modules/atlas_mongodb"
+  count  = var.database_type == "mongodb" ? 1 : 0
+
+  gcp_project_id                            = var.project_id
+  gcp_vpc_network_name                      = module.networking.network_name
+  gcp_subnet_ip_cidr_range                  = var.ip_cidr_range
+  gcp_subnet_secondary_ip_range_service     = var.secondary_ip_range_services
+  gcp_subnet_secondary_ip_range_pods        = var.secondary_ip_range_pods
+  atlas_mongodb_org_id                      = var.atlas_mongodb_org_id
+  atlas_mongodb_project_name                = var.atlas_mongodb_project_name
+  atlas_mongodb_region                      = var.atlas_mongodb_region
+  atlas_mongodb_cluster_cidr_block          = var.atlas_mongodb_cluster_cidr_block
+  atlas_mongodb_cluster_instance_size_name  = var.atlas_mongodb_cluster_instance_size_name
+  atlas_mongodb_cluster_instance_node_count = var.atlas_mongodb_cluster_instance_node_count
+  atlas_mongodb_version                     = var.atlas_mongodb_version
+
+  depends_on = [module.networking]
+}
+
 module "cloud_sql" {
   source = "../modules/cloud_sql"
+  count  = var.database_type == "postgresql" ? 1 : 0
 
   project_id                               = var.project_id
   region                                   = var.region

@@ -14,10 +14,10 @@ variable "project_id" {
 }
 
 variable "mqtt_adapter" {
-  type        = object({
-    enabled = optional(bool, true),
+  type = object({
+    enabled                = optional(bool, true),
     advanced_load_balancer = optional(object({
-      enabled = optional(bool, false),
+      enabled   = optional(bool, false),
       algorithm = optional(string, "leastconn")
     }), {}),
   })
@@ -49,6 +49,26 @@ variable "http_static_ip" {
 variable "mqtt_static_ip" {
   type        = string
   description = "static ip address for the mqtt loadbalancer"
+}
+
+variable "database_type" {
+  type        = string
+  description = "Database type. Valid values are: mongodb or postgresql"
+}
+
+variable "mongodb_pw" {
+  type        = string
+  description = "Password of the MongoDB user."
+}
+
+variable "mongodb_user" {
+  type        = string
+  description = "User name of the MongoDB user."
+}
+
+variable "mongodb_cluster_connection_string" {
+  type        = string
+  description = "Connection string for the MongoDB cluster."
 }
 
 variable "sql_user" {
