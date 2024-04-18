@@ -4,6 +4,7 @@ locals {
     "roles/pubsub.editor",
     "roles/iam.serviceAccountOpenIdTokenCreator",
     "roles/monitoring.dashboardViewer",
-    "roles/container.nodeServiceAccount"
+    "roles/container.nodeServiceAccount",
+    "roles/cloudtrace.agent"
   ])
 }
