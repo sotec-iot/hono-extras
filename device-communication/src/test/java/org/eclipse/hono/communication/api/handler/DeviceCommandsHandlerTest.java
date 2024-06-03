@@ -17,19 +17,35 @@
 package org.eclipse.hono.communication.api.handler;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.config.DeviceCommandConstants;
-import org.eclipse.hono.communication.api.service.DeviceCommandService;
-import org.eclipse.hono.communication.api.service.DeviceCommandServiceImpl;
+import org.eclipse.hono.communication.api.service.command.DeviceCommandService;
+import org.eclipse.hono.communication.api.service.command.DeviceCommandServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
+import io.vertx.core.Context;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.RequestBody;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.openapi.Operation;
 import io.vertx.ext.web.openapi.RouterBuilder;
-
 
 class DeviceCommandsHandlerTest {
 
@@ -38,6 +54,9 @@ class DeviceCommandsHandlerTest {
     private final RoutingContext routingContextMock;
     private final Operation operationMock;
     private final DeviceCommandHandler deviceCommandsHandler;
+    private final RequestBody requestBodyMock;
+    private final HttpServerResponse responseMock;
+    private final Context contextMock;
 
     DeviceCommandsHandlerTest() {
         operationMock = mock(Operation.class);
@@ -45,6 +64,9 @@ class DeviceCommandsHandlerTest {
         routerBuilderMock = mock(RouterBuilder.class);
         routingContextMock = mock(RoutingContext.class);
         deviceCommandsHandler = new DeviceCommandHandler(commandServiceMock);
+        requestBodyMock = mock(RequestBody.class);
+        responseMock = mock(HttpServerResponse.class);
+        this.contextMock = mock(Context.class);
     }
 
     @AfterEach
@@ -53,7 +75,10 @@ class DeviceCommandsHandlerTest {
                 commandServiceMock,
                 routerBuilderMock,
                 routingContextMock,
-                operationMock);
+                operationMock,
+                requestBodyMock,
+                responseMock,
+                contextMock);
     }
 
     @BeforeEach
@@ -63,7 +88,6 @@ class DeviceCommandsHandlerTest {
                 routerBuilderMock,
                 routingContextMock,
                 operationMock);
-
     }
 
     @Test
@@ -79,12 +103,49 @@ class DeviceCommandsHandlerTest {
     }
 
     @Test
-    void handlePostCommand() {
-        doNothing().when(commandServiceMock).postCommand(routingContextMock);
+    void testHandlePostCommand() {
+        try (MockedStatic<Vertx> vertxMockedStatic = mockStatic(Vertx.class)) {
+            // Arrange
+            final String tenantId = "tenant1";
+            final String deviceId = "device1";
 
-        deviceCommandsHandler.handlePostCommand(routingContextMock);
+            // Set up mock behavior for RoutingContext
+            when(routingContextMock.body()).thenReturn(requestBodyMock);
+            when(requestBodyMock.asJsonObject()).thenReturn(new JsonObject("{}"));
+            when(routingContextMock.pathParam(ApiCommonConstants.TENANT_PATH_PARAMS)).thenReturn(tenantId);
+            when(routingContextMock.pathParam(ApiCommonConstants.DEVICE_PATH_PARAMS)).thenReturn(deviceId);
+            when(routingContextMock.response()).thenReturn(responseMock);
+            when(responseMock.setStatusCode(200)).thenReturn(responseMock);
 
-        verify(commandServiceMock, times(1)).postCommand(routingContextMock);
+            doAnswer(invocation -> {
+                final Promise<Object> result = Promise.promise();
+                final Handler<Promise<Object>> handler = invocation.getArgument(0);
+                handler.handle(result);
+                return result.future();
+            }).when(contextMock).executeBlocking(any());
+
+            vertxMockedStatic.when(Vertx::currentContext).thenReturn(contextMock);
+
+            // Set up mock behavior for CommandService
+            when(commandServiceMock.postCommand(any(), any(), any())).thenReturn(Future.succeededFuture());
+
+            // Act
+            deviceCommandsHandler.handlePostCommand(routingContextMock);
+
+            // Assert
+            vertxMockedStatic.verify(Vertx::currentContext);
+            verify(routingContextMock, times(1)).body();
+            verify(requestBodyMock).asJsonObject();
+            verify(routingContextMock).body();
+            verify(routingContextMock).response();
+
+            verify(commandServiceMock).postCommand(any(), anyString(), anyString());
+            verify(routingContextMock, times(1)).pathParam(ApiCommonConstants.TENANT_PATH_PARAMS);
+            verify(routingContextMock, times(1)).pathParam(ApiCommonConstants.DEVICE_PATH_PARAMS);
+
+            verify(responseMock, times(1)).setStatusCode(200);
+            verify(responseMock, times(1)).end();
+            verify(contextMock).executeBlocking(any());
+        }
     }
-
 }

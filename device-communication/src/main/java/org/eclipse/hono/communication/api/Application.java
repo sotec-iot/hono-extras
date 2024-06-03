@@ -29,19 +29,19 @@ import io.vertx.core.Vertx;
  */
 public class Application extends AbstractServiceApplication {
 
-    private final Logger log = LoggerFactory.getLogger(AbstractServiceApplication.class);
+    private final Logger log = LoggerFactory.getLogger(Application.class);
     private final HttpServer server;
 
     /**
      * Creates new Application with all dependencies.
      *
-     * @param vertx      The quarkus Vertx instance
+     * @param vertx The quarkus Vert.x instance
      * @param appConfigs The application configs
-     * @param server     The http server
+     * @param server The http server
      */
     public Application(final Vertx vertx,
-                       final ApplicationConfig appConfigs,
-                       final HttpServer server) {
+            final ApplicationConfig appConfigs,
+            final HttpServer server) {
         super(vertx, appConfigs);
         this.server = server;
     }
@@ -57,6 +57,5 @@ public class Application extends AbstractServiceApplication {
         log.info("Stopping HTTP server...");
         server.stop();
     }
-
 
 }

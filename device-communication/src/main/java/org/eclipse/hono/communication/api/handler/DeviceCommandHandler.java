@@ -16,14 +16,17 @@
 
 package org.eclipse.hono.communication.api.handler;
 
-import javax.enterprise.context.ApplicationScoped;
-
+import org.eclipse.hono.communication.api.config.ApiCommonConstants;
 import org.eclipse.hono.communication.api.config.DeviceCommandConstants;
-import org.eclipse.hono.communication.api.service.DeviceCommandService;
+import org.eclipse.hono.communication.api.data.DeviceCommandRequest;
+import org.eclipse.hono.communication.api.service.command.DeviceCommandService;
 import org.eclipse.hono.communication.core.http.HttpEndpointHandler;
+import org.eclipse.hono.communication.core.utils.ResponseUtils;
 
+import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.openapi.RouterBuilder;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Handler for device command endpoints.
@@ -49,11 +52,18 @@ public class DeviceCommandHandler implements HttpEndpointHandler {
     }
 
     /**
-     * Handle post device commands.
+     * Handles Post device command.
      *
      * @param routingContext The RoutingContext
      */
     public void handlePostCommand(final RoutingContext routingContext) {
-        commandService.postCommand(routingContext);
+        final var commandRequest = routingContext.body()
+                .asJsonObject()
+                .mapTo(DeviceCommandRequest.class);
+        final var tenantId = routingContext.pathParam(ApiCommonConstants.TENANT_PATH_PARAMS);
+        final var deviceId = routingContext.pathParam(ApiCommonConstants.DEVICE_PATH_PARAMS);
+        Vertx.currentContext().executeBlocking(promise -> commandService.postCommand(commandRequest, tenantId, deviceId)
+                .onSuccess(res -> routingContext.response().setStatusCode(200).end())
+                .onFailure(err -> ResponseUtils.errorResponse(routingContext, err)));
     }
 }

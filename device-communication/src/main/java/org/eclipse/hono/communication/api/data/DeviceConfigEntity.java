@@ -18,11 +18,12 @@ package org.eclipse.hono.communication.api.data;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * The device configuration entity object.
  **/
 public class DeviceConfigEntity {
-
 
     private int version;
     private String tenantId;
@@ -32,14 +33,6 @@ public class DeviceConfigEntity {
     private String deviceAckTime;
     private String binaryData;
 
-
-    /**
-     * Creates new DeviceConfigEntity.
-     */
-    public DeviceConfigEntity() {
-    }
-
-
     public int getVersion() {
         return version;
     }
@@ -48,47 +41,55 @@ public class DeviceConfigEntity {
         this.version = version;
     }
 
+    @JsonProperty("tenantId")
     public String getTenantId() {
         return tenantId;
     }
 
+    @JsonProperty("tenant_id")
     public void setTenantId(final String tenantId) {
         this.tenantId = tenantId;
     }
 
+    @JsonProperty("deviceId")
     public String getDeviceId() {
         return deviceId;
     }
 
+    @JsonProperty("device_id")
     public void setDeviceId(final String deviceId) {
         this.deviceId = deviceId;
     }
 
-
+    @JsonProperty("cloudUpdateTime")
     public String getCloudUpdateTime() {
         return cloudUpdateTime;
     }
 
+    @JsonProperty("cloud_update_time")
     public void setCloudUpdateTime(final String cloudUpdateTime) {
         this.cloudUpdateTime = cloudUpdateTime;
     }
 
+    @JsonProperty("deviceAckTime")
     public String getDeviceAckTime() {
         return deviceAckTime;
     }
 
+    @JsonProperty("device_ack_time")
     public void setDeviceAckTime(final String deviceAckTime) {
         this.deviceAckTime = deviceAckTime;
     }
 
+    @JsonProperty("binaryData")
     public String getBinaryData() {
         return binaryData;
     }
 
+    @JsonProperty("binary_data")
     public void setBinaryData(final String binaryData) {
         this.binaryData = binaryData;
     }
-
 
     @Override
     public String toString() {
@@ -111,13 +112,14 @@ public class DeviceConfigEntity {
             return false;
         }
         final var that = (DeviceConfigEntity) o;
-        return version == that.version && tenantId.equals(that.tenantId) && deviceId.equals(that.deviceId) && cloudUpdateTime.equals(that.cloudUpdateTime) && Objects.equals(deviceAckTime, that.deviceAckTime) && binaryData.equals(that.binaryData);
+        return version == that.version && tenantId.equals(that.tenantId) && deviceId.equals(that.deviceId)
+                && cloudUpdateTime.equals(that.cloudUpdateTime) && Objects.equals(deviceAckTime, that.deviceAckTime)
+                && binaryData.equals(that.binaryData);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(version, tenantId, deviceId, cloudUpdateTime, deviceAckTime, binaryData);
     }
-
 
 }

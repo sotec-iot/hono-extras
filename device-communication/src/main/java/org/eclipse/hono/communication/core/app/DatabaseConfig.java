@@ -16,10 +16,9 @@
 
 package org.eclipse.hono.communication.core.app;
 
-import javax.inject.Singleton;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import jakarta.inject.Singleton;
 
 /**
  * Database configurations.
@@ -40,8 +39,18 @@ public class DatabaseConfig {
     String name;
     @ConfigProperty(name = "vertx.database.pool-max-size")
     int poolMaxSize;
+    @ConfigProperty(name = "vertx.database.pool-initial-size")
+    int poolInitialSize;
+    @ConfigProperty(name = "vertx.database.connection-idle-timeout")
+    int connectionIdleTimeout;
+    @ConfigProperty(name = "vertx.database.cache-prepared-statements")
+    boolean cachePreparedStatements;
     @ConfigProperty(name = "vertx.device-registration.table")
     String deviceRegistrationTableName;
+    @ConfigProperty(name = "vertx.tenant.table")
+    String tenantTableName;
+    @ConfigProperty(name = "vertx.tenant.tenant-id-column")
+    String tenantTableIdColumn;
     @ConfigProperty(name = "vertx.device-registration.tenant-id-column")
     String deviceRegistrationTenantIdColumn;
     @ConfigProperty(name = "vertx.device-registration.device-id-column")
@@ -49,6 +58,14 @@ public class DatabaseConfig {
 
     public String getDeviceRegistrationTableName() {
         return deviceRegistrationTableName;
+    }
+
+    public String getTenantTableName() {
+        return tenantTableName;
+    }
+
+    public String getTenantTableIdColumn() {
+        return tenantTableIdColumn;
     }
 
     public String getDeviceRegistrationTenantIdColumn() {
@@ -61,6 +78,18 @@ public class DatabaseConfig {
 
     public int getPoolMaxSize() {
         return poolMaxSize;
+    }
+
+    public int getPoolInitialSize() {
+        return poolInitialSize;
+    }
+
+    public int getConnectionIdleTimeout() {
+        return connectionIdleTimeout;
+    }
+
+    public boolean getCachePreparedStatements() {
+        return cachePreparedStatements;
     }
 
     public int getPort() {

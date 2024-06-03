@@ -16,18 +16,20 @@
 
 package org.eclipse.hono.communication.core.utils;
 
+import org.eclipse.hono.communication.api.exception.DeviceNotAvailableException;
 import org.eclipse.hono.communication.api.exception.DeviceNotFoundException;
 
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.validation.BadRequestException;
 
-
 /**
  * HTTP Response utilities class.
  */
 public abstract class ResponseUtils {
+
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String APPLICATION_JSON_TYPE = "application/json";
 
@@ -38,53 +40,26 @@ public abstract class ResponseUtils {
     /**
      * Build success response using 200 as its status code and response object as body.
      *
-     * @param rc       The routing context
+     * @param rc The routing context
      * @param response The response object
      */
-    public static void successResponse(final RoutingContext rc,
-                                       final Object response) {
+    public static void successResponse(final RoutingContext rc, final Object response) {
         rc.response()
-                .setStatusCode(200)
+                .setStatusCode(HttpResponseStatus.OK.code())
                 .putHeader(CONTENT_TYPE_HEADER, APPLICATION_JSON_TYPE)
                 .end(Json.encodePrettily(response));
     }
 
     /**
-     * Build success response using 201 Created as its status code and response  object as body.
-     *
-     * @param rc       Routing context
-     * @param response Response body
-     */
-    public static void createdResponse(final RoutingContext rc,
-                                       final Object response) {
-        rc.response()
-                .setStatusCode(201)
-                .putHeader(CONTENT_TYPE_HEADER, APPLICATION_JSON_TYPE)
-                .end(Json.encodePrettily(response));
-    }
-
-    /**
-     * Build success response using 204 No Content as its status code and no response body.
+     * Build error response using 400 Bad Request, 404 Not Found, 504 Gateway Timeout or 500 Internal Server Error as
+     * its status code and throwable as its body.
      *
      * @param rc Routing context
-     */
-    public static void noContentResponse(final RoutingContext rc) {
-        rc.response()
-                .setStatusCode(204)
-                .end();
-    }
-
-    /**
-     * Build error response using 400 Bad Request, 404 Not Found or 500 Internal Server Error
-     * as its status code and throwable as its body.
-     *
-     * @param rc    Routing context
      * @param error Throwable exception
      */
     public static void errorResponse(final RoutingContext rc, final Throwable error) {
         final int status;
         final String message;
-
 
         if (error instanceof IllegalArgumentException
                 || error instanceof IllegalStateException
@@ -92,15 +67,19 @@ public abstract class ResponseUtils {
                 || error instanceof BadRequestException) {
 
             // Bad Request
-            status = 400;
+            status = HttpResponseStatus.BAD_REQUEST.code();
             message = error.getMessage();
         } else if (error instanceof DeviceNotFoundException) {
             // Not Found
-            status = 404;
+            status = HttpResponseStatus.NOT_FOUND.code();
+            message = error.getMessage();
+        } else if (error instanceof DeviceNotAvailableException) {
+            // Gateway Timeout
+            status = HttpResponseStatus.GATEWAY_TIMEOUT.code();
             message = error.getMessage();
         } else {
             // Internal Server Error
-            status = 500;
+            status = HttpResponseStatus.INTERNAL_SERVER_ERROR.code();
             if (error != null) {
                 message = String.format("Internal Server Error: %s", error.getMessage());
             } else {
@@ -114,6 +93,5 @@ public abstract class ResponseUtils {
                 .putHeader(CONTENT_TYPE_HEADER, APPLICATION_JSON_TYPE)
                 .end(new JsonObject().put("error", message).encodePrettily());
     }
-
 
 }

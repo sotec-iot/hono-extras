@@ -17,39 +17,49 @@ package org.eclipse.hono.communication.api.data;
 
 import java.util.Objects;
 
+import org.eclipse.hono.communication.core.utils.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
-
-
 /**
- * Command json object structure.
+ * Command request json object structure.
  **/
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DeviceCommandRequest {
 
     private String binaryData;
     private String subfolder;
+    private boolean responseRequired;
+    private boolean ackRequired;
+    private Long correlationId;
+    private Long timeout;
 
     /**
      * Creates a new DeviceCommandRequest.
      */
     public DeviceCommandRequest() {
-
     }
 
     /**
      * Creates a new DeviceCommandRequest.
      *
      * @param binaryData Binary data
-     * @param subfolder  THe subfolder
+     * @param subfolder The subfolder
+     * @param responseRequired If it is a request / response command
+     * @param ackRequired If an acknowledgement is expected
+     * @param correlationId The correlation id
+     * @param timeout The timeout for the API call in milliseconds
      */
-    public DeviceCommandRequest(final String binaryData, final String subfolder) {
+    public DeviceCommandRequest(final String binaryData, final String subfolder, final boolean responseRequired,
+            final boolean ackRequired, final Long correlationId, final Long timeout) {
         this.binaryData = binaryData;
         this.subfolder = subfolder;
+        this.responseRequired = responseRequired;
+        this.ackRequired = ackRequired;
+        this.correlationId = correlationId;
+        this.timeout = timeout;
     }
-
 
     @JsonProperty("binaryData")
     public String getBinaryData() {
@@ -60,7 +70,6 @@ public class DeviceCommandRequest {
         this.binaryData = binaryData;
     }
 
-
     @JsonProperty("subfolder")
     public String getSubfolder() {
         return subfolder;
@@ -70,6 +79,41 @@ public class DeviceCommandRequest {
         this.subfolder = subfolder;
     }
 
+    @JsonProperty("response-required")
+    public boolean isResponseRequired() {
+        return responseRequired;
+    }
+
+    public void setResponseRequired(final boolean responseRequired) {
+        this.responseRequired = responseRequired;
+    }
+
+    @JsonProperty("ack-required")
+    public boolean isAckRequired() {
+        return ackRequired;
+    }
+
+    public void setAckRequired(final boolean ackRequired) {
+        this.ackRequired = ackRequired;
+    }
+
+    @JsonProperty("correlation-id")
+    public Long getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(final Long correlationId) {
+        this.correlationId = correlationId;
+    }
+
+    @JsonProperty("timeout")
+    public Long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(final Long timeout) {
+        this.timeout = timeout;
+    }
 
     @Override
     public boolean equals(final Object o) {
@@ -81,31 +125,40 @@ public class DeviceCommandRequest {
         }
         final DeviceCommandRequest deviceCommandRequest = (DeviceCommandRequest) o;
         return Objects.equals(binaryData, deviceCommandRequest.binaryData) &&
-                Objects.equals(subfolder, deviceCommandRequest.subfolder);
+                Objects.equals(subfolder, deviceCommandRequest.subfolder) &&
+                Objects.equals(responseRequired, deviceCommandRequest.responseRequired) &&
+                Objects.equals(ackRequired, deviceCommandRequest.ackRequired) &&
+                Objects.equals(correlationId, deviceCommandRequest.correlationId) &&
+                Objects.equals(timeout, deviceCommandRequest.timeout);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(binaryData, subfolder);
+        return Objects.hash(binaryData, subfolder, responseRequired, ackRequired, correlationId, timeout);
     }
 
     @Override
     public String toString() {
-
-        return "class DeviceCommandRequest {\n" +
-                "    binaryData: " + toIndentedString(binaryData) + "\n" +
-                "    subfolder: " + toIndentedString(subfolder) + "\n" +
-                "}";
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(final Object o) {
-        if (o == null) {
-            return "null";
+        if (responseRequired) {
+            return "class DeviceCommandRequest {\n" +
+                    "    binaryData: " + StringUtils.toIndentedString(binaryData) + "\n" +
+                    "    subfolder: " + StringUtils.toIndentedString(subfolder) + "\n" +
+                    "    response-required: " + responseRequired + "\n" +
+                    "    correlation-id: " + correlationId + "\n" +
+                    "}";
+        } else if (ackRequired) {
+            return "class DeviceCommandRequest {\n" +
+                    "    binaryData: " + StringUtils.toIndentedString(binaryData) + "\n" +
+                    "    subfolder: " + StringUtils.toIndentedString(subfolder) + "\n" +
+                    "    ack-required: " + ackRequired + "\n" +
+                    "    correlation-id: " + correlationId + "\n" +
+                    "    timeout: " + timeout + "\n" +
+                    "}";
+        } else {
+            return "class DeviceCommandRequest {\n" +
+                    "    binaryData: " + StringUtils.toIndentedString(binaryData) + "\n" +
+                    "    subfolder: " + StringUtils.toIndentedString(subfolder) + "\n" +
+                    "}";
         }
-        return o.toString().replace("\n", "\n    ");
     }
 }

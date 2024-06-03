@@ -1,13 +1,13 @@
 swagger: "2.0"
 x-components: { }
-host: "hono-device-communication-gce.endpoints.sotec-iot-core-dev.cloud.goog"
+host: "hono-device-communication-gce.endpoints.<google-project-id>.cloud.goog"
 info:
   description: Device commands and configs API.
   title: Hono Device Communication API
   version: 1.0.0
 schemes:
   - http
-basePath: /api/v1
+basePath: /v1
 definitions:
   DeviceCommandRequest:
     description: Command json object structure
@@ -27,6 +27,26 @@ definitions:
           more than 256 characters, and must not contain any MQTT wildcards 
           ("+" or "#") or null characters.
         type: string
+      response-required:
+        description: >-
+          If set to true, the command will be send with a correlation-id
+          as a request/response command.
+        type: boolean
+      ack-required:
+        description: >-
+          If set to true, the command will be send with a correlation-id.
+          The request will wait for the command acknowledgement response.
+          The maximum wait time can be adjusted with the timeout parameter.
+        type: boolean
+      correlation-id:
+        description: >-
+          ID used to correlate a response message to the original request.
+        type: integer
+      timeout:
+        description: >-
+          Time in milliseconds to wait for an ack-required response message.
+        type: integer
+        default: 10000
     required:
       - binaryData
     title: Root Type for Command
@@ -87,7 +107,6 @@ definitions:
     required:
       - binaryData
     type: object
-
   ListDeviceConfigVersionsResponse:
     description: A list of a device config versions
     example:
@@ -100,6 +119,39 @@ definitions:
           $ref: "#/definitions/DeviceConfig"
         type: array
     title: Root Type for ListDeviceConfigVersionsResponse
+    type: object
+  DeviceState:
+    description: The device state.
+    example:
+      binaryData: string
+      updateTime: string
+    properties:
+      binaryData:
+        description: >-
+          string (bytes format) The device state data in string
+          base64-encoded format.
+        type: string
+      updateTime:
+        description: >-
+          String (Timestamp format) [Output only] The time at which this
+          state version was updated. This timestamp is
+          set by the server. Timestamp in  RFC3339 UTC "Zulu" format, accurate
+          to nanoseconds.  Example: "2014-10-02T15:01:23.045123456Z".
+        type: string
+    title: Root Type for DeviceState
+    type: object
+  ListDeviceStatesResponse:
+    description: A list of a device states.
+    example:
+      deviceStates:
+        - object: DeviceState
+    properties:
+      deviceStates:
+        description: List of DeviceState objects.
+        items:
+          $ref: "#/definitions/DeviceState"
+        type: array
+    title: Root Type for ListDeviceStatesResponse
     type: object
 paths:
   "/commands/{tenantid}/{deviceid}":
@@ -203,3 +255,42 @@ paths:
       summary: Modify cloud to device config
       tags:
         - CONFIGS
+  "/states/{tenantid}/{deviceid}":
+    get:
+      description: >-
+        Lists the last few versions of the device state in descending
+        order (i.e.: newest first).
+      operationId: listStates
+      parameters:
+        - description: >-
+            The number of states to list. States are listed in decreasing
+            order of the state id. The maximum number of states saved in
+            Database is 10. If this value is zero, it will return all the
+            states available.
+          in: query
+          maximum: 10
+          minimum: 0
+          name: numStates
+          required: false
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Lists the device states
+          schema:
+            $ref: "#/definitions/ListDeviceStatesResponse"
+      summary: List the device states
+      tags:
+        - STATES
+    parameters:
+      - description: Unique registry id
+        in: path
+        name: tenantid
+        required: true
+        type: string
+      - description: Unique device id
+        in: path
+        name: deviceid
+        required: true
+        type: string

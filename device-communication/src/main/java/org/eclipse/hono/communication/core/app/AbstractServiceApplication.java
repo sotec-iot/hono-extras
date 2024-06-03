@@ -21,8 +21,6 @@ import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import javax.enterprise.event.Observes;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +31,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.impl.JsonUtil;
-
+import jakarta.enterprise.event.Observes;
 
 /**
  * Abstract Service application class.
@@ -41,7 +39,7 @@ import io.vertx.core.json.impl.JsonUtil;
 public abstract class AbstractServiceApplication {
 
     /**
-     * YAML file application configurations properties.
+     * YAML file application configuration properties.
      */
     protected final ApplicationConfig appConfigs;
     /**
@@ -51,15 +49,14 @@ public abstract class AbstractServiceApplication {
     private final Logger log = LoggerFactory.getLogger(AbstractServiceApplication.class);
     private Closeable addedVertxCloseHook;
 
-
     /**
      * Creates a new AbstractServiceApplication.
      *
-     * @param vertx      The quarkus Vertx instance
-     * @param appConfigs The application configs
+     * @param vertx The Quarkus Vert.x instance
+     * @param appConfigs The application configuration properties
      */
-    public AbstractServiceApplication(final Vertx vertx,
-                                      final ApplicationConfig appConfigs) {
+    protected AbstractServiceApplication(final Vertx vertx,
+            final ApplicationConfig appConfigs) {
         this.vertx = vertx;
         this.appConfigs = appConfigs;
     }
@@ -73,9 +70,9 @@ public abstract class AbstractServiceApplication {
             final String base64Encoder = Base64.getEncoder() == JsonUtil.BASE64_ENCODER ? "legacy" : "URL safe";
 
             log.info("""
-                            running on Java VM [version: {}, name: {}, vendor: {}, max memory: {}MiB, processors: {}] \
-                            with vert.x using {} Base64 encoder\
-                            """,
+                    running on Java VM [version: {}, name: {}, vendor: {}, max memory: {}MiB, processors: {}] \
+                    with vert.x using {} Base64 encoder\
+                    """,
                     System.getProperty("java.version"),
                     System.getProperty("java.vm.name"),
                     System.getProperty("java.vm.vendor"),
@@ -86,7 +83,7 @@ public abstract class AbstractServiceApplication {
     }
 
     /**
-     * Registers a close hook that will be notified when the Vertx instance is being closed.
+     * Registers a close hook that will be notified when the Vert.x instance is being closed.
      */
     private void registerVertxCloseHook() {
         if (vertx instanceof VertxInternal vertxInternal) {
@@ -120,7 +117,7 @@ public abstract class AbstractServiceApplication {
      * <li>invokes {@link #doStart()}.</li>
      * </ol>
      *
-     * @param ev The event indicating shutdown.
+     * @param ev The event indicating startup
      */
     public void onStart(final @Observes StartupEvent ev) {
 
@@ -133,8 +130,7 @@ public abstract class AbstractServiceApplication {
     /**
      * Invoked during start up.
      * <p>
-     * Subclasses should override this method in order to initialize
-     * the component.
+     * Subclasses should override this method in order to initialize the component.
      */
     protected void doStart() {
         // do nothing
@@ -147,11 +143,10 @@ public abstract class AbstractServiceApplication {
         // do nothing
     }
 
-
     /**
      * Stops this component.
      *
-     * @param ev The event indicating shutdown.
+     * @param ev The event indicating shutdown
      */
     public void onStop(final @Observes ShutdownEvent ev) {
         doStop();

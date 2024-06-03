@@ -26,12 +26,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
- * Mapper for device config objects.
+ * Mapper for device configuration objects.
  */
-@Mapper(componentModel = "cdi",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "jakarta", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface DeviceConfigMapper {
-
 
     /**
      * Convert device config entity to device config.
@@ -49,6 +47,9 @@ public interface DeviceConfigMapper {
      */
     @Mapping(target = "version", source = "request.versionToUpdate")
     @Mapping(target = "cloudUpdateTime", expression = "java(getDateTime())")
+    @Mapping(target = "tenantId", ignore = true)
+    @Mapping(target = "deviceId", ignore = true)
+    @Mapping(target = "deviceAckTime", ignore = true)
     DeviceConfigEntity configRequestToDeviceConfigEntity(DeviceConfigRequest request);
 
     default String getDateTime() {

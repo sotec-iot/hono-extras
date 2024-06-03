@@ -24,13 +24,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.eclipse.hono.communication.core.app.ApplicationConfig;
 import org.eclipse.hono.communication.core.http.HttpServer;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 import io.vertx.core.Vertx;
-
 
 class ApplicationTest {
 
@@ -47,10 +44,6 @@ class ApplicationTest {
         verifyNoMoreInteractions(httpServerMock, appConfigs, vertxMock);
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void doStart() {
         doNothing().when(httpServerMock).start();
@@ -58,6 +51,14 @@ class ApplicationTest {
         application.doStart();
 
         verify(httpServerMock, times(1)).start();
+    }
 
+    @Test
+    void doStop() {
+        doNothing().when(httpServerMock).stop();
+
+        application.doStop();
+
+        verify(httpServerMock, times(1)).stop();
     }
 }
