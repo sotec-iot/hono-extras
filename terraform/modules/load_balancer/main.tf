@@ -21,6 +21,14 @@ locals {
         extraArgs = [
           "--configmap-tcp-services=${var.hono_namespace}/${kubernetes_config_map.tcp.metadata[0].name}"
         ]
+        nodeSelector = {
+          "cloud.google.com/compute-class": "Balanced"
+          "supported-cpu-platform.cloud.google.com/Intel_Cascade_Lake": "true"
+        }
+        PodDisruptionBudget = {
+          enable: true
+          minAvailable: 2
+        }
       }
     }
   )]
