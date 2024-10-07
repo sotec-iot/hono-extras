@@ -12,18 +12,27 @@ resource "google_compute_subnetwork" "subnetwork" {
   network            = google_compute_network.vpc_network.id
   name               = "honosubnet-01"
   ip_cidr_range      = var.ip_cidr_range
-  secondary_ip_range = [
-    {
-      range_name    = "services"
-      ip_cidr_range = var.secondary_ip_range_service
-    },
-    {
-      range_name    = "pods"
-      ip_cidr_range = var.secondary_ip_range_pods
-    }
-  ]
-
   private_ip_google_access = true
+
+  secondary_ip_range {
+    range_name    = "services"
+    ip_cidr_range = var.secondary_ip_range_service
+  }
+  secondary_ip_range {
+    range_name    = "pods"
+    ip_cidr_range = var.secondary_ip_range_pods
+  }
+  #secondary_ip_range = [
+  #  {
+  #    range_name    = "services"
+  #    ip_cidr_range = var.secondary_ip_range_service
+  #  },
+  #  {
+  #    range_name    = "pods"
+  #    ip_cidr_range = var.secondary_ip_range_pods
+  #  }
+
+  #]
 }
 
 #Creating the Static IP address(external) for the http adapter
@@ -66,6 +75,7 @@ resource "google_compute_global_address" "private_ip_address" {
   address_type  = "INTERNAL"
   prefix_length = 16
   network       = google_compute_network.vpc_network.id
+  project       = var.project_id
 }
 
 #Creating the Private VPC connection for SQL Private IP and the VPC network
@@ -79,4 +89,5 @@ resource "google_compute_ssl_policy" "ssl_policy" {
   name            = var.ssl_policy_name
   profile         = var.ssl_policy_profile
   min_tls_version = var.ssl_policy_min_tls_version
+  project         = var.project_id
 }
