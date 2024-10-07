@@ -12,24 +12,22 @@ resource "google_container_cluster" "hono_cluster" {
       service_account = var.gke_service_account_email
     }
   }
-#  node_config {
-#    service_account = var.gke_service_account_email
-#    oauth_scopes = [
-##      "https://www.googleapis.com/auth/cloud-platform"
-#    ]
-#  }
+
   release_channel {
     channel = var.gke_release_channel
   }
+
   ip_allocation_policy {
     services_secondary_range_name = var.ip_ranges_services
     cluster_secondary_range_name  = var.ip_ranges_pods
   }
+
   master_auth {
     client_certificate_config {
       issue_client_certificate = true
     }
   }
+
   dynamic "maintenance_policy" {
     for_each = var.gke_cluster_maintenance_policy_recurring_window != null ? [1] : []
     content {
@@ -45,17 +43,14 @@ resource "google_container_cluster" "hono_cluster" {
 
 
 ##################################
-######## Autopilot-cluster ########
+######## Autopilot-cluster #######
 ##################################
-resource "google_service_account_iam_binding" "workload_identity_binding" {
+
+resource "google_service_account_iam_member" "gke_k8_binding" {
   count = var.gke_enable_autopilot ? 1 : 0
-  members            = [
-    "serviceAccount:sotec-iot-core-dev.svc.id.goog[hono/default]",
-    "serviceAccount:sotec-iot-core-dev.svc.id.goog[hono/eclipse-hono-adapter]",
-    "serviceAccount:sotec-iot-core-dev.svc.id.goog[hono/eclipse-hono-service-command-router]"
-  ]
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${kubernetes_annotations.gke_gcp_binding.metadata.namespace}/sa/${kubernetes_annotations.gke_gcp_binding.metadata.name}"
   role               = "roles/iam.workloadIdentityUser"
-  service_account_id =  "projects/${var.project_id}/serviceAccounts/${var.gke_service_account_email}"
+  service_account_id = "projects/${var.project_id}/serviceAccounts/${var.gke_service_account_email}"
 }
 
 resource "kubernetes_annotations" "gke_gcp_binding" {
@@ -73,40 +68,6 @@ resource "kubernetes_annotations" "gke_gcp_binding" {
   }
 }
 
-
-#resource "google_container_cluster" "hono_cluster" {
-#  count = var.gke_enable_autopilot ? 1 : 0
-#  name                     = var.gke_cluster_name
-#  project                  = var.project_id
-#  location                 = var.region
-#  network                  = var.network_name
-#  subnetwork               = var.subnetwork_name
-#  initial_node_count       = 1
-#  remove_default_node_pool = true
-#
-#  release_channel {
-#    channel = var.gke_release_channel
-#  }
-#  ip_allocation_policy {
-#    services_secondary_range_name = var.ip_ranges_services
-#    cluster_secondary_range_name  = var.ip_ranges_pods
-#  }
-#  master_auth {
-#    client_certificate_config {
-#      issue_client_certificate = true
-#    }
-#  }
-#  dynamic "maintenance_policy" {
-#    for_each = var.gke_cluster_maintenance_policy_recurring_window != null ? [1] : []
-#    content {
-#      recurring_window {
-#        start_time = var.gke_cluster_maintenance_policy_recurring_window.start_time
-#        end_time   = var.gke_cluster_maintenance_policy_recurring_window.end_time
-#        recurrence = var.gke_cluster_maintenance_policy_recurring_window.recurrence
-#      }
-#    }
-#  }
-#}
 
 ##################################
 ######## Standard-cluster ########

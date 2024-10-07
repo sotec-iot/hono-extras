@@ -74,6 +74,7 @@ module "gke" {
   source = "../modules/gke"
 
   project_id                                      = var.project_id
+  project_nr                                      = var.project_nr
   gke_cluster_name                                = var.gke_cluster_name
   gke_cluster_maintenance_policy_recurring_window = var.gke_cluster_maintenance_policy_recurring_window
   region                                          = var.region

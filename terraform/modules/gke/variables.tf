@@ -3,6 +3,11 @@ variable "project_id" {
   description = "The project ID to deploy to"
 }
 
+variable "project_nr" {
+  description = "The project nr"
+  type        = string
+}
+
 variable "gke_cluster_name" {
   type        = string
   description = "Name of the GKE Cluster"
