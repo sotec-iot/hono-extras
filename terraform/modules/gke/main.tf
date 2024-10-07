@@ -48,7 +48,7 @@ resource "google_container_cluster" "hono_cluster" {
 
 resource "google_service_account_iam_member" "gke_k8_binding" {
   count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${kubernetes_annotations.gke_gcp_binding.metadata.namespace}/sa/${kubernetes_annotations.gke_gcp_binding.metadata.name}"
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${kubernetes_annotations.gke_gcp_binding[0].metadata[0].namespace}/sa/${kubernetes_annotations.gke_gcp_binding[0].metadata[0].name}"
   role               = "roles/iam.workloadIdentityUser"
   service_account_id = "projects/${var.project_id}/serviceAccounts/${var.gke_service_account_email}"
 }

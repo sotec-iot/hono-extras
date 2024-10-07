@@ -4,7 +4,7 @@ variable "project_id" {
 }
 
 variable "project_nr" {
-  description = "The project nr"
+  description = "The project nr to deploy to"
   type        = string
 }
 
