@@ -42,37 +42,46 @@ resource "google_container_cluster" "hono_cluster" {
 
 
 
-##################################
-######## Autopilot-cluster #######
-##################################
-
-resource "google_service_account_iam_member" "gke_k8_binding" {
+# Autopilot-cluster
+resource "google_project_iam_member" "gke_k8_binding_pubsub_editor" {
   count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${kubernetes_annotations.gke_gcp_binding[0].metadata[0].namespace}/sa/${kubernetes_annotations.gke_gcp_binding[0].metadata[0].name}"
-  role               = "roles/iam.workloadIdentityUser"
-  service_account_id = "projects/${var.project_id}/serviceAccounts/${var.gke_service_account_email}"
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  project = var.project_id
+  role               = "roles/pubsub.editor"
+}
+resource "google_project_iam_member" "gke_k8_binding_cloudtrace_agent" {
+  count = var.gke_enable_autopilot ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  project = var.project_id
+  role               = "roles/cloudtrace.agent"
+}
+resource "google_project_iam_member" "gke_k8_binding_instance_user" {
+  count = var.gke_enable_autopilot ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  project = var.project_id
+  role               = "roles/cloudsql.instanceUser"
+}
+resource "google_project_iam_member" "gke_k8_binding_cloudsql_client" {
+  count = var.gke_enable_autopilot ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  project = var.project_id
+  role               = "roles/cloudsql.client"
+}
+resource "google_project_iam_member" "gke_k8_binding_cloudsql_instanceuser" {
+  count = var.gke_enable_autopilot ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  project = var.project_id
+  role               = "roles/cloudsql.instanceUser"
+}
+resource "google_project_iam_member" "gke_k8_binding_servicemanagement_servicecontroller" {
+  count = var.gke_enable_autopilot ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  project = var.project_id
+  role               = "roles/servicemanagement.serviceController"
 }
 
-resource "kubernetes_annotations" "gke_gcp_binding" {
-  count = var.gke_enable_autopilot ? 1 : 0
-  api_version = "v1"
-  kind        = "ServiceAccount"
 
-  metadata {
-    name = "default"
-    namespace = "hono"
-  }
-
-  annotations = {
-    "iam.gke.io/gcp-service-account" = var.gke_service_account_email
-  }
-}
-
-
-##################################
-######## Standard-cluster ########
-##################################
-
+# Standard-cluster
 resource "google_container_node_pool" "standard_node_pool" {
   count = var.gke_enable_autopilot ? 0 : 1
   name               = var.gke_node_pool_name

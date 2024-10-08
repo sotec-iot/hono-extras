@@ -22,17 +22,6 @@ resource "google_compute_subnetwork" "subnetwork" {
     range_name    = "pods"
     ip_cidr_range = var.secondary_ip_range_pods
   }
-  #secondary_ip_range = [
-  #  {
-  #    range_name    = "services"
-  #    ip_cidr_range = var.secondary_ip_range_service
-  #  },
-  #  {
-  #    range_name    = "pods"
-  #    ip_cidr_range = var.secondary_ip_range_pods
-  #  }
-
-  #]
 }
 
 #Creating the Static IP address(external) for the http adapter
