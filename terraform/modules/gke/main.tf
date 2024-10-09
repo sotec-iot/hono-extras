@@ -5,7 +5,7 @@ resource "google_container_cluster" "hono_cluster" {
   network                  = var.network_name
   subnetwork               = var.subnetwork_name
 
-  enable_autopilot         = var.gke_enable_autopilot
+  enable_autopilot         = var.gke_autopilot_enabled
 
   cluster_autoscaling {
     auto_provisioning_defaults {
@@ -44,38 +44,38 @@ resource "google_container_cluster" "hono_cluster" {
 
 # Autopilot-cluster
 resource "google_project_iam_member" "gke_k8_binding_pubsub_editor" {
-  count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  count = var.gke_autopilot_enabled ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/pubsub.editor"
 }
 resource "google_project_iam_member" "gke_k8_binding_cloudtrace_agent" {
-  count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  count = var.gke_autopilot_enabled ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudtrace.agent"
 }
 resource "google_project_iam_member" "gke_k8_binding_instance_user" {
-  count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  count = var.gke_autopilot_enabled ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudsql.instanceUser"
 }
 resource "google_project_iam_member" "gke_k8_binding_cloudsql_client" {
-  count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  count = var.gke_autopilot_enabled ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudsql.client"
 }
 resource "google_project_iam_member" "gke_k8_binding_cloudsql_instanceuser" {
-  count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  count = var.gke_autopilot_enabled ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudsql.instanceUser"
 }
 resource "google_project_iam_member" "gke_k8_binding_servicemanagement_servicecontroller" {
-  count = var.gke_enable_autopilot ? 1 : 0
-  member             = "principal://iam.googleapis.com/projects/${var.project_nr}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
+  count = var.gke_autopilot_enabled ? 1 : 0
+  member             = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/servicemanagement.serviceController"
 }
@@ -83,7 +83,7 @@ resource "google_project_iam_member" "gke_k8_binding_servicemanagement_serviceco
 
 # Standard-cluster
 resource "google_container_node_pool" "standard_node_pool" {
-  count = var.gke_enable_autopilot ? 0 : 1
+  count = var.gke_autopilot_enabled ? 0 : 1
   name               = var.gke_node_pool_name
   project            = var.project_id
   location           = var.region

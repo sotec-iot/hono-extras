@@ -74,13 +74,13 @@ module "gke" {
   source = "../modules/gke"
 
   project_id                                      = var.project_id
-  project_nr                                      = var.project_nr
+  project_number                                  = var.project_number
   gke_cluster_name                                = var.gke_cluster_name
   gke_cluster_maintenance_policy_recurring_window = var.gke_cluster_maintenance_policy_recurring_window
   region                                          = var.region
   network_name                                    = module.networking.network_name
   subnetwork_name                                 = module.networking.subnetwork_name
-  gke_enable_autopilot                            = var.gke_enable_autopilot
+  gke_autopilot_enabled                           = var.gke_autopilot_enabled
   gke_release_channel                             = var.gke_release_channel
   ip_ranges_services                              = module.networking.ip_ranges_services_name
   ip_ranges_pods                                  = module.networking.ip_ranges_pods_name

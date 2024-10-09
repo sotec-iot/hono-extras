@@ -3,8 +3,8 @@ variable "project_id" {
   type        = string
 }
 
-variable "project_nr" {
-  description = "The project nr to deploy to"
+variable "project_number" {
+  description = "The project number to deploy to (which is different to project id!)"
   type        = string
 }
 
@@ -142,7 +142,7 @@ variable "service_account_roles_gke_sa" {
   default     = []
 }
 
-variable "gke_enable_autopilot" {
+variable "gke_autopilot_enabled" {
   type        = bool
   description = "If autopilot mode should be enabled for the GKE cluster."
   default     = false

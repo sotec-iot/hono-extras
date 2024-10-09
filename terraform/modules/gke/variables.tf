@@ -3,7 +3,7 @@ variable "project_id" {
   description = "The project ID to deploy to"
 }
 
-variable "project_nr" {
+variable "project_number" {
   description = "The project nr to deploy to"
   type        = string
 }
@@ -37,7 +37,7 @@ variable "subnetwork_name" {
   description = "name of the subnetwork"
 }
 
-variable "gke_enable_autopilot" {
+variable "gke_autopilot_enabled" {
   type        = bool
   description = "If autopilot mode should be enabled for the GKE cluster."
 }
