@@ -46,37 +46,37 @@ data "google_project" "project"{
 }
 
 # Autopilot-cluster
-resource "google_project_iam_member" "gke_k8_binding_pubsub_editor" {
+resource "google_project_iam_member" "gke_binding_pubsub_editor" {
   count = var.gke_autopilot_enabled ? 1 : 0
   member             = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/pubsub.editor"
 }
-resource "google_project_iam_member" "gke_k8_binding_cloudtrace_agent" {
+resource "google_project_iam_member" "gke_binding_cloudtrace_agent" {
   count = var.gke_autopilot_enabled ? 1 : 0
   member             = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudtrace.agent"
 }
-resource "google_project_iam_member" "gke_k8_binding_instance_user" {
+resource "google_project_iam_member" "gke_binding_instance_user" {
   count = var.gke_autopilot_enabled ? 1 : 0
   member             = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudsql.instanceUser"
 }
-resource "google_project_iam_member" "gke_k8_binding_cloudsql_client" {
+resource "google_project_iam_member" "gke_binding_cloudsql_client" {
   count = var.gke_autopilot_enabled ? 1 : 0
   member             = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudsql.client"
 }
-resource "google_project_iam_member" "gke_k8_binding_cloudsql_instanceuser" {
+resource "google_project_iam_member" "gke_binding_cloudsql_instanceuser" {
   count = var.gke_autopilot_enabled ? 1 : 0
   member             = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
   role               = "roles/cloudsql.instanceUser"
 }
-resource "google_project_iam_member" "gke_k8_binding_servicemanagement_servicecontroller" {
+resource "google_project_iam_member" "gke_binding_servicemanagement_servicecontroller" {
   count = var.gke_autopilot_enabled ? 1 : 0
   member             = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/default"
   project = var.project_id
