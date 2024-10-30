@@ -79,6 +79,7 @@ module "gke" {
   region                                          = var.region
   network_name                                    = module.networking.network_name
   subnetwork_name                                 = module.networking.subnetwork_name
+  gke_autopilot_enabled                           = var.gke_autopilot_enabled
   gke_release_channel                             = var.gke_release_channel
   ip_ranges_services                              = module.networking.ip_ranges_services_name
   ip_ranges_pods                                  = module.networking.ip_ranges_pods_name

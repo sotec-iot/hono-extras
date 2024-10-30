@@ -11,4 +11,5 @@ output "gke_cluster_name_endpoint" {
 output "gke_cluster_ca_certificate" {
   value       = google_container_cluster.hono_cluster.master_auth
   description = "CA-Certificate for the Cluster"
+  sensitive = true
 }

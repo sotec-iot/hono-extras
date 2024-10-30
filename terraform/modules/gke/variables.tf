@@ -29,7 +29,12 @@ variable "network_name" {
 
 variable "subnetwork_name" {
   type        = string
-  description = "name of the subnetwork "
+  description = "name of the subnetwork"
+}
+
+variable "gke_autopilot_enabled" {
+  type        = bool
+  description = "If autopilot mode should be enabled for the GKE cluster."
 }
 
 variable "gke_release_channel" {

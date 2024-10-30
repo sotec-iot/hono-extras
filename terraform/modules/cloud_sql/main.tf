@@ -47,14 +47,17 @@ resource "google_sql_user" "hono-sql-user" {
   name     = var.sql_db_user_name
   instance = google_sql_database_instance.hono_sql.id
   password = random_password.password.result
+  project  = var.project_id
 }
 
 resource "google_sql_database" "hono_sql_db" {
   name     = var.sql_hono_database_name
   instance = google_sql_database_instance.hono_sql.id
+  project  = var.project_id
 }
 
 resource "google_sql_database" "grafana_sql_db" {
   name     = var.sql_grafana_database_name
   instance = google_sql_database_instance.hono_sql.id
+  project  = var.project_id
 }

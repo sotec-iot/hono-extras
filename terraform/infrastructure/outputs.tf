@@ -47,6 +47,7 @@ output "gke_cluster_name_endpoint" {
 output "gke_cluster_ca_certificate" {
   value       = module.gke.gke_cluster_ca_certificate
   description = "CA-Certificate for the cluster."
+  sensitive = true
 }
 
 output "service_name_communication" {

@@ -49,11 +49,11 @@ output "grafana_static_ip" {
 }
 
 output "ip_ranges_services_name" {
-  value = google_compute_subnetwork.subnetwork.secondary_ip_range.0.range_name
+  value = google_compute_subnetwork.subnetwork.secondary_ip_range[0].range_name
 }
 
 output "ip_ranges_pods_name" {
-  value = google_compute_subnetwork.subnetwork.secondary_ip_range.1.range_name
+  value = google_compute_subnetwork.subnetwork.secondary_ip_range[1].range_name
 }
 
 output "ssl_policy_name" {
