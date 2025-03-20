@@ -22,119 +22,122 @@ locals {
     }
   }
 
-  values = [jsonencode(
-    {
-      googleProjectId = var.project_id
-      adapters = {
-        http = {
-          enabled = var.enable_http_adapter
-          svc = {
-            loadBalancerIP = var.http_static_ip # sets a static IP loadbalancerIP for http adapter
+  values = [
+    jsonencode(
+      {
+        googleProjectId = var.project_id
+        adapters = {
+          http = {
+            enabled = var.enable_http_adapter
+            svc = {
+              loadBalancerIP = var.http_static_ip # sets a static IP loadbalancerIP for http adapter
+            }
+            deployment             = local.deployment
+            tlsKeysSecret          = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+            tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
           }
-          deployment = local.deployment
+          mqtt = {
+            enabled = var.mqtt_adapter.enabled
+            svc = {
+              annotations = {
+                "haproxy.org/load-balance" = var.mqtt_adapter.advanced_load_balancer.algorithm
+              }
+              type           = var.mqtt_adapter.advanced_load_balancer.enabled ? "ClusterIP" : "LoadBalancer"
+              loadBalancerIP = var.mqtt_static_ip # sets a static IP loadbalancerIP for mqtt adapter
+            }
+            deployment             = local.deployment
+            tlsKeysSecret          = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+            tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+            horizontalPodAutoscaler = {
+              enabled     = var.hpa_enabled
+              minReplicas = var.hpa_minReplicas_mqtt
+              maxReplicas = var.hpa_maxReplicas_mqtt
+              metrics     = var.hpa_metrics_mqtt
+            }
+          }
+        }
+        authServer = {
+          deployment    = local.deployment
           tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+        }
+        deviceRegistryExample = {
+          tlsKeysSecret          = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+          tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+          # sets database connection config
+          jdbcBasedDeviceRegistry = {
+            deployment = local.deployment
+            tenant     = local.database_block
+            registry   = local.database_block
+            horizontalPodAutoscaler = {
+              enabled     = var.hpa_enabled
+              minReplicas = var.hpa_minReplicas_device_registry
+              maxReplicas = var.hpa_maxReplicas_device_registry
+            }
+          }
+        }
+        commandRouterService = {
+          deployment             = local.deployment
+          tlsKeysSecret          = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
           tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
         }
-        mqtt = {
-          enabled = var.mqtt_adapter.enabled
-          svc = {
+        grafana = {
+          ingress = {
+            enabled = var.grafana_expose_externally
             annotations = {
-              "haproxy.org/load-balance" = var.mqtt_adapter.advanced_load_balancer.algorithm
+              "kubernetes.io/ingress.global-static-ip-name" = var.grafana_static_ip_name
             }
-            type = var.mqtt_adapter.advanced_load_balancer.enabled ? "ClusterIP" : "LoadBalancer"
-            loadBalancerIP = var.mqtt_static_ip # sets a static IP loadbalancerIP for mqtt adapter
+            hosts = [
+              var.grafana_dns_name
+            ]
+            tls = [
+              {
+                secretName = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+              }
+            ]
           }
-          deployment = local.deployment
-          tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
-          tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
-          horizontalPodAutoscaler = {
-            enabled     = var.hpa_enabled
-            minReplicas = var.hpa_minReplicas_mqtt
-            maxReplicas = var.hpa_maxReplicas_mqtt
-            metrics     = var.hpa_metrics_mqtt
-          }
-        }
-      }
-      authServer = {
-        deployment = local.deployment
-        tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
-      }
-      deviceRegistryExample = {
-        tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
-        tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
-        # sets database connection config
-        jdbcBasedDeviceRegistry = {
-          deployment = local.deployment
-          tenant   = local.database_block
-          registry = local.database_block
-          horizontalPodAutoscaler = {
-            enabled     = var.hpa_enabled
-            minReplicas = var.hpa_minReplicas_device_registry
-            maxReplicas = var.hpa_maxReplicas_device_registry
-          }
-        }
-      }
-      commandRouterService = {
-        deployment = local.deployment
-        tlsKeysSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
-        tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
-      }
-      grafana = {
-        ingress = {
-          enabled = var.grafana_expose_externally
-          annotations = {
-            "kubernetes.io/ingress.global-static-ip-name" = var.grafana_static_ip_name
-          }
-          hosts = [
-            var.grafana_dns_name
-          ]
-          tls = [
-            {
-              secretName = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+          "grafana.ini" = {
+            database = {
+              type     = "postgres"
+              host     = "${var.sql_ip}:5432"
+              name     = var.sql_grafana_database
+              user     = var.sql_user
+              password = var.sql_db_pw
+              ssl_mode = "disable"
             }
-          ]
-        }
-        "grafana.ini" = {
-          database = {
-            type = "postgres"
-            host = "${var.sql_ip}:5432"
-            name = var.sql_grafana_database
-            user = var.sql_user
-            password = var.sql_db_pw
-            ssl_mode = "disable"
           }
         }
-      }
-      deviceCommunication = {
-        app = {
-          name = var.oauth_app_name
-        }
-        api = {
-          database = { # database connection for device Communication
-            name     = var.sql_hono_database
-            host     = var.sql_ip
-            port     = 5432
-            username = var.sql_user
-            password = var.sql_db_pw
+        deviceCommunication = {
+          app = {
+            name = var.oauth_app_name
+          }
+          api = {
+            database = {
+              # database connection for device Communication
+              name     = var.sql_hono_database
+              host     = var.sql_ip
+              port     = 5432
+              username = var.sql_user
+              password = var.sql_db_pw
+            }
           }
         }
-      }
-      cloudEndpoints = {
-        esp = {
-          serviceName = var.service_name_communication
+        cloudEndpoints = {
+          esp = {
+            serviceName = var.service_name_communication
+          }
+        }
+        externalIngress = {
+          ingressTlsSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+          staticIpName     = var.device_communication_static_ip_name
+          host             = var.device_communication_dns_name
+          sslPolicy        = var.ssl_policy_name
+        }
+        managementUi = {
+          googleClientId = var.oauth_client_id
         }
       }
-      externalIngress = {
-        ingressTlsSecret  = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
-        staticIpName      = var.device_communication_static_ip_name
-        host              = var.device_communication_dns_name
-        sslPolicy         = var.ssl_policy_name
-      }
-      managementUi = {
-        googleClientId = var.oauth_client_id
-      }
-    }
-  )]
+    )
+  ]
 }
 
 resource "kubernetes_secret" "hono_domain_secret_tls" {
@@ -172,7 +175,7 @@ resource "kubernetes_secret" "iap_client_secret" {
 }
 
 resource "helm_release" "hono" {
-  name             = "eclipse-hono"
+  name             = var.helm_release_name
   repository       = var.helm_package_repository # Repository of the hono package
   chart            = var.hono_chart_name         # name of the chart in the repository
   version          = var.hono_chart_version      # version of the chart in the repository
@@ -204,4 +207,71 @@ resource "helm_release" "prometheus_adapter" {
       }
     })
   ]
+}
+## needed to access the project number
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+resource "google_project_iam_member" "gke_binding_service_account_user" {
+  for_each = local.service_account_user_members
+  member   = each.value
+  role     = "roles/iam.serviceAccountUser"
+  project  = var.project_id
+}
+
+resource "google_project_iam_member" "gke_binding_project_token_creator" {
+  for_each = local.project_token_creator_members
+  member   = each.value
+  role     = "roles/iam.serviceAccountTokenCreator"
+  project  = var.project_id
+}
+
+resource "google_project_iam_member" "gke_binding_pubsub_editor" {
+  for_each = local.pubsub_editor_members
+  member   = each.value
+  role     = "roles/pubsub.editor"
+  project  = var.project_id
+}
+
+resource "google_project_iam_member" "gke_binding_cloudtrace_agent" {
+  for_each = local.cloud_trace_agent_members
+  member   = each.value
+  role     = "roles/cloudtrace.agent"
+  project  = var.project_id
+}
+
+resource "google_project_iam_member" "gke_binding_cloudsql_instanceuser" {
+  for_each = local.cloudsql_instance_user_members
+  member   = each.value
+  role     = "roles/cloudsql.instanceUser"
+  project  = var.project_id
+}
+
+resource "google_project_iam_member" "gke_binding_cloudsql_client" {
+  for_each = local.cloudsql_client_members
+  member   = each.value
+  role     = "roles/cloudsql.client"
+  project  = var.project_id
+}
+
+# service esp uses default sa, create binding & annotation
+resource "kubernetes_annotations" "sa_service_esp_annotation" {
+  annotations = {
+    "iam.gke.io/gcp-service-account" = "gke-service-account@${var.project_id}.iam.gserviceaccount.com",
+  }
+  api_version = "v1"
+  kind        = "ServiceAccount"
+  metadata {
+    name      = "default"
+    namespace = "hono"
+  }
+}
+
+resource "google_service_account_iam_binding" "default_workload_identity_binding" {
+  members = [
+    "serviceAccount:${var.project_id}.svc.id.goog[hono/default]",
+  ]
+  role               = "roles/iam.workloadIdentityUser"
+  service_account_id = "projects/${var.project_id}/serviceAccounts/gke-service-account@${var.project_id}.iam.gserviceaccount.com"
 }

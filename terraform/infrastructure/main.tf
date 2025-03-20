@@ -79,6 +79,7 @@ module "gke" {
   region                                          = var.region
   network_name                                    = module.networking.network_name
   subnetwork_name                                 = module.networking.subnetwork_name
+  gke_autopilot_enabled                           = var.gke_autopilot_enabled
   gke_release_channel                             = var.gke_release_channel
   ip_ranges_services                              = module.networking.ip_ranges_services_name
   ip_ranges_pods                                  = module.networking.ip_ranges_pods_name
@@ -98,6 +99,7 @@ module "gke" {
   node_pool_batch_node_count                      = var.node_pool_batch_node_count
   node_pool_batch_soak_duration                   = var.node_pool_batch_soak_duration
   node_pool_soak_duration                         = var.node_pool_soak_duration
+  helm_release_name                               = var.helm_release_name
 
   depends_on = [
     google_project_service.project

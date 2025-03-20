@@ -137,6 +137,12 @@ variable "service_account_roles_gke_sa" {
   default     = []
 }
 
+variable "gke_autopilot_enabled" {
+  type        = bool
+  description = "If autopilot mode should be enabled for the GKE cluster."
+  default     = false
+}
+
 variable "gke_release_channel" {
   type        = string
   description = "Which Release Channel to use for the Cluster"
@@ -295,4 +301,10 @@ variable "grafana_expose_externally" {
   type        = bool
   description = "Whether or not Grafana should be exposed externally."
   default     = false
+}
+
+variable "helm_release_name" {
+  type        = string
+  description = "Name of the helm realease"
+  default     = "eclipse-hono"
 }

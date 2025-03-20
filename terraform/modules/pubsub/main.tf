@@ -15,6 +15,8 @@ resource "google_pubsub_subscription" "registry_tenant_notification" {
   retain_acked_messages      = false
   message_retention_duration = "600s"
   ack_deadline_seconds       = 10
+  project                    = var.project_id
+
   retry_policy {
     minimum_backoff = "10s"
   }
@@ -31,6 +33,7 @@ resource "google_pubsub_subscription" "registry-tenant_notification_communicatio
   retain_acked_messages      = false
   message_retention_duration = "600s"
   ack_deadline_seconds       = 10
+  project                    = var.project_id
   retry_policy {
     minimum_backoff = "10s"
   }
@@ -47,6 +50,7 @@ resource "google_pubsub_subscription" "registry-device_notification" {
   retain_acked_messages      = false
   message_retention_duration = "600s"
   ack_deadline_seconds       = 10
+  project                    = var.project_id
   retry_policy {
     minimum_backoff = "10s"
   }

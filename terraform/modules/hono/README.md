@@ -6,6 +6,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | n/a |
 | <a name="provider_helm"></a> [helm](#provider\_helm) | n/a |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
 
@@ -17,11 +18,20 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [google_project_iam_member.gke_binding_cloudsql_client](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_cloudsql_instanceuser](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_cloudtrace_agent](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_project_token_creator](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_pubsub_editor](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_service_account_user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_service_account_iam_binding.default_workload_identity_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_binding) | resource |
 | [helm_release.hono](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [helm_release.prometheus_adapter](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
+| [kubernetes_annotations.sa_service_esp_annotation](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/annotations) | resource |
 | [kubernetes_secret.cloud_endpoints_key_file](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.hono_domain_secret_tls](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.iap_client_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
+| [google_project.project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
 
 ## Inputs
 
@@ -33,10 +43,12 @@ No modules.
 | <a name="input_device_communication_dns_name"></a> [device\_communication\_dns\_name](#input\_device\_communication\_dns\_name) | Name of the DNS Host | `string` | n/a | yes |
 | <a name="input_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#input\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress | `string` | n/a | yes |
 | <a name="input_enable_http_adapter"></a> [enable\_http\_adapter](#input\_enable\_http\_adapter) | Used to enable the http adapter | `bool` | n/a | yes |
+| <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | n/a | yes |
 | <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Name of the DNS host for Grafana | `string` | n/a | yes |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
 | <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. | `string` | n/a | yes |
 | <a name="input_helm_package_repository"></a> [helm\_package\_repository](#input\_helm\_package\_repository) | Link to the Helm Package for the Hono Deployment | `string` | n/a | yes |
+| <a name="input_helm_release_name"></a> [helm\_release\_name](#input\_helm\_release\_name) | Name of the helm realease | `string` | n/a | yes |
 | <a name="input_hono_chart_name"></a> [hono\_chart\_name](#input\_hono\_chart\_name) | Name of the Chart in the Repository | `string` | n/a | yes |
 | <a name="input_hono_chart_version"></a> [hono\_chart\_version](#input\_hono\_chart\_version) | Version of the Chart in the Repository | `string` | n/a | yes |
 | <a name="input_hono_domain_managed_secret_name"></a> [hono\_domain\_managed\_secret\_name](#input\_hono\_domain\_managed\_secret\_name) | Name of the kubernetes secret for the hono domain (wildcard) in case it is managed by cert-manager | `string` | n/a | yes |
@@ -54,7 +66,7 @@ No modules.
 | <a name="input_hpa_minReplicas_device_registry"></a> [hpa\_minReplicas\_device\_registry](#input\_hpa\_minReplicas\_device\_registry) | Minimum number of replicas that the horizontal pod autoscaler must maintain for the device registry deployment. | `number` | n/a | yes |
 | <a name="input_hpa_minReplicas_mqtt"></a> [hpa\_minReplicas\_mqtt](#input\_hpa\_minReplicas\_mqtt) | Minimum number of replicas that the horizontal pod autoscaler must maintain for the MQTT adapter deployment. | `number` | n/a | yes |
 | <a name="input_http_static_ip"></a> [http\_static\_ip](#input\_http\_static\_ip) | static ip address for the http loadbalancer | `string` | n/a | yes |
-| <a name="input_mqtt_adapter"></a> [mqtt\_adapter](#input\_mqtt\_adapter) | Configuration options for the MQTT adapter.<br>  enabled: Enables the MQTT adapter.<br>  advanced\_load\_balancer:<br>    enabled: Enables the use of the advanced MQTT load balancer.<br>    algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance . | <pre>object({<br>    enabled = optional(bool, true),<br>    advanced_load_balancer = optional(object({<br>      enabled = optional(bool, false),<br>      algorithm = optional(string, "leastconn")<br>    }), {}),<br>  })</pre> | `{}` | no |
+| <a name="input_mqtt_adapter"></a> [mqtt\_adapter](#input\_mqtt\_adapter) | Configuration options for the MQTT adapter.<br/>  enabled: Enables the MQTT adapter.<br/>  advanced\_load\_balancer:<br/>    enabled: Enables the use of the advanced MQTT load balancer.<br/>    algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance . | <pre>object({<br/>    enabled = optional(bool, true),<br/>    advanced_load_balancer = optional(object({<br/>      enabled   = optional(bool, false),<br/>      algorithm = optional(string, "leastconn")<br/>    }), {}),<br/>  })</pre> | `{}` | no |
 | <a name="input_mqtt_static_ip"></a> [mqtt\_static\_ip](#input\_mqtt\_static\_ip) | static ip address for the mqtt loadbalancer | `string` | n/a | yes |
 | <a name="input_oauth_app_name"></a> [oauth\_app\_name](#input\_oauth\_app\_name) | Name of the OAuth Application | `string` | n/a | yes |
 | <a name="input_oauth_client_id"></a> [oauth\_client\_id](#input\_oauth\_client\_id) | The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP) | `string` | n/a | yes |
