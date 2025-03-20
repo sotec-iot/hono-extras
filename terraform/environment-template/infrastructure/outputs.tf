@@ -54,6 +54,11 @@ output "sql_grafana_database" {
   description = "Name of the grafana postgres database."
 }
 
+output "gke_autopilot_enabled" {
+  value       = module.infrastructure.gke_autopilot_enabled
+  description = "If autopilot mode is enabled for the GKE cluster."
+}
+
 output "service_name_communication" {
   value       = module.infrastructure.service_name_communication
   description = "Name of the Could Endpoints Service Device Registry"

@@ -302,9 +302,3 @@ variable "grafana_expose_externally" {
   description = "Whether or not Grafana should be exposed externally."
   default     = false
 }
-
-variable "helm_release_name" {
-  type        = string
-  description = "Name of the helm realease"
-  default     = "eclipse-hono"
-}

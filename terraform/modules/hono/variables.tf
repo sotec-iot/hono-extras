@@ -224,8 +224,3 @@ variable "helm_release_name" {
   type        = string
   description = "Name of the helm realease"
 }
-
-variable "gke_autopilot_enabled" {
-  type        = bool
-  description = "If autopilot mode should be enabled for the GKE cluster."
-}

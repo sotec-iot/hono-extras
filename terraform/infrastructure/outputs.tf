@@ -39,15 +39,9 @@ output "sql_grafana_database" {
   description = "Name of the Grafana Postgres database."
 }
 
-output "gke_cluster_name_endpoint" {
-  value       = module.gke.gke_cluster_name_endpoint
-  description = "Endpoint of the GKE cluster."
-}
-
-output "gke_cluster_ca_certificate" {
-  value       = module.gke.gke_cluster_ca_certificate
-  description = "CA-Certificate for the cluster."
-  sensitive   = true
+output "gke_autopilot_enabled" {
+  value       = var.gke_autopilot_enabled
+  description = "If autopilot mode is enabled for the GKE cluster."
 }
 
 output "service_name_communication" {
