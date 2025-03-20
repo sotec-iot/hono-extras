@@ -396,5 +396,4 @@ variable "helm_release_name" {
 variable "gke_autopilot_enabled" {
   type        = bool
   description = "If autopilot mode should be enabled for the GKE cluster."
-  default     = false
 }

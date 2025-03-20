@@ -48,7 +48,7 @@ resource "kubectl_manifest" "issuer_letsencrypt_prod" {
         "privateKeySecretRef" = {
           "name" = var.cert_manager_issuer_name
         }
-        #  "server"  = "https://acme-staging-v02.api.letsencrypt.org/directory" # use this for testing
+        # "server" = "https://acme-staging-v02.api.letsencrypt.org/directory" # use this for testing
         "server" = "https://acme-v02.api.letsencrypt.org/directory"
         "solvers" = [
           {

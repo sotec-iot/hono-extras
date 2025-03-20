@@ -99,7 +99,6 @@ module "gke" {
   node_pool_batch_node_count                      = var.node_pool_batch_node_count
   node_pool_batch_soak_duration                   = var.node_pool_batch_soak_duration
   node_pool_soak_duration                         = var.node_pool_soak_duration
-  helm_release_name                               = var.helm_release_name
 
   depends_on = [
     google_project_service.project

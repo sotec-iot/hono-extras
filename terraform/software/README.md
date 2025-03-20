@@ -40,7 +40,7 @@ No resources.
 | <a name="input_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#input\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress | `string` | n/a | yes |
 | <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the use of cert manager. | `bool` | `false` | no |
 | <a name="input_enable_http_adapter"></a> [enable\_http\_adapter](#input\_enable\_http\_adapter) | Used to enable the http adapter | `bool` | `false` | no |
-| <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | `false` | no |
+| <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | n/a | yes |
 | <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Name of the DNS host for Grafana | `string` | `""` | no |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
 | <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. | `string` | n/a | yes |

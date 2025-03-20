@@ -131,9 +131,3 @@ variable "node_pool_soak_duration" {
   type        = string
   description = "Duration to wait after all batches are drained during blue-green upgrade process"
 }
-
-
-variable "helm_release_name" {
-  type        = string
-  description = "Name of the helm realease"
-}

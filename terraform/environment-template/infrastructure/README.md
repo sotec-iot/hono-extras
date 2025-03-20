@@ -34,6 +34,7 @@ No inputs.
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | Name of the GKE Cluster |
 | <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for External Ingress |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress |
+| <a name="output_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#output\_gke\_autopilot\_enabled) | If autopilot mode is enabled for the GKE cluster. |
 | <a name="output_grafana_expose_externally"></a> [grafana\_expose\_externally](#output\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. |
 | <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for grafana external ingress. |
 | <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for grafana external ingress. |

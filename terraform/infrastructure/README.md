@@ -41,7 +41,6 @@ No requirements.
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | `"standard-node-pool"` | no |
 | <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | Which Release Channel to use for the Cluster | `string` | `"STABLE"` | no |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | `false` | no |
-| <a name="input_helm_release_name"></a> [helm\_release\_name](#input\_helm\_release\_name) | Name of the helm realease | `string` | `"eclipse-hono"` | no |
 | <a name="input_ip_cidr_range"></a> [ip\_cidr\_range](#input\_ip\_cidr\_range) | The range of internal addresses that are owned by this subnetwork. Provide this property when you create the subnetwork.Ranges must be unique and non-overlapping within a network. Only IPv4 is supported. | `string` | `"10.10.1.0/24"` | no |
 | <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | List of Strings for the Node Locations | `list(string)` | n/a | yes |
 | <a name="input_node_pool_autoscaling_enabled"></a> [node\_pool\_autoscaling\_enabled](#input\_node\_pool\_autoscaling\_enabled) | If node autoscaling should be enabled | `string` | `false` | no |
@@ -91,9 +90,8 @@ No requirements.
 | <a name="output_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#output\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account. |
 | <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for external ingress. |
 | <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the static IP for external ingress. |
-| <a name="output_gke_cluster_ca_certificate"></a> [gke\_cluster\_ca\_certificate](#output\_gke\_cluster\_ca\_certificate) | CA-Certificate for the cluster. |
+| <a name="output_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#output\_gke\_autopilot\_enabled) | If autopilot mode is enabled for the GKE cluster. |
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | Name of the GKE cluster. |
-| <a name="output_gke_cluster_name_endpoint"></a> [gke\_cluster\_name\_endpoint](#output\_gke\_cluster\_name\_endpoint) | Endpoint of the GKE cluster. |
 | <a name="output_grafana_expose_externally"></a> [grafana\_expose\_externally](#output\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. |
 | <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for Grafana external ingress. |
 | <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for Grafana external ingress. |

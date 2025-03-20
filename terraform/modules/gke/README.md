@@ -31,7 +31,6 @@ No modules.
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | n/a | yes |
 | <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | Which Release Channel to use for the Cluster | `string` | n/a | yes |
 | <a name="input_gke_service_account_email"></a> [gke\_service\_account\_email](#input\_gke\_service\_account\_email) | Email of the GKE Service Account | `string` | n/a | yes |
-| <a name="input_helm_release_name"></a> [helm\_release\_name](#input\_helm\_release\_name) | Name of the helm realease | `string` | n/a | yes |
 | <a name="input_ip_ranges_pods"></a> [ip\_ranges\_pods](#input\_ip\_ranges\_pods) | Secondary IP Ranges in Subnetwork for Pods | `string` | n/a | yes |
 | <a name="input_ip_ranges_services"></a> [ip\_ranges\_services](#input\_ip\_ranges\_services) | Secondary IP Ranges in Subnetwork for Services | `string` | n/a | yes |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | name of the network | `string` | n/a | yes |
@@ -56,6 +55,4 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_gke_cluster_ca_certificate"></a> [gke\_cluster\_ca\_certificate](#output\_gke\_cluster\_ca\_certificate) | CA-Certificate for the Cluster |
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | Name of the GKE Cluster |
-| <a name="output_gke_cluster_name_endpoint"></a> [gke\_cluster\_name\_endpoint](#output\_gke\_cluster\_name\_endpoint) | Endpoint of the GKE Cluster |

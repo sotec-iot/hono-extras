@@ -8,6 +8,10 @@ resource "google_container_cluster" "hono_cluster" {
   initial_node_count       = 1
   remove_default_node_pool = true
 
+  workload_identity_config {
+    workload_pool = "${var.project_id}.svc.id.goog"
+  }
+
   release_channel {
     channel = var.gke_release_channel
   }
