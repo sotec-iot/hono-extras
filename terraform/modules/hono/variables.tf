@@ -14,10 +14,10 @@ variable "project_id" {
 }
 
 variable "mqtt_adapter" {
-  type        = object({
+  type = object({
     enabled = optional(bool, true),
     advanced_load_balancer = optional(object({
-      enabled = optional(bool, false),
+      enabled   = optional(bool, false),
       algorithm = optional(string, "leastconn")
     }), {}),
   })
@@ -28,7 +28,7 @@ Configuration options for the MQTT adapter.
     enabled: Enables the use of the advanced MQTT load balancer.
     algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .
 EOT
-  default = {}
+  default     = {}
 }
 
 variable "enable_http_adapter" {
@@ -219,4 +219,13 @@ variable "grafana_static_ip_name" {
 variable "grafana_dns_name" {
   type        = string
   description = "Name of the DNS host for Grafana"
+}
+variable "helm_release_name" {
+  type        = string
+  description = "Name of the helm realease"
+}
+
+variable "gke_autopilot_enabled" {
+  type        = bool
+  description = "If autopilot mode should be enabled for the GKE cluster."
 }

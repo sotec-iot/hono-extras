@@ -1,34 +1,6 @@
-locals {
-  values = [yamlencode(
-    {
-      controller = {
-        replicaCount = var.advanced_load_balancer.replicaCount
-        resources = var.advanced_load_balancer.resources
-        service = {
-          tcpPorts = [
-            for port_config in var.advanced_load_balancer.port_configs :
-            port_config
-          ]
-          type: "LoadBalancer"
-          enablePorts = {
-            http: false
-            https: false
-            stat: false
-            prometheus: false
-          }
-          loadBalancerIP = var.mqtt_static_ip
-        }
-        extraArgs = [
-          "--configmap-tcp-services=${var.hono_namespace}/${kubernetes_config_map.tcp.metadata[0].name}"
-        ]
-      }
-    }
-  )]
-}
-
 resource "kubernetes_config_map" "tcp" {
   metadata {
-    name = "tcp"
+    name      = "tcp"
     namespace = var.hono_namespace
   }
   data = {
@@ -47,5 +19,6 @@ resource "helm_release" "load-balancer" {
   timeout          = 120
 
   # using yaml to set values in the helm chart
-  values = local.values
+  values = var.gke_autopilot_enabled ? local.values_autopilot : local.values
+
 }

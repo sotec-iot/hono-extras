@@ -16,6 +16,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [google_container_cluster.hono_autopilot_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
 | [google_container_cluster.hono_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
 | [google_container_node_pool.standard_node_pool](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_node_pool) | resource |
 
@@ -23,12 +24,14 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_gke_cluster_maintenance_policy_recurring_window"></a> [gke\_cluster\_maintenance\_policy\_recurring\_window](#input\_gke\_cluster\_maintenance\_policy\_recurring\_window) | The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy | <pre>object({<br>    start_time = string,<br>    end_time = string,<br>    recurrence = string<br>  })</pre> | n/a | yes |
+| <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | n/a | yes |
+| <a name="input_gke_cluster_maintenance_policy_recurring_window"></a> [gke\_cluster\_maintenance\_policy\_recurring\_window](#input\_gke\_cluster\_maintenance\_policy\_recurring\_window) | The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy | <pre>object({<br/>    start_time = string,<br/>    end_time   = string,<br/>    recurrence = string<br/>  })</pre> | n/a | yes |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | n/a | yes |
 | <a name="input_gke_machine_type"></a> [gke\_machine\_type](#input\_gke\_machine\_type) | Machine Type for node\_pools | `string` | n/a | yes |
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | n/a | yes |
 | <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | Which Release Channel to use for the Cluster | `string` | n/a | yes |
 | <a name="input_gke_service_account_email"></a> [gke\_service\_account\_email](#input\_gke\_service\_account\_email) | Email of the GKE Service Account | `string` | n/a | yes |
+| <a name="input_helm_release_name"></a> [helm\_release\_name](#input\_helm\_release\_name) | Name of the helm realease | `string` | n/a | yes |
 | <a name="input_ip_ranges_pods"></a> [ip\_ranges\_pods](#input\_ip\_ranges\_pods) | Secondary IP Ranges in Subnetwork for Pods | `string` | n/a | yes |
 | <a name="input_ip_ranges_services"></a> [ip\_ranges\_services](#input\_ip\_ranges\_services) | Secondary IP Ranges in Subnetwork for Services | `string` | n/a | yes |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | name of the network | `string` | n/a | yes |

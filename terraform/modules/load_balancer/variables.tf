@@ -9,16 +9,16 @@ variable "mqtt_static_ip" {
 }
 
 variable "advanced_load_balancer" {
-  type        = object({
+  type = object({
     chart_version = string,
-    replicaCount = number,
+    replicaCount  = number,
     resources = object({
       limits = object({
-        cpu = string,
+        cpu    = string,
         memory = string
       }),
       requests = object({
-        cpu = string
+        cpu    = string
         memory = string
       })
     }),
@@ -38,3 +38,9 @@ Configuration options for the advanced MQTT load balancer.
   tcp_configmap_data: Data of the TCP configMap for the advanced MQTT load balancer.
 EOT
 }
+
+variable "gke_autopilot_enabled" {
+  type        = bool
+  description = "If autopilot mode should be enabled for the GKE cluster."
+}
+

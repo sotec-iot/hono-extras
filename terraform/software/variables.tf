@@ -252,7 +252,7 @@ variable "hpa_maxReplicas_mqtt" {
 
 variable "hpa_metrics_mqtt" {
   description = "Metrics for the MQTT horizontal pod autoscaler as JSON list."
-  default     = [
+  default = [
     {
       type = "Pods"
       pods = {
@@ -266,9 +266,9 @@ variable "hpa_metrics_mqtt" {
       }
     },
     {
-      type     = "Resource"
+      type = "Resource"
       resource = {
-        name   = "cpu"
+        name = "cpu"
         target = {
           type               = "Utilization"
           averageUtilization = 80
@@ -276,9 +276,9 @@ variable "hpa_metrics_mqtt" {
       }
     },
     {
-      type     = "Resource"
+      type = "Resource"
       resource = {
-        name   = "memory"
+        name = "memory"
         target = {
           type               = "Utilization"
           averageUtilization = 85
@@ -308,10 +308,10 @@ variable "prometheus_adapter_version" {
 
 variable "prometheus_adapter_custom_metrics" {
   description = "Prometheus metrics to expose via the prometheus adapter to use as custom metrics in horizontal pod autoscaler."
-  default     = [
+  default = [
     {
       seriesQuery = "hono_connections_authenticated{kubernetes_namespace!=\"\",kubernetes_pod_name!=\"\"}"
-      resources   = {
+      resources = {
         overrides = {
           kubernetes_namespace = { resource : "namespace" }
           kubernetes_pod_name  = { resource : "pod" }
@@ -339,20 +339,20 @@ variable "grafana_dns_name" {
 }
 
 variable "mqtt_adapter" {
-  type        = object({
+  type = object({
     enabled = optional(bool, true),
     advanced_load_balancer = optional(object({
-      enabled = optional(bool, false),
+      enabled       = optional(bool, false),
       chart_version = optional(string, "1.34.1"),
-      algorithm = optional(string, "leastconn"),
-      replicaCount = optional(number, 1),
+      algorithm     = optional(string, "leastconn"),
+      replicaCount  = optional(number, 1),
       resources = optional(object({
         limits = optional(object({
-          cpu = optional(string, null),
+          cpu    = optional(string, null),
           memory = optional(string, null)
         }), {}),
         requests = optional(object({
-          cpu = optional(string, "500m"),
+          cpu    = optional(string, "500m"),
           memory = optional(string, "1000Mi")
         }), {})
       }), {}),
@@ -360,11 +360,11 @@ variable "mqtt_adapter" {
         name       = string,
         port       = number,
         targetPort = optional(number, 8883)
-      })), [
+        })), [
         {
-          name: "mqtt"
-          port: 8883
-          targetPort: 8883
+          name : "mqtt"
+          port : 8883
+          targetPort : 8883
         }
       ]),
       tcp_configmap_data = optional(map(string), {
@@ -384,5 +384,17 @@ Configuration options for the MQTT adapter.
     port_configs: List of MQTT port config objects for the advanced MQTT load balancer service.
     tcp_configmap_data: Data of the TCP configMap for the advanced MQTT load balancer.
 EOT
-  default = {}
+  default     = {}
+}
+
+variable "helm_release_name" {
+  type        = string
+  description = "Name of the helm realease"
+  default     = "eclipse-hono"
+}
+
+variable "gke_autopilot_enabled" {
+  type        = bool
+  description = "If autopilot mode should be enabled for the GKE cluster."
+  default     = false
 }

@@ -11,7 +11,7 @@ variable "gke_cluster_name" {
 variable "gke_cluster_maintenance_policy_recurring_window" {
   type = object({
     start_time = string,
-    end_time = string,
+    end_time   = string,
     recurrence = string
   })
   description = "The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy"
@@ -29,7 +29,12 @@ variable "network_name" {
 
 variable "subnetwork_name" {
   type        = string
-  description = "name of the subnetwork "
+  description = "name of the subnetwork"
+}
+
+variable "gke_autopilot_enabled" {
+  type        = bool
+  description = "If autopilot mode should be enabled for the GKE cluster."
 }
 
 variable "gke_release_channel" {
@@ -125,4 +130,10 @@ variable "node_pool_batch_soak_duration" {
 variable "node_pool_soak_duration" {
   type        = string
   description = "Duration to wait after all batches are drained during blue-green upgrade process"
+}
+
+
+variable "helm_release_name" {
+  type        = string
+  description = "Name of the helm realease"
 }

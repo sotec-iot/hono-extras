@@ -59,3 +59,4 @@ resource "google_service_account_key" "cert_manager_sa_key" {
   service_account_id = google_service_account.cert_manager_sa[0].name
   public_key_type    = "TYPE_X509_PEM_FILE"
 }
+
