@@ -397,3 +397,15 @@ variable "gke_autopilot_enabled" {
   type        = bool
   description = "If autopilot mode should be enabled for the GKE cluster."
 }
+
+variable "alerts_enabled" {
+  type        = bool
+  description = "If alerts should be enabled."
+  default     = false
+}
+
+variable "alerts_chat_space_id" {
+  type        = string
+  description = "The Chat space ID is the string following “chat/space/” in the chat URL. It can only be seen in the web view of the Chat app. In order to add Google Chat as a notification channel, you must first add the Google Cloud Monitoring App to the chat space. You can add the app directly to a space by typing @Google Cloud Monitoring."
+  default     = null
+}
