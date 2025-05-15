@@ -10,6 +10,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_alert_policies"></a> [alert\_policies](#module\_alert\_policies) | ../modules/alert_policies | n/a |
 | <a name="module_cert-manager"></a> [cert-manager](#module\_cert-manager) | ../modules/cert_manager | n/a |
 | <a name="module_hono"></a> [hono](#module\_hono) | ../modules/hono | n/a |
 | <a name="module_load-balancer"></a> [load-balancer](#module\_load-balancer) | ../modules/load_balancer | n/a |
@@ -24,6 +25,8 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_alerts_chat_space_id"></a> [alerts\_chat\_space\_id](#input\_alerts\_chat\_space\_id) | The Chat space ID is the string following “chat/space/” in the chat URL. It can only be seen in the web view of the Chat app. In order to add Google Chat as a notification channel, you must first add the Google Cloud Monitoring App to the chat space. You can add the app directly to a space by typing @Google Cloud Monitoring. | `string` | `null` | no |
+| <a name="input_alerts_enabled"></a> [alerts\_enabled](#input\_alerts\_enabled) | If alerts should be enabled. | `bool` | `false` | no |
 | <a name="input_cert_manager_cert_duration"></a> [cert\_manager\_cert\_duration](#input\_cert\_manager\_cert\_duration) | Validity period of a newly created certificate (e.g. 2160h for 90 day validity). | `string` | `"2160h"` | no |
 | <a name="input_cert_manager_cert_renew_before"></a> [cert\_manager\_cert\_renew\_before](#input\_cert\_manager\_cert\_renew\_before) | When to renew the certificate based on its remaining validity period (e.g. 720h for 30 days before expiration). | `string` | `"720h"` | no |
 | <a name="input_cert_manager_email"></a> [cert\_manager\_email](#input\_cert\_manager\_email) | E-Mail address to contact in case something goes wrong with the certificate renewal. | `string` | n/a | yes |
