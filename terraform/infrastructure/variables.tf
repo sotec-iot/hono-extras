@@ -302,3 +302,34 @@ variable "grafana_expose_externally" {
   description = "Whether or not Grafana should be exposed externally."
   default     = false
 }
+
+variable "gke_notification_enabled" {
+  type        = bool
+  description = "Enables notification emails for some Google Kubernetes Engine events (UPGRADE_AVAILABLE_EVENT, UPGRADE_EVENT and SECURITY_BULLETIN_EVENT)."
+  default     = false
+}
+
+variable "gke_notification_pubsub_topic" {
+  type        = string
+  description = "The topic to which the google cluster notifications are published to."
+  default     = "hono.cluster.notifications"
+}
+
+variable "sendgrid_api_key" {
+  type        = string
+  description = "The api key used to access sendgrid mail provisioner"
+  default     = null
+  sensitive   = true
+}
+
+variable "sendgrid_domain" {
+  type        = string
+  description = "The domain of the sendgrid mail provisioner"
+  default     = null
+}
+
+variable "gke_notification_email" {
+  type        = string
+  description = "The email address of the recipients for the Google Kubernetes Engine notifications."
+  default     = null
+}

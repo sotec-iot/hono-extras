@@ -60,3 +60,9 @@ resource "google_pubsub_subscription" "registry-device_notification" {
 
   enable_message_ordering = false
 }
+
+resource "google_pubsub_topic" "gke_notification" {
+  count   = var.gke_notification_enabled ? 1 : 0
+  name    = var.gke_notification_pubsub_topic
+  project = var.project_id
+}

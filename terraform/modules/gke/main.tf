@@ -27,6 +27,13 @@ resource "google_container_cluster" "hono_cluster" {
     }
   }
 
+  notification_config {
+    pubsub {
+      enabled = var.gke_notification_enabled
+      topic   = "projects/${var.project_id}/topics/${var.gke_notification_pubsub_topic}"
+    }
+  }
+
   dynamic "maintenance_policy" {
     for_each = var.gke_cluster_maintenance_policy_recurring_window != null ? [1] : []
     content {
@@ -68,6 +75,13 @@ resource "google_container_cluster" "hono_autopilot_cluster" {
   master_auth {
     client_certificate_config {
       issue_client_certificate = true
+    }
+  }
+
+  notification_config {
+    pubsub {
+      enabled = var.gke_notification_enabled
+      topic   = "projects/${var.project_id}/topics/${var.gke_notification_pubsub_topic}"
     }
   }
 
@@ -132,3 +146,57 @@ resource "google_container_node_pool" "standard_node_pool" {
     }
   }
 }
+
+resource "google_cloudfunctions2_function" "gke_notification_email_function" {
+  count    = var.gke_notification_enabled ? 1 : 0
+  name     = "gkeNotificationEmailSender"
+  location = var.region
+  lifecycle {
+    precondition {
+      condition     = var.sendgrid_api_key != null && var.sendgrid_api_key != "" && var.sendgrid_domain != null && var.sendgrid_domain != "" && var.gke_notification_email != null && var.gke_notification_email != ""
+      error_message = "sendgrid_api_key, sendgrid_domain and gke_notification_email must be set to enable GKE notification emails."
+    }
+  }
+  build_config {
+    runtime     = "go123"
+    entry_point = "SendEmail"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.gke_notification_email_function_bucket[0].name
+        object = google_storage_bucket_object.gke_notification_email_function_archive[0].name
+      }
+    }
+  }
+  service_config {
+    max_instance_count = 2
+    environment_variables = {
+      MAIL             = var.gke_notification_email
+      SENDGRID_API_KEY = var.sendgrid_api_key
+      SENDGRID_DOMAIN  = var.sendgrid_domain
+      PROJECT_ID       = var.project_id
+    }
+  }
+  event_trigger {
+    event_type   = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic = "projects/${var.project_id}/topics/${var.gke_notification_pubsub_topic}"
+    retry_policy = "RETRY_POLICY_DO_NOT_RETRY"
+  }
+}
+
+
+resource "google_storage_bucket" "gke_notification_email_function_bucket" {
+  count         = var.gke_notification_enabled ? 1 : 0
+  name          = "${var.project_id}-gke-notification-email-function-source"
+  location      = var.region
+  force_destroy = true
+
+  uniform_bucket_level_access = true
+}
+
+resource "google_storage_bucket_object" "gke_notification_email_function_archive" {
+  count  = var.gke_notification_enabled ? 1 : 0
+  name   = "gke_notification_email.zip"
+  bucket = google_storage_bucket.gke_notification_email_function_bucket[0].name
+  source = "${path.module}/gke_notification_email.zip"
+}
+

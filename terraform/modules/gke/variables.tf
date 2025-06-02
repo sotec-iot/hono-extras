@@ -131,3 +131,29 @@ variable "node_pool_soak_duration" {
   type        = string
   description = "Duration to wait after all batches are drained during blue-green upgrade process"
 }
+
+variable "gke_notification_enabled" {
+  type        = bool
+  description = "Enables notification emails for some Google Kubernetes Engine events (UPGRADE_AVAILABLE_EVENT, UPGRADE_EVENT and SECURITY_BULLETIN_EVENT)."
+}
+
+variable "gke_notification_pubsub_topic" {
+  type        = string
+  description = "The topic to which the google cluster notifications are published to."
+}
+
+variable "sendgrid_api_key" {
+  type        = string
+  description = "The api key used to access sendgrid mail provisioner"
+  sensitive   = true
+}
+
+variable "sendgrid_domain" {
+  type        = string
+  description = "The domain of the sendgrid mail provisioner"
+}
+
+variable "gke_notification_email" {
+  type        = string
+  description = "The email address of the recipients for the Google Kubernetes Engine notifications."
+}

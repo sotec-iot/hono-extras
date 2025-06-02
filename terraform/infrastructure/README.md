@@ -39,6 +39,8 @@ No requirements.
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | `"hono-cluster"` | no |
 | <a name="input_gke_machine_type"></a> [gke\_machine\_type](#input\_gke\_machine\_type) | Machine Type for node\_pools | `string` | `"c2-standard-8"` | no |
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | `"standard-node-pool"` | no |
+| <a name="input_gke_notification_email"></a> [gke\_notification\_email](#input\_gke\_notification\_email) | The email address of the recipients for the Google Kubernetes Engine notifications. | `string` | n/a | yes |
+| <a name="input_gke_notification_enabled"></a> [gke\_notification\_enabled](#input\_gke\_notification\_enabled) | Enables notification emails for some Google Kubernetes Engine events (UPGRADE\_AVAILABLE\_EVENT, UPGRADE\_EVENT and SECURITY\_BULLETIN\_EVENT). | `bool` | `false` | no |
 | <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | Which Release Channel to use for the Cluster | `string` | `"STABLE"` | no |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | `false` | no |
 | <a name="input_ip_cidr_range"></a> [ip\_cidr\_range](#input\_ip\_cidr\_range) | The range of internal addresses that are owned by this subnetwork. Provide this property when you create the subnetwork.Ranges must be unique and non-overlapping within a network. Only IPv4 is supported. | `string` | `"10.10.1.0/24"` | no |
@@ -59,6 +61,8 @@ No requirements.
 | <a name="input_region"></a> [region](#input\_region) | The region to deploy to | `string` | `"europe-west1"` | no |
 | <a name="input_secondary_ip_range_pods"></a> [secondary\_ip\_range\_pods](#input\_secondary\_ip\_range\_pods) | Secondary IP Ranges in Subnetwork for Pods | `string` | `"10.1.0.0/20"` | no |
 | <a name="input_secondary_ip_range_services"></a> [secondary\_ip\_range\_services](#input\_secondary\_ip\_range\_services) | Secondary IP Ranges in Subnetwork for Services | `string` | `"10.10.11.0/24"` | no |
+| <a name="input_sendgrid_api_key"></a> [sendgrid\_api\_key](#input\_sendgrid\_api\_key) | The api key used to access sendgrid mail provisioner | `string` | n/a | yes |
+| <a name="input_sendgrid_domain"></a> [sendgrid\_domain](#input\_sendgrid\_domain) | The domain of the sendgrid mail provisioner | `string` | n/a | yes |
 | <a name="input_service_account_roles_gke_sa"></a> [service\_account\_roles\_gke\_sa](#input\_service\_account\_roles\_gke\_sa) | Additional roles to be added to the GKE service account. | `list(string)` | `[]` | no |
 | <a name="input_sql_db_user_name"></a> [sql\_db\_user\_name](#input\_sql\_db\_user\_name) | The name of the user. Changing this forces a new resource to be created. | `string` | `"hono-user"` | no |
 | <a name="input_sql_grafana_database_name"></a> [sql\_grafana\_database\_name](#input\_sql\_grafana\_database\_name) | The name of the grafana database in the Cloud SQL instance. This does not include the project ID or instance name. | `string` | `"grafana-db"` | no |
