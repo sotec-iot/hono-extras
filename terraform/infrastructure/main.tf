@@ -6,7 +6,10 @@ resource "google_project_service" "project" {
     "sqladmin.googleapis.com",
     "servicenetworking.googleapis.com",
     "iap.googleapis.com",
-    "servicecontrol.googleapis.com"
+    "servicecontrol.googleapis.com",
+    "run.googleapis.com",
+    "eventarc.googleapis.com",
+    "cloudfunctions.googleapis.com",
   ])
 
   project = var.project_id
@@ -99,16 +102,24 @@ module "gke" {
   node_pool_batch_node_count                      = var.node_pool_batch_node_count
   node_pool_batch_soak_duration                   = var.node_pool_batch_soak_duration
   node_pool_soak_duration                         = var.node_pool_soak_duration
+  gke_notification_enabled                        = var.gke_notification_enabled
+  gke_notification_pubsub_topic                   = var.gke_notification_pubsub_topic
+  gke_notification_email                          = var.gke_notification_email
+  sendgrid_api_key                                = var.sendgrid_api_key
+  sendgrid_domain                                 = var.sendgrid_domain
 
   depends_on = [
-    google_project_service.project
+    google_project_service.project,
+    module.pubsub
   ]
 }
 
 module "pubsub" {
   source = "../modules/pubsub"
 
-  project_id = var.project_id
+  project_id                    = var.project_id
+  gke_notification_enabled      = var.gke_notification_enabled
+  gke_notification_pubsub_topic = var.gke_notification_pubsub_topic
 
   depends_on = [
     google_project_service.project

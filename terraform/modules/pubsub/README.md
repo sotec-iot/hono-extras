@@ -19,6 +19,7 @@ No modules.
 | [google_pubsub_subscription.registry-device_notification](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_subscription) | resource |
 | [google_pubsub_subscription.registry-tenant_notification_communication_api](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_subscription) | resource |
 | [google_pubsub_subscription.registry_tenant_notification](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_subscription) | resource |
+| [google_pubsub_topic.gke_notification](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
 | [google_pubsub_topic.notification_registry_device](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
 | [google_pubsub_topic.notification_registry_tenant](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
 
@@ -26,6 +27,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_gke_notification_enabled"></a> [gke\_notification\_enabled](#input\_gke\_notification\_enabled) | Enables notification emails for some Google Kubernetes Engine events (UPGRADE\_AVAILABLE\_EVENT, UPGRADE\_EVENT and SECURITY\_BULLETIN\_EVENT). | `bool` | n/a | yes |
+| <a name="input_gke_notification_pubsub_topic"></a> [gke\_notification\_pubsub\_topic](#input\_gke\_notification\_pubsub\_topic) | The topic to which the google cluster notifications are published to. | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to deploy to | `string` | n/a | yes |
 
 ## Outputs

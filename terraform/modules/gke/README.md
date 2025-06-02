@@ -16,9 +16,12 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [google_cloudfunctions2_function.gke_notification_email_function](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions2_function) | resource |
 | [google_container_cluster.hono_autopilot_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
 | [google_container_cluster.hono_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
 | [google_container_node_pool.standard_node_pool](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_node_pool) | resource |
+| [google_storage_bucket.gke_notification_email_function_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
+| [google_storage_bucket_object.gke_notification_email_function_archive](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
 
 ## Inputs
 
@@ -29,6 +32,9 @@ No modules.
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | n/a | yes |
 | <a name="input_gke_machine_type"></a> [gke\_machine\_type](#input\_gke\_machine\_type) | Machine Type for node\_pools | `string` | n/a | yes |
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | n/a | yes |
+| <a name="input_gke_notification_email"></a> [gke\_notification\_email](#input\_gke\_notification\_email) | The email address of the recipients for the Google Kubernetes Engine notifications. | `string` | n/a | yes |
+| <a name="input_gke_notification_enabled"></a> [gke\_notification\_enabled](#input\_gke\_notification\_enabled) | Enables notification emails for some Google Kubernetes Engine events (UPGRADE\_AVAILABLE\_EVENT, UPGRADE\_EVENT and SECURITY\_BULLETIN\_EVENT). | `bool` | n/a | yes |
+| <a name="input_gke_notification_pubsub_topic"></a> [gke\_notification\_pubsub\_topic](#input\_gke\_notification\_pubsub\_topic) | The topic to which the google cluster notifications are published to. | `string` | n/a | yes |
 | <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | Which Release Channel to use for the Cluster | `string` | n/a | yes |
 | <a name="input_gke_service_account_email"></a> [gke\_service\_account\_email](#input\_gke\_service\_account\_email) | Email of the GKE Service Account | `string` | n/a | yes |
 | <a name="input_ip_ranges_pods"></a> [ip\_ranges\_pods](#input\_ip\_ranges\_pods) | Secondary IP Ranges in Subnetwork for Pods | `string` | n/a | yes |
@@ -49,6 +55,8 @@ No modules.
 | <a name="input_node_pool_upgrade_strategy"></a> [node\_pool\_upgrade\_strategy](#input\_node\_pool\_upgrade\_strategy) | Upgrade strategy for node pool | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to deploy to | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region to deploy to | `string` | n/a | yes |
+| <a name="input_sendgrid_api_key"></a> [sendgrid\_api\_key](#input\_sendgrid\_api\_key) | The api key used to access sendgrid mail provisioner | `string` | n/a | yes |
+| <a name="input_sendgrid_domain"></a> [sendgrid\_domain](#input\_sendgrid\_domain) | The domain of the sendgrid mail provisioner | `string` | n/a | yes |
 | <a name="input_subnetwork_name"></a> [subnetwork\_name](#input\_subnetwork\_name) | name of the subnetwork | `string` | n/a | yes |
 
 ## Outputs

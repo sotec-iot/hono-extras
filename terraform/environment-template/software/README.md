@@ -2,7 +2,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 4 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | ~> 2 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | ~> 1 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2 |
@@ -11,7 +11,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | ~> 4 |
+| <a name="provider_google"></a> [google](#provider\_google) | ~> 5 |
 | <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
 ## Modules
