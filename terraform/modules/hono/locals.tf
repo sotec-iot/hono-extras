@@ -75,6 +75,9 @@ locals {
             }
           }
         }
+        dataGridExample = {
+          replicas = var.data_grid_replicas
+        }
         commandRouterService = {
           deployment             = local.deployment
           tlsKeysSecret          = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name

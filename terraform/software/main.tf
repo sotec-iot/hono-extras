@@ -55,6 +55,7 @@ module "hono" {
   grafana_dns_name                    = var.grafana_dns_name
   mqtt_adapter                        = var.mqtt_adapter
   helm_release_name                   = var.helm_release_name
+  data_grid_replicas                  = var.data_grid_replicas
 
   depends_on = [module.namespace, module.cert-manager]
 }

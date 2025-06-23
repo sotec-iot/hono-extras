@@ -348,8 +348,8 @@ variable "mqtt_adapter" {
       replicaCount  = optional(number, 1),
       resources = optional(object({
         limits = optional(object({
-          cpu    = optional(string, null),
-          memory = optional(string, null)
+          cpu    = optional(string, "2000m"),
+          memory = optional(string, "1000Mi")
         }), {}),
         requests = optional(object({
           cpu    = optional(string, "500m"),
@@ -408,4 +408,10 @@ variable "alerts_chat_space_id" {
   type        = string
   description = "The Chat space ID is the string following “chat/space/” in the chat URL. It can only be seen in the web view of the Chat app. In order to add Google Chat as a notification channel, you must first add the Google Cloud Monitoring App to the chat space. You can add the app directly to a space by typing @Google Cloud Monitoring."
   default     = null
+}
+
+variable "data_grid_replicas" {
+  type        = number
+  description = "Number of replicas for the data grid"
+  default     = 1
 }

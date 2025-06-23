@@ -224,3 +224,8 @@ variable "helm_release_name" {
   type        = string
   description = "Name of the helm realease"
 }
+
+variable "data_grid_replicas" {
+  type        = number
+  description = "Number of replicas for the data grid"
+}

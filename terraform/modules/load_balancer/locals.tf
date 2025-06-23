@@ -21,8 +21,8 @@ locals {
         "--configmap-tcp-services=${var.hono_namespace}/${kubernetes_config_map.tcp.metadata[0].name}"
       ]
       PodDisruptionBudget = {
-        enable       = true
-        minAvailable = 2
+        enable         = true
+        maxUnavailable = 1
       }
     }
   }
