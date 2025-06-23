@@ -27,7 +27,7 @@ resource "google_sql_database_instance" "hono_sql" {
     }
     backup_configuration {
       enabled    = var.sql_instance_backup_enabled
-      location   = var.sql_instance_backup_location != null ? var.sql_instance_backup_location : var.region
+      location   = var.sql_instance_backup_enabled ? (var.sql_instance_backup_location != null ? var.sql_instance_backup_location : var.region) : null
       start_time = var.sql_instance_backup_start_time
       backup_retention_settings {
         retained_backups = var.sql_instance_backup_count
