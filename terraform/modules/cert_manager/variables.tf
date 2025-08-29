@@ -1,3 +1,8 @@
+variable "project_id" {
+  type        = string
+  description = "Project ID in which the cluster is present"
+}
+
 variable "hono_namespace" {
   type        = string
   description = "Namespace of the hono deployment."
@@ -36,17 +41,6 @@ variable "cert_manager_issuer_project_id" {
 variable "cert_manager_email" {
   type        = string
   description = "E-Mail address to contact in case something goes wrong with the certificate renewal."
-}
-
-variable "cert_manager_sa_account_id" {
-  type        = string
-  description = "Account id of the cert-manager Service Account."
-}
-
-variable "cert_manager_sa_key_file" {
-  type        = string
-  description = "Service Account Key File for cert-manager Service Account."
-  sensitive   = true
 }
 
 variable "hono_domain_managed_secret_name" {

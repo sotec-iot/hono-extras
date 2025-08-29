@@ -11,15 +11,6 @@ resource "kubernetes_secret" "hono_domain_secret_tls" {
   }
 }
 
-resource "kubernetes_secret" "cloud_endpoints_key_file" {
-  metadata {
-    name      = "service-account-creds"
-    namespace = var.hono_namespace
-  }
-  binary_data = {
-    "hono-cloud-endpoint-manager.json" = var.cloud_endpoints_key_file
-  }
-}
 
 resource "kubernetes_secret" "iap_client_secret" {
   metadata {
@@ -58,7 +49,7 @@ resource "helm_release" "prometheus_adapter" {
   values = [
     jsonencode({
       prometheus = {
-        url = "http://eclipse-hono-prometheus-server.${var.hono_namespace}.svc"
+        url = "http://${var.helm_release_name}-prometheus-server.${var.hono_namespace}.svc"
       }
       rules = {
         custom = var.prometheus_adapter_custom_metrics
@@ -69,20 +60,6 @@ resource "helm_release" "prometheus_adapter" {
 ## needed to access the project number
 data "google_project" "project" {
   project_id = var.project_id
-}
-
-resource "google_project_iam_member" "gke_binding_service_account_user" {
-  for_each = local.service_account_user_members
-  member   = each.value
-  role     = "roles/iam.serviceAccountUser"
-  project  = var.project_id
-}
-
-resource "google_project_iam_member" "gke_binding_project_token_creator" {
-  for_each = local.project_token_creator_members
-  member   = each.value
-  role     = "roles/iam.serviceAccountTokenCreator"
-  project  = var.project_id
 }
 
 resource "google_project_iam_member" "gke_binding_pubsub_editor" {
@@ -99,23 +76,22 @@ resource "google_project_iam_member" "gke_binding_cloudtrace_agent" {
   project  = var.project_id
 }
 
-# service esp uses default sa, create binding & annotation
+# service esp doesn't work with the newer workload identity binding method used above, therefor use workload identity impersonation
 resource "kubernetes_annotations" "sa_service_esp_annotation" {
   annotations = {
-    "iam.gke.io/gcp-service-account" = "gke-service-account@${var.project_id}.iam.gserviceaccount.com",
+    "iam.gke.io/gcp-service-account" = "hono-cloud-endpoint-manager@${var.project_id}.iam.gserviceaccount.com",
   }
   api_version = "v1"
   kind        = "ServiceAccount"
   metadata {
-    name      = "default"
+    name      = "${var.helm_release_name}-service-esp"
     namespace = "hono"
   }
 }
-
-resource "google_service_account_iam_binding" "default_workload_identity_binding" {
+resource "google_service_account_iam_binding" "esp_workload_identity_binding" {
   members = [
-    "serviceAccount:${var.project_id}.svc.id.goog[hono/default]",
+    "serviceAccount:${var.project_id}.svc.id.goog[hono/${var.helm_release_name}-service-esp]",
   ]
   role               = "roles/iam.workloadIdentityUser"
-  service_account_id = "projects/${var.project_id}/serviceAccounts/gke-service-account@${var.project_id}.iam.gserviceaccount.com"
+  service_account_id = "projects/${var.project_id}/serviceAccounts/hono-cloud-endpoint-manager@${var.project_id}.iam.gserviceaccount.com"
 }

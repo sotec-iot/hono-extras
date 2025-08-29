@@ -25,14 +25,15 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-resource "kubernetes_secret" "cert_manager_sa_key_secret" {
-  metadata {
-    name      = var.cert_manager_sa_account_id
-    namespace = var.cert_manager_namespace
-  }
-  binary_data = {
-    "key.json" = var.cert_manager_sa_key_file
-  }
+## needed to access the project number
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+resource "google_project_iam_member" "sa_binding_dns_admin" {
+  member   = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${var.cert_manager_namespace}/sa/cert-manager"
+  role     = "roles/dns.admin"
+  project  = var.cert_manager_issuer_project_id != null && var.cert_manager_issuer_project_id != "" ? var.cert_manager_issuer_project_id : var.project_id
 }
 
 resource "kubectl_manifest" "issuer_letsencrypt_prod" {
@@ -54,11 +55,7 @@ resource "kubectl_manifest" "issuer_letsencrypt_prod" {
           {
             "dns01" = {
               "cloudDNS" = {
-                "project" = var.cert_manager_issuer_project_id
-                "serviceAccountSecretRef" = {
-                  "name" = var.cert_manager_sa_account_id
-                  "key"  = "key.json"
-                }
+                "project" = var.cert_manager_issuer_project_id != null && var.cert_manager_issuer_project_id != "" ? var.cert_manager_issuer_project_id : var.project_id
               }
             }
           },
@@ -66,7 +63,7 @@ resource "kubectl_manifest" "issuer_letsencrypt_prod" {
       }
     }
   })
-  depends_on = [helm_release.cert-manager, kubernetes_secret.cert_manager_sa_key_secret]
+  depends_on = [helm_release.cert-manager, google_project_iam_member.sa_binding_dns_admin]
 }
 
 resource "kubectl_manifest" "certificate" {
@@ -90,7 +87,7 @@ resource "kubectl_manifest" "certificate" {
       ]
     }
   })
-  depends_on = [helm_release.cert-manager, kubernetes_secret.cert_manager_sa_key_secret]
+  depends_on = [helm_release.cert-manager, google_project_iam_member.sa_binding_dns_admin]
 }
 
 resource "helm_release" "trust-manager" {

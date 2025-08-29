@@ -19,14 +19,11 @@ No modules.
 | Name | Type |
 |------|------|
 | [google_project_iam_member.gke_binding_cloudtrace_agent](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
-| [google_project_iam_member.gke_binding_project_token_creator](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.gke_binding_pubsub_editor](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
-| [google_project_iam_member.gke_binding_service_account_user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
-| [google_service_account_iam_binding.default_workload_identity_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_binding) | resource |
+| [google_service_account_iam_binding.esp_workload_identity_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_binding) | resource |
 | [helm_release.hono](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [helm_release.prometheus_adapter](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [kubernetes_annotations.sa_service_esp_annotation](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/annotations) | resource |
-| [kubernetes_secret.cloud_endpoints_key_file](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.hono_domain_secret_tls](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.iap_client_secret](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [google_project.project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
@@ -36,7 +33,6 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cert_manager_enabled"></a> [cert\_manager\_enabled](#input\_cert\_manager\_enabled) | Disables the creation of TLS secrets to manually maintain | `bool` | n/a | yes |
-| <a name="input_cloud_endpoints_key_file"></a> [cloud\_endpoints\_key\_file](#input\_cloud\_endpoints\_key\_file) | Service Account Key File for Cloud Endpoints Service Account | `string` | n/a | yes |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | name of the cluster | `string` | n/a | yes |
 | <a name="input_data_grid_replicas"></a> [data\_grid\_replicas](#input\_data\_grid\_replicas) | Number of replicas for the data grid | `number` | n/a | yes |
 | <a name="input_device_communication_dns_name"></a> [device\_communication\_dns\_name](#input\_device\_communication\_dns\_name) | Name of the DNS Host | `string` | n/a | yes |

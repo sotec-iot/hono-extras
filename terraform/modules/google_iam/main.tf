@@ -25,38 +25,8 @@ resource "google_project_iam_member" "cloud_endpoint_sa_binding" {
   for_each = toset([
     "roles/servicemanagement.serviceController",
     "roles/cloudtrace.agent",
-    "roles/pubsub.editor",
-    "roles/servicemanagement.serviceController"
   ])
   project = var.project_id
   role    = each.key
   member  = google_service_account.cloud_endpoints_sa.member
 }
-
-resource "google_service_account_key" "endpoints_sa_key" {
-  service_account_id = google_service_account.cloud_endpoints_sa.name
-  public_key_type    = "TYPE_X509_PEM_FILE"
-}
-
-# Creating the Service Account for cert-manager
-resource "google_service_account" "cert_manager_sa" {
-  count        = var.enable_cert_manager ? 1 : 0
-  project      = var.cert_manager_issuer_project_id != null ? var.cert_manager_issuer_project_id : var.project_id
-  account_id   = var.cert_manager_sa_account_id
-  display_name = var.cert_manager_sa_account_id
-}
-
-# Setting IAM Roles for cert-manager Service Account
-resource "google_project_iam_member" "cert_manager_sa_roles" {
-  count   = var.enable_cert_manager ? 1 : 0
-  project = var.cert_manager_issuer_project_id != null ? var.cert_manager_issuer_project_id : var.project_id
-  role    = "roles/dns.admin"
-  member  = google_service_account.cert_manager_sa[0].member
-}
-
-resource "google_service_account_key" "cert_manager_sa_key" {
-  count              = var.enable_cert_manager ? 1 : 0
-  service_account_id = google_service_account.cert_manager_sa[0].name
-  public_key_type    = "TYPE_X509_PEM_FILE"
-}
-

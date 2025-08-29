@@ -34,7 +34,6 @@ module "hono" {
   hono_tls_crt                        = var.hono_tls_crt
   hono_tls_key_from_storage           = var.hono_tls_key_from_storage
   hono_tls_crt_from_storage           = var.hono_tls_crt_from_storage
-  cloud_endpoints_key_file            = var.cloud_endpoints_key_file
   hono_domain_secret_name             = var.hono_domain_secret_name
   hono_domain_managed_secret_name     = var.hono_domain_managed_secret_name
   hono_trust_store_config_map_name    = var.hono_trust_store_config_map_name
@@ -63,6 +62,7 @@ module "hono" {
 module "cert-manager" {
   source                           = "../modules/cert_manager"
   count                            = var.enable_cert_manager ? 1 : 0
+  project_id                       = var.project_id
   hono_namespace                   = var.hono_namespace
   cert_manager_namespace           = var.cert_manager_namespace
   cert_manager_version             = var.cert_manager_version
@@ -70,8 +70,6 @@ module "cert-manager" {
   cert_manager_issuer_name         = var.cert_manager_issuer_name
   cert_manager_issuer_project_id   = var.cert_manager_issuer_project_id
   cert_manager_email               = var.cert_manager_email
-  cert_manager_sa_account_id       = var.cert_manager_sa_account_id
-  cert_manager_sa_key_file         = var.cert_manager_sa_key_file
   cert_manager_cert_duration       = var.cert_manager_cert_duration
   cert_manager_cert_renew_before   = var.cert_manager_cert_renew_before
   hono_domain_managed_secret_name  = var.hono_domain_managed_secret_name

@@ -74,28 +74,6 @@ output "ssl_policy_name" {
   description = "Name of the SSL policy for external ingress."
 }
 
-output "cloud_endpoints_key_file" {
-  value       = module.google_iam.cloud_endpoints_key_file
-  description = "Service Account Key File for Cloud Endpoints Service Account."
-  sensitive   = true
-}
-
-output "cert_manager_sa_account_id" {
-  value       = module.google_iam.cert_manager_sa_account_id
-  description = "Account ID of the cert-manager Service Account."
-}
-
-output "cert_manager_sa_key_file" {
-  value       = module.google_iam.cert_manager_sa_key_file
-  description = "Service Account Key File for cert-manager Service Account."
-  sensitive   = true
-}
-
-output "cert_manager_issuer_project_id" {
-  value       = module.google_iam.cert_manager_issuer_project_id
-  description = "Google project ID in which the Cloud DNS zone to manage the DNS entries is located."
-}
-
 output "grafana_expose_externally" {
   value       = module.networking.grafana_expose_externally
   description = "Whether or not Grafana should be exposed externally."

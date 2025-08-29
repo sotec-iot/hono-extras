@@ -132,12 +132,6 @@ variable "hono_tls_crt_from_storage" {
   description = "Content of the hono domain tls Cert File from storage bucket"
 }
 
-variable "cloud_endpoints_key_file" {
-  type        = string
-  description = "Service Account Key File for Cloud Endpoints Service Account"
-  sensitive   = true
-}
-
 variable "hono_domain_secret_name" {
   type        = string
   description = "Name of the kubernetes secret for the hono domain (wildcard)"
