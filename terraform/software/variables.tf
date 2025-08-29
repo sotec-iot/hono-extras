@@ -113,12 +113,6 @@ variable "hono_tls_crt_from_storage" {
   description = "Content of the hono domain tls Cert File from storage bucket"
 }
 
-variable "cloud_endpoints_key_file" {
-  type        = string
-  description = "Service Account Key File for Cloud Endpoints Service Account"
-  sensitive   = true
-}
-
 variable "hono_domain_secret_name" {
   type        = string
   description = "Name of the kubernetes secret for the hono domain (wildcard)"
@@ -174,22 +168,12 @@ variable "cert_manager_issuer_name" {
 variable "cert_manager_issuer_project_id" {
   type        = string
   description = "Project ID in which the Cloud DNS zone to manage the DNS entries is located."
+  default     = null
 }
 
 variable "cert_manager_email" {
   type        = string
   description = "E-Mail address to contact in case something goes wrong with the certificate renewal."
-}
-
-variable "cert_manager_sa_account_id" {
-  type        = string
-  description = "Account id of the cert-manager Service Account."
-}
-
-variable "cert_manager_sa_key_file" {
-  type        = string
-  description = "Service Account Key File for cert-manager Service Account."
-  sensitive   = true
 }
 
 variable "cert_manager_cert_duration" {
