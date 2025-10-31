@@ -35,7 +35,7 @@ No inputs.
 | <a name="output_hono_api_static_ip"></a> [hono\_api\_static\_ip](#output\_hono\_api\_static\_ip) | Output of the static IP for External Ingress |
 | <a name="output_hono_api_static_ip_name"></a> [hono\_api\_static\_ip\_name](#output\_hono\_api\_static\_ip\_name) | Name of the Static IP for External Ingress |
 | <a name="output_http_adapter_static_ip"></a> [http\_adapter\_static\_ip](#output\_http\_adapter\_static\_ip) | Output of the http adapter static ip address. |
-| <a name="output_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#output\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled. |
+| <a name="output_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#output\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled. |
 | <a name="output_mqtt_adapter_static_ip"></a> [mqtt\_adapter\_static\_ip](#output\_mqtt\_adapter\_static\_ip) | Output of the mqtt adapter static ip address. |
 | <a name="output_node_locations"></a> [node\_locations](#output\_node\_locations) | The zones the standard node pool will create nodes in (only applicable if cluster autopilot is disabled). IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy\_load\_balancer\_setup\_enabled = true'). |
 | <a name="output_project_id"></a> [project\_id](#output\_project\_id) | ID of the Project |
