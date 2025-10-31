@@ -212,6 +212,42 @@ variable "hono_trust_store_config_map_name" {
   default     = "hono-trust-store-config-map"
 }
 
+variable "cluster_self_signed_issuer_name" {
+  type        = string
+  description = "Name of the issuer used for the clusters internal certification process, used by cert-manager."
+  default     = "selfsigned-issuer"
+}
+
+variable "hono_cluster_ca_secret_name" {
+  type        = string
+  description = "Name of the kubernetes secret containing the clusters internal ca.crt for hono deployments internal communication, managed by cert-manager."
+  default     = "hono-cluster-ca-secret"
+}
+
+variable "hono_cluster_ca_name" {
+  type        = string
+  description = "Name of the clusters internal ca for hono deployments internal communication, managed by cert-manager."
+  default     = "hono-cluster-ca"
+}
+
+variable "hono_cluster_ca_issuer" {
+  type        = string
+  description = "Name of the issuer used for the clusters application certification process, used by cert-manager."
+  default     = "hono-cluster-ca-issuer"
+}
+
+variable "hono_internal_tls_cert_name" {
+  type        = string
+  description = "Name of the Certificate resource for Hono internal TLS"
+  default     = "hono-cluster-ca-signed-eclipse-hono-all-tls-secret"
+}
+
+variable "hono_internal_tls_secret_name" {
+  type        = string
+  description = "Name of the kubernetes secret that will store the Hono internal TLS certificate"
+  default     = "eclipse-hono-all-tls-secret"
+}
+
 variable "ssl_policy" {
   type        = string
   description = "SSL policy for external ingress."
@@ -331,7 +367,7 @@ variable "grafana_dns_name" {
 
 variable "helm_release_name" {
   type        = string
-  description = "Name of the helm realease"
+  description = "Name of the helm release"
   default     = "eclipse-hono"
 }
 
@@ -365,7 +401,7 @@ variable "node_locations" {
 
 variable "legacy_load_balancer_setup_enabled" {
   type        = bool
-  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
 }
 
 variable "gcp_load_balancer_log_config" {

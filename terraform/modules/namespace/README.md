@@ -24,9 +24,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cert_manager_namespace"></a> [cert\_manager\_namespace](#input\_cert\_manager\_namespace) | Namespace of the cert manager deployment. | `string` | n/a | yes |
-| <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the creation of the cert-manager namespace. Only relevant if legacy\_load\_balancer\_setup\_enabled is set to true | `bool` | n/a | yes |
+| <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the creation of the cert-manager namespace. | `bool` | n/a | yes |
 | <a name="input_hono_namespace"></a> [hono\_namespace](#input\_hono\_namespace) | Namespace of the hono deployment. | `string` | n/a | yes |
-| <a name="input_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#input\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled. | `bool` | n/a | yes |
 
 ## Outputs
 

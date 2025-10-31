@@ -25,7 +25,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#input\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled. | `bool` | n/a | yes |
+| <a name="input_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#input\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled. | `bool` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | n/a | `string` | n/a | yes |
 | <a name="input_service_account_roles_gke_sa"></a> [service\_account\_roles\_gke\_sa](#input\_service\_account\_roles\_gke\_sa) | Additional roles to be added to the service account. | `list(string)` | n/a | yes |
 

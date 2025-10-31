@@ -3,6 +3,16 @@ variable "project_id" {
   description = "Project ID in which the cluster is present"
 }
 
+variable "project_number" {
+  type        = string
+  description = "Project number of the project in which the cluster is present"
+}
+
+variable "helm_release_name" {
+  type        = string
+  description = "Name of the helm release"
+}
+
 variable "hono_namespace" {
   type        = string
   description = "Namespace of the hono deployment."
@@ -66,4 +76,39 @@ variable "hono_root_domain" {
 variable "hono_trust_store_config_map_name" {
   type        = string
   description = "Name of the kubernetes trust store config map for the hono deployments managed by trust-manager."
+}
+
+variable "cluster_self_signed_issuer_name" {
+  type        = string
+  description = "Name of the issuer used for the clusters root internal certification process, used by cert-manager."
+}
+
+variable "hono_cluster_ca_secret_name" {
+  type        = string
+  description = "Name of the kubernetes secret containing the clusters internal ca.crt for hono deployments internal communication, managed by cert-manager."
+}
+
+variable "hono_cluster_ca_name" {
+  type        = string
+  description = "Name of the clusters internal ca for hono deployments internal communication, managed by cert-manager."
+}
+
+variable "hono_cluster_ca_issuer" {
+  type        = string
+  description = "Name of the issuer used for the clusters application certification process, used by cert-manager."
+}
+
+variable "hono_internal_tls_cert_name" {
+  type        = string
+  description = "Name of the Certificate resource for Hono internal TLS"
+}
+
+variable "hono_internal_tls_secret_name" {
+  type        = string
+  description = "Name of the kubernetes secret that will store the Hono internal TLS certificate"
+}
+
+variable "legacy_load_balancer_setup_enabled" {
+  type        = bool
+  description = "Whether or not the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
 }

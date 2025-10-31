@@ -318,6 +318,6 @@ variable "gke_notification_email" {
 
 variable "legacy_load_balancer_setup_enabled" {
   type        = bool
-  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
   default     = false
 }

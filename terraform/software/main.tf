@@ -6,10 +6,9 @@ moved {
 module "namespace" {
   source = "../modules/namespace"
 
-  hono_namespace                     = var.hono_namespace
-  cert_manager_namespace             = var.cert_manager_namespace
-  enable_cert_manager                = var.enable_cert_manager
-  legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
+  hono_namespace         = var.hono_namespace
+  cert_manager_namespace = var.cert_manager_namespace
+  enable_cert_manager    = var.enable_cert_manager
 }
 
 module "hono" {
@@ -59,35 +58,45 @@ module "hono" {
   helm_release_name                  = var.helm_release_name
   data_grid_replicas                 = var.data_grid_replicas
   legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
+  hono_internal_tls_secret_name      = var.hono_internal_tls_secret_name
 
   depends_on = [module.namespace, module.cert_manager]
 }
 
 module "cert_manager" {
   source = "../modules/cert_manager"
-  count  = var.legacy_load_balancer_setup_enabled && var.enable_cert_manager ? 1 : 0
+  count  = var.enable_cert_manager ? 1 : 0
 
-  project_id                       = var.project_id
-  hono_namespace                   = var.hono_namespace
-  cert_manager_namespace           = var.cert_manager_namespace
-  cert_manager_version             = var.cert_manager_version
-  cert_manager_issuer_kind         = var.cert_manager_issuer_kind
-  cert_manager_issuer_name         = var.cert_manager_issuer_name
-  cert_manager_issuer_project_id   = var.cert_manager_issuer_project_id
-  cert_manager_email               = var.cert_manager_email
-  cert_manager_cert_duration       = var.cert_manager_cert_duration
-  cert_manager_cert_renew_before   = var.cert_manager_cert_renew_before
-  hono_domain_managed_secret_name  = var.hono_domain_managed_secret_name
-  hono_root_domain                 = var.hono_root_domain
-  trust_manager_version            = var.trust_manager_version
-  hono_trust_store_config_map_name = var.hono_trust_store_config_map_name
+  project_id                         = var.project_id
+  project_number                     = data.google_project.project.number
+  helm_release_name                  = var.helm_release_name
+  hono_namespace                     = var.hono_namespace
+  cert_manager_namespace             = var.cert_manager_namespace
+  cert_manager_version               = var.cert_manager_version
+  cert_manager_issuer_kind           = var.cert_manager_issuer_kind
+  cert_manager_issuer_name           = var.cert_manager_issuer_name
+  cert_manager_issuer_project_id     = var.cert_manager_issuer_project_id
+  cert_manager_email                 = var.cert_manager_email
+  cert_manager_cert_duration         = var.cert_manager_cert_duration
+  cert_manager_cert_renew_before     = var.cert_manager_cert_renew_before
+  hono_domain_managed_secret_name    = var.hono_domain_managed_secret_name
+  hono_root_domain                   = var.hono_root_domain
+  trust_manager_version              = var.trust_manager_version
+  hono_trust_store_config_map_name   = var.hono_trust_store_config_map_name
+  hono_cluster_ca_secret_name        = var.hono_cluster_ca_secret_name
+  hono_cluster_ca_issuer             = var.hono_cluster_ca_issuer
+  hono_cluster_ca_name               = var.hono_cluster_ca_name
+  hono_internal_tls_cert_name        = var.hono_internal_tls_cert_name
+  hono_internal_tls_secret_name      = var.hono_internal_tls_secret_name
+  cluster_self_signed_issuer_name    = var.cluster_self_signed_issuer_name
+  legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
 
   depends_on = [module.namespace]
 }
 
 module "stakater_reloader" {
   source = "../modules/stakater_reloader"
-  count  = var.legacy_load_balancer_setup_enabled && var.enable_cert_manager ? 1 : 0
+  count  = var.enable_cert_manager ? 1 : 0
 
   hono_namespace   = var.hono_namespace
   reloader_version = var.reloader_version

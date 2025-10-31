@@ -134,6 +134,11 @@ variable "hono_trust_store_config_map_name" {
   description = "Name of the kubernetes trust store config map for the hono deployments managed by trust-manager."
 }
 
+variable "hono_internal_tls_secret_name" {
+  type        = string
+  description = "Name of the kubernetes secret that will store the Hono internal TLS certificate"
+}
+
 variable "oauth_client_id" {
   type        = string
   description = "The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
@@ -213,5 +218,5 @@ variable "data_grid_replicas" {
 
 variable "legacy_load_balancer_setup_enabled" {
   type        = bool
-  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
+  description = "Whether or not the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
 }

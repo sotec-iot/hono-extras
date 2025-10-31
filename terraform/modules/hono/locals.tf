@@ -34,20 +34,22 @@ locals {
               type           = var.legacy_load_balancer_setup_enabled ? "LoadBalancer" : "ClusterIP"
               loadBalancerIP = var.http_adapter_static_ip # sets a static IP loadbalancerIP for http adapter
             }
-            deployment             = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? local.deployment : {}
-            tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name : "example"
+            deployment             = var.cert_manager_enabled ? local.deployment : {}
+            tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? (var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name) : (var.cert_manager_enabled ? var.hono_internal_tls_secret_name : "example")
             tlsTrustStoreConfigMap = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+            singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
           }
           mqtt = {
             enabled = var.enable_mqtt_adapter
             svc = {
-              annotations    = var.legacy_load_balancer_setup_enabled ? {} : {"cloud.google.com/neg" = "{\"exposed_ports\": {\"8883\": {\"name\": \"hono-mqtt-adapter-neg\"}}}"}
+              annotations    = var.legacy_load_balancer_setup_enabled ? {} : { "cloud.google.com/neg" = "{\"exposed_ports\": {\"8883\": {\"name\": \"hono-mqtt-adapter-neg\"}}}" }
               type           = var.legacy_load_balancer_setup_enabled ? "LoadBalancer" : "ClusterIP"
               loadBalancerIP = var.mqtt_adapter_static_ip # sets a static IP loadbalancerIP for mqtt adapter
             }
-            deployment             = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? local.deployment : {}
-            tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name : "example"
+            deployment             = var.cert_manager_enabled ? local.deployment : {}
+            tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? (var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name) : (var.cert_manager_enabled ? var.hono_internal_tls_secret_name : "example")
             tlsTrustStoreConfigMap = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+            singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
             horizontalPodAutoscaler = {
               enabled     = var.hpa_enabled
               minReplicas = var.hpa_minReplicas_mqtt
@@ -57,18 +59,19 @@ locals {
           }
         }
         authServer = {
-          deployment    = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? local.deployment : {}
-          tlsKeysSecret = var.legacy_load_balancer_setup_enabled ? var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name : "example"
+          deployment    = var.cert_manager_enabled ? local.deployment : {}
+          tlsKeysSecret = var.legacy_load_balancer_setup_enabled ? (var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name) : (var.cert_manager_enabled ? var.hono_internal_tls_secret_name : "example")
         }
         deviceRegistryExample = {
           svc = {
-            annotations    = var.legacy_load_balancer_setup_enabled ? {} : {"cloud.google.com/neg": "{\"exposed_ports\": {\"8443\":{\"name\": \"hono-device-registry-neg\"}}}"}
+            annotations = var.legacy_load_balancer_setup_enabled ? {} : { "cloud.google.com/neg" : "{\"exposed_ports\": {\"8443\":{\"name\": \"hono-device-registry-neg\"}}}" }
           }
-          tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name : "example"
+          tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? (var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name) : (var.cert_manager_enabled ? var.hono_internal_tls_secret_name : "example")
           tlsTrustStoreConfigMap = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+          singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
           # sets database connection config
           jdbcBasedDeviceRegistry = {
-            deployment = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? local.deployment : {}
+            deployment = var.cert_manager_enabled ? local.deployment : {}
             tenant     = local.database_block
             registry   = local.database_block
             horizontalPodAutoscaler = {
@@ -82,13 +85,14 @@ locals {
           replicas = var.data_grid_replicas
         }
         commandRouterService = {
-          deployment             = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? local.deployment : {}
-          tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name : "example"
+          deployment             = var.cert_manager_enabled ? local.deployment : {}
+          tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? (var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name) : (var.cert_manager_enabled ? var.hono_internal_tls_secret_name : "example")
           tlsTrustStoreConfigMap = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+          singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
         }
         grafana = {
           service = {
-            annotations = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? {"cloud.google.com/neg" = "{\"exposed_ports\": {\"3000\": {\"name\": \"hono-grafana-neg\"}}}"} : {}
+            annotations = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? { "cloud.google.com/neg" = "{\"exposed_ports\": {\"3000\": {\"name\": \"hono-grafana-neg\"}}}" } : {}
           }
           ingress = {
             enabled = var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally
@@ -133,7 +137,7 @@ locals {
               password = var.sql_db_pw
             }
             svc = {
-              annotations = var.legacy_load_balancer_setup_enabled ? {} : {"cloud.google.com/neg": "{\"exposed_ports\": {\"8080\":{\"name\": \"hono-device-communication-neg\"}}}"}
+              annotations = var.legacy_load_balancer_setup_enabled ? {} : { "cloud.google.com/neg" : "{\"exposed_ports\": {\"8080\":{\"name\": \"hono-device-communication-neg\"}}}" }
             }
           }
         }
@@ -153,7 +157,7 @@ locals {
         managementUi = {
           googleClientId = var.oauth_client_id
           svc = {
-            annotations = var.legacy_load_balancer_setup_enabled ? {} : {"cloud.google.com/neg": "{\"exposed_ports\": {\"8080\":{\"name\": \"hono-device-management-ui-neg\"}}}"}
+            annotations = var.legacy_load_balancer_setup_enabled ? {} : { "cloud.google.com/neg" : "{\"exposed_ports\": {\"8080\":{\"name\": \"hono-device-management-ui-neg\"}}}" }
           }
         }
       }
