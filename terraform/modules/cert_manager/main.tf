@@ -15,14 +15,16 @@ resource "helm_release" "cert-manager" {
   namespace        = var.cert_manager_namespace
   create_namespace = false
 
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
-  set {
-    name  = "global.leaderElection.namespace"
-    value = var.cert_manager_namespace
-  }
+  set = [
+    {
+      name  = "installCRDs"
+      value = "true"
+    },
+    {
+      name  = "global.leaderElection.namespace"
+      value = var.cert_manager_namespace
+    }
+  ]
 }
 
 resource "google_project_iam_member" "sa_binding_dns_admin" {
