@@ -6,8 +6,10 @@ resource "helm_release" "stakater-reloader" {
   namespace        = var.hono_namespace
   create_namespace = false
 
-  set {
-    name  = "reloader.watchGlobally"
-    value = "false"
-  }
+  set = [
+    {
+      name  = "reloader.watchGlobally"
+      value = "false"
+    }
+  ]
 }
