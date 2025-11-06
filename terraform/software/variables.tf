@@ -4,11 +4,6 @@ variable "hono_namespace" {
   default     = "hono"
 }
 
-variable "cluster_name" {
-  type        = string
-  description = "name of the autopilot cluster"
-}
-
 variable "project_id" {
   type        = string
   description = "Project ID in which the cluster is present"
@@ -20,14 +15,20 @@ variable "enable_http_adapter" {
   default     = false
 }
 
-variable "http_static_ip" {
+variable "http_adapter_static_ip" {
   type        = string
-  description = "static ip address for the http loadbalancer"
+  description = "Static ip address for the HTTP adapter loadbalancer."
 }
 
-variable "mqtt_static_ip" {
+variable "enable_mqtt_adapter" {
+  type        = bool
+  description = "Used to enable the mqtt adapter"
+  default     = true
+}
+
+variable "mqtt_adapter_static_ip" {
   type        = string
-  description = "static ip address for the mqtt loadbalancer"
+  description = "Static ip address for the MQTT adapter loadbalancer."
 }
 
 variable "sql_user" {
@@ -61,9 +62,14 @@ variable "service_name_communication" {
   description = "name of the Cloud Endpoint service for device communication"
 }
 
-variable "device_communication_static_ip_name" {
+variable "hono_api_static_ip_name" {
   type        = string
   description = "Name of the Static IP for External Ingress"
+}
+
+variable "hono_api_static_ip" {
+  type        = string
+  description = "Static IP for External Ingress"
 }
 
 variable "helm_package_repository" {
@@ -88,9 +94,9 @@ variable "oauth_app_name" {
   description = "Name of the Application"
 }
 
-variable "device_communication_dns_name" {
+variable "hono_api_host_address" {
   type        = string
-  description = "Name of the DNS Host"
+  description = "Host address of your Hono API (e.g. api.hono.my-domain.com)"
 }
 
 variable "hono_tls_key" {
@@ -137,7 +143,7 @@ variable "oauth_client_secret" {
 
 variable "enable_cert_manager" {
   type        = bool
-  description = "Enables the use of cert manager."
+  description = "Enables the use of cert manager. Only relevant if legacy_load_balancer_setup_enabled is set to true"
   default     = false
 }
 
@@ -174,6 +180,7 @@ variable "cert_manager_issuer_project_id" {
 variable "cert_manager_email" {
   type        = string
   description = "E-Mail address to contact in case something goes wrong with the certificate renewal."
+  default     = ""
 }
 
 variable "cert_manager_cert_duration" {
@@ -188,9 +195,9 @@ variable "cert_manager_cert_renew_before" {
   default     = "720h"
 }
 
-variable "wildcard_domain" {
+variable "hono_root_domain" {
   type        = string
-  description = "The wildcard domain the secret will be maintained for (e.g. *.root-domain.com)."
+  description = "The root domain of the Hono installation (e.g. hono.my-domain.com)."
 }
 
 variable "trust_manager_version" {
@@ -205,9 +212,9 @@ variable "hono_trust_store_config_map_name" {
   default     = "hono-trust-store-config-map"
 }
 
-variable "ssl_policy_name" {
+variable "ssl_policy" {
   type        = string
-  description = "Name of the SSL policy for external ingress."
+  description = "SSL policy for external ingress."
 }
 
 variable "reloader_version" {
@@ -313,62 +320,13 @@ variable "grafana_expose_externally" {
 
 variable "grafana_static_ip_name" {
   type        = string
-  description = "Name of the static IP for external ingress."
+  description = "Name of the static IP for external ingress. Only relevant if both grafana_expose_externally and legacy_load_balancer_setup_enabled are set to true"
 }
 
 variable "grafana_dns_name" {
   type        = string
-  description = "Name of the DNS host for Grafana"
+  description = "Name of the DNS host for Grafana. Only relevant if both grafana_expose_externally and legacy_load_balancer_setup_enabled are set to true. If Grafana is exposed with the legacy_load_balancer_setup_enabled=false it is reachable under \"https://{hono_api_host_address}/grafana\"."
   default     = ""
-}
-
-variable "mqtt_adapter" {
-  type = object({
-    enabled = optional(bool, true),
-    advanced_load_balancer = optional(object({
-      enabled       = optional(bool, false),
-      chart_version = optional(string, "1.34.1"),
-      algorithm     = optional(string, "leastconn"),
-      replicaCount  = optional(number, 1),
-      resources = optional(object({
-        limits = optional(object({
-          cpu    = optional(string, "2000m"),
-          memory = optional(string, "1000Mi")
-        }), {}),
-        requests = optional(object({
-          cpu    = optional(string, "500m"),
-          memory = optional(string, "1000Mi")
-        }), {})
-      }), {}),
-      port_configs = optional(list(object({
-        name       = string,
-        port       = number,
-        targetPort = optional(number, 8883)
-        })), [
-        {
-          name : "mqtt"
-          port : 8883
-          targetPort : 8883
-        }
-      ]),
-      tcp_configmap_data = optional(map(string), {
-        8883 = "hono/eclipse-hono-adapter-mqtt:8883"
-      })
-    }), {}),
-  })
-  description = <<EOT
-Configuration options for the MQTT adapter.
-  enabled: Enables the MQTT adapter.
-  advanced_load_balancer:
-    enabled: Enables the use of the advanced MQTT load balancer.
-    chart_version: Version of the chart to deploy.
-    algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .
-    replicaCount: Number of replicas to deploy.
-    resources: Resource requests and limits.
-    port_configs: List of MQTT port config objects for the advanced MQTT load balancer service.
-    tcp_configmap_data: Data of the TCP configMap for the advanced MQTT load balancer.
-EOT
-  default     = {}
 }
 
 variable "helm_release_name" {
@@ -398,4 +356,74 @@ variable "data_grid_replicas" {
   type        = number
   description = "Number of replicas for the data grid"
   default     = 1
+}
+
+variable "node_locations" {
+  type        = list(string)
+  description = "The zones the standard node pool will create nodes in (only applicable if cluster autopilot is disabled). IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy_load_balancer_setup_enabled = true')."
+}
+
+variable "legacy_load_balancer_setup_enabled" {
+  type        = bool
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
+}
+
+variable "gcp_load_balancer_log_config" {
+  type = object({
+    ui = optional(object({
+      enable        = optional(bool, false)
+      sample_rate   = optional(number, 1.0)
+      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
+    }), {})
+    device_registry = optional(object({
+      enable        = optional(bool, false)
+      sample_rate   = optional(number, 1.0)
+      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
+    }), {})
+    device_communication = optional(object({
+      enable        = optional(bool, false)
+      sample_rate   = optional(number, 1.0)
+      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
+    }), {})
+    grafana = optional(object({
+      enable        = optional(bool, false)
+      sample_rate   = optional(number, 1.0)
+      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
+    }), {})
+    mqtt_adapter = optional(object({
+      enable        = optional(bool, false)
+      sample_rate   = optional(number, 1.0)
+      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
+    }), {})
+    http_adapter = optional(object({
+      enable        = optional(bool, false)
+      sample_rate   = optional(number, 1.0)
+      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
+    }), {})
+  })
+  description = "Logging configuration for the backend services of the GCP load balancers."
+  default     = {}
+}
+
+variable "gcp_load_balancer_mqtt_timeout" {
+  type = number
+  description = "The timeout in seconds after which the connection will be closed by the load balancer if no communication occurred (should be longer than the keep-alive of the devices)."
+  default = 60
+}
+
+variable "mqtt_rate_limiting" {
+  type = object({
+    all = optional(object({
+      enable                 = optional(bool, false)
+      threshold_count        = optional(number, 100)
+      threshold_interval_sec = optional(number, 10)
+    }), {})
+    ip = optional(object({
+      enable                 = optional(bool, false)
+      threshold_count        = optional(number, 5)
+      threshold_interval_sec = optional(number, 10)
+    }), {})
+  })
+  default     = {}
+  description = "Rate limiting configuration for the MQTT adapter. Only one of 'all' or 'ip' can take effect. If both are specified 'all' will take precedence."
 }

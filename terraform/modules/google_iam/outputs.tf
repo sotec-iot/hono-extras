@@ -9,6 +9,6 @@ output "gke_service_account_name" {
 }
 
 output "cloud_endpoints_sa_name" {
-  value       = google_service_account.cloud_endpoints_sa.name
+  value       = google_service_account.cloud_endpoints_sa[*].name
   description = "Name of the Cloud Endpoints Service Account"
 }

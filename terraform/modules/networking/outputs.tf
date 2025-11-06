@@ -18,24 +18,24 @@ output "network_id" {
   description = "Output of the network id of the network that is created."
 }
 
-output "http_static_ip" {
-  value       = google_compute_address.http_static_ip[*].address
-  description = "Output of the http static ip address."
+output "http_adapter_static_ip" {
+  value       = var.legacy_load_balancer_setup_enabled ? google_compute_address.http_adapter_static_ip[*].address : google_compute_global_address.http_adapter_static_ip[*].address
+  description = "Output of the http adapter static ip address."
 }
 
-output "mqtt_static_ip" {
-  value       = google_compute_address.mqtt_static_ip[*].address
-  description = "Output of the mqtt static ip address."
+output "mqtt_adapter_static_ip" {
+  value       = var.legacy_load_balancer_setup_enabled ? google_compute_address.mqtt_adapter_static_ip[*].address : google_compute_global_address.mqtt_adapter_static_ip[*].address
+  description = "Output of the mqtt adapter static ip address."
 }
 
-output "device_communication_static_ip_name" {
-  value       = google_compute_global_address.device_communication_static_ip.name
-  description = "Name of the static IP for external ingress."
+output "hono_api_static_ip_name" {
+  value       = google_compute_global_address.hono_api_static_ip.name
+  description = "Name of the static IP for the Hono API."
 }
 
-output "device_communication_static_ip" {
-  value       = google_compute_global_address.device_communication_static_ip.address
-  description = "Output of the static IP for external ingress."
+output "hono_api_static_ip" {
+  value       = google_compute_global_address.hono_api_static_ip.address
+  description = "Output of the static IP for the Hono API."
 }
 
 output "grafana_static_ip_name" {
@@ -56,12 +56,7 @@ output "ip_ranges_pods_name" {
   value = google_compute_subnetwork.subnetwork.secondary_ip_range[1].range_name
 }
 
-output "ssl_policy_name" {
-  value       = google_compute_ssl_policy.ssl_policy.name
-  description = "Name of the SSL policy for external ingress."
-}
-
-output "grafana_expose_externally" {
-  value       = length(google_compute_global_address.grafana_static_ip) == 1 ? true : false
-  description = "Whether or not Grafana should be exposed externally."
+output "ssl_policy" {
+  value       = google_compute_ssl_policy.ssl_policy.id
+  description = "SSL policy for external ingress."
 }

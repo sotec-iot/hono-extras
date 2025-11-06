@@ -4,22 +4,27 @@ No requirements.
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | n/a |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_alert_policies"></a> [alert\_policies](#module\_alert\_policies) | ../modules/alert_policies | n/a |
-| <a name="module_cert-manager"></a> [cert-manager](#module\_cert-manager) | ../modules/cert_manager | n/a |
+| <a name="module_cert_manager"></a> [cert\_manager](#module\_cert\_manager) | ../modules/cert_manager | n/a |
+| <a name="module_gcp_load_balancer"></a> [gcp\_load\_balancer](#module\_gcp\_load\_balancer) | ../modules/gcp_load_balancer | n/a |
 | <a name="module_hono"></a> [hono](#module\_hono) | ../modules/hono | n/a |
-| <a name="module_load-balancer"></a> [load-balancer](#module\_load-balancer) | ../modules/load_balancer | n/a |
 | <a name="module_namespace"></a> [namespace](#module\_namespace) | ../modules/namespace | n/a |
-| <a name="module_stakater-reloader"></a> [stakater-reloader](#module\_stakater-reloader) | ../modules/stakater_reloader | n/a |
+| <a name="module_stakater_reloader"></a> [stakater\_reloader](#module\_stakater\_reloader) | ../modules/stakater_reloader | n/a |
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [google_compute_zones.available_zones](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/compute_zones) | data source |
+| [google_project.project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
 
 ## Inputs
 
@@ -29,29 +34,33 @@ No resources.
 | <a name="input_alerts_enabled"></a> [alerts\_enabled](#input\_alerts\_enabled) | If alerts should be enabled. | `bool` | `false` | no |
 | <a name="input_cert_manager_cert_duration"></a> [cert\_manager\_cert\_duration](#input\_cert\_manager\_cert\_duration) | Validity period of a newly created certificate (e.g. 2160h for 90 day validity). | `string` | `"2160h"` | no |
 | <a name="input_cert_manager_cert_renew_before"></a> [cert\_manager\_cert\_renew\_before](#input\_cert\_manager\_cert\_renew\_before) | When to renew the certificate based on its remaining validity period (e.g. 720h for 30 days before expiration). | `string` | `"720h"` | no |
-| <a name="input_cert_manager_email"></a> [cert\_manager\_email](#input\_cert\_manager\_email) | E-Mail address to contact in case something goes wrong with the certificate renewal. | `string` | n/a | yes |
+| <a name="input_cert_manager_email"></a> [cert\_manager\_email](#input\_cert\_manager\_email) | E-Mail address to contact in case something goes wrong with the certificate renewal. | `string` | `""` | no |
 | <a name="input_cert_manager_issuer_kind"></a> [cert\_manager\_issuer\_kind](#input\_cert\_manager\_issuer\_kind) | Kind of the cert-manager issuer (Issuer or ClusterIssuer). | `string` | `"ClusterIssuer"` | no |
 | <a name="input_cert_manager_issuer_name"></a> [cert\_manager\_issuer\_name](#input\_cert\_manager\_issuer\_name) | Name of the cert-manager issuer. | `string` | `"letsencrypt-prod"` | no |
 | <a name="input_cert_manager_issuer_project_id"></a> [cert\_manager\_issuer\_project\_id](#input\_cert\_manager\_issuer\_project\_id) | Project ID in which the Cloud DNS zone to manage the DNS entries is located. | `string` | `null` | no |
 | <a name="input_cert_manager_namespace"></a> [cert\_manager\_namespace](#input\_cert\_manager\_namespace) | namespace of the cert manager deployment. | `string` | `"cert-manager"` | no |
 | <a name="input_cert_manager_version"></a> [cert\_manager\_version](#input\_cert\_manager\_version) | Version of the chart to deploy. | `string` | `"1.12.2"` | no |
-| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | name of the autopilot cluster | `string` | n/a | yes |
 | <a name="input_data_grid_replicas"></a> [data\_grid\_replicas](#input\_data\_grid\_replicas) | Number of replicas for the data grid | `number` | `1` | no |
-| <a name="input_device_communication_dns_name"></a> [device\_communication\_dns\_name](#input\_device\_communication\_dns\_name) | Name of the DNS Host | `string` | n/a | yes |
-| <a name="input_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#input\_device\_communication\_static\_ip\_name) | Name of the Static IP for External Ingress | `string` | n/a | yes |
-| <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the use of cert manager. | `bool` | `false` | no |
+| <a name="input_enable_cert_manager"></a> [enable\_cert\_manager](#input\_enable\_cert\_manager) | Enables the use of cert manager. Only relevant if legacy\_load\_balancer\_setup\_enabled is set to true | `bool` | `false` | no |
 | <a name="input_enable_http_adapter"></a> [enable\_http\_adapter](#input\_enable\_http\_adapter) | Used to enable the http adapter | `bool` | `false` | no |
+| <a name="input_enable_mqtt_adapter"></a> [enable\_mqtt\_adapter](#input\_enable\_mqtt\_adapter) | Used to enable the mqtt adapter | `bool` | `true` | no |
+| <a name="input_gcp_load_balancer_log_config"></a> [gcp\_load\_balancer\_log\_config](#input\_gcp\_load\_balancer\_log\_config) | Logging configuration for the backend services of the GCP load balancers. | <pre>object({<br/>    ui = optional(object({<br/>      enable        = optional(bool, false)<br/>      sample_rate   = optional(number, 1.0)<br/>      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")<br/>    }), {})<br/>    device_registry = optional(object({<br/>      enable        = optional(bool, false)<br/>      sample_rate   = optional(number, 1.0)<br/>      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")<br/>    }), {})<br/>    device_communication = optional(object({<br/>      enable        = optional(bool, false)<br/>      sample_rate   = optional(number, 1.0)<br/>      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")<br/>    }), {})<br/>    grafana = optional(object({<br/>      enable        = optional(bool, false)<br/>      sample_rate   = optional(number, 1.0)<br/>      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")<br/>    }), {})<br/>    mqtt_adapter = optional(object({<br/>      enable        = optional(bool, false)<br/>      sample_rate   = optional(number, 1.0)<br/>      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")<br/>    }), {})<br/>    http_adapter = optional(object({<br/>      enable        = optional(bool, false)<br/>      sample_rate   = optional(number, 1.0)<br/>      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")<br/>    }), {})<br/>  })</pre> | `{}` | no |
+| <a name="input_gcp_load_balancer_mqtt_timeout"></a> [gcp\_load\_balancer\_mqtt\_timeout](#input\_gcp\_load\_balancer\_mqtt\_timeout) | The timeout in seconds after which the connection will be closed by the load balancer if no communication occurred (should be longer than the keep-alive of the devices). | `number` | `60` | no |
 | <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | n/a | yes |
-| <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Name of the DNS host for Grafana | `string` | `""` | no |
+| <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Name of the DNS host for Grafana. Only relevant if both grafana\_expose\_externally and legacy\_load\_balancer\_setup\_enabled are set to true. If Grafana is exposed with the legacy\_load\_balancer\_setup\_enabled=false it is reachable under "https://{hono_api_host_address}/grafana". | `string` | `""` | no |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
-| <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. | `string` | n/a | yes |
+| <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. Only relevant if both grafana\_expose\_externally and legacy\_load\_balancer\_setup\_enabled are set to true | `string` | n/a | yes |
 | <a name="input_helm_package_repository"></a> [helm\_package\_repository](#input\_helm\_package\_repository) | Link to the Helm Package for the Hono Deployment | `string` | n/a | yes |
 | <a name="input_helm_release_name"></a> [helm\_release\_name](#input\_helm\_release\_name) | Name of the helm realease | `string` | `"eclipse-hono"` | no |
+| <a name="input_hono_api_host_address"></a> [hono\_api\_host\_address](#input\_hono\_api\_host\_address) | Host address of your Hono API (e.g. api.hono.my-domain.com) | `string` | n/a | yes |
+| <a name="input_hono_api_static_ip"></a> [hono\_api\_static\_ip](#input\_hono\_api\_static\_ip) | Static IP for External Ingress | `string` | n/a | yes |
+| <a name="input_hono_api_static_ip_name"></a> [hono\_api\_static\_ip\_name](#input\_hono\_api\_static\_ip\_name) | Name of the Static IP for External Ingress | `string` | n/a | yes |
 | <a name="input_hono_chart_name"></a> [hono\_chart\_name](#input\_hono\_chart\_name) | Name of the Chart in the Repository | `string` | `"hono"` | no |
 | <a name="input_hono_chart_version"></a> [hono\_chart\_version](#input\_hono\_chart\_version) | Version of the Chart in the Repository | `string` | `null` | no |
 | <a name="input_hono_domain_managed_secret_name"></a> [hono\_domain\_managed\_secret\_name](#input\_hono\_domain\_managed\_secret\_name) | Name of the kubernetes secret for the hono domain (wildcard) in case it is managed by cert-manager | `string` | `"hono-domain-managed-secret"` | no |
 | <a name="input_hono_domain_secret_name"></a> [hono\_domain\_secret\_name](#input\_hono\_domain\_secret\_name) | Name of the kubernetes secret for the hono domain (wildcard) | `string` | `"hono-domain-secret"` | no |
 | <a name="input_hono_namespace"></a> [hono\_namespace](#input\_hono\_namespace) | namespace of the deployment | `string` | `"hono"` | no |
+| <a name="input_hono_root_domain"></a> [hono\_root\_domain](#input\_hono\_root\_domain) | The root domain of the Hono installation (e.g. hono.my-domain.com). | `string` | n/a | yes |
 | <a name="input_hono_tls_crt"></a> [hono\_tls\_crt](#input\_hono\_tls\_crt) | Content of the hono domain tls Cert File | `string` | n/a | yes |
 | <a name="input_hono_tls_crt_from_storage"></a> [hono\_tls\_crt\_from\_storage](#input\_hono\_tls\_crt\_from\_storage) | Content of the hono domain tls Cert File from storage bucket | `string` | n/a | yes |
 | <a name="input_hono_tls_key"></a> [hono\_tls\_key](#input\_hono\_tls\_key) | Content of the hono domain tls Key File | `string` | n/a | yes |
@@ -63,9 +72,11 @@ No resources.
 | <a name="input_hpa_metrics_mqtt"></a> [hpa\_metrics\_mqtt](#input\_hpa\_metrics\_mqtt) | Metrics for the MQTT horizontal pod autoscaler as JSON list. | `list` | <pre>[<br/>  {<br/>    "pods": {<br/>      "metric": {<br/>        "name": "hono_connections_authenticated"<br/>      },<br/>      "target": {<br/>        "averageValue": "10000",<br/>        "type": "AverageValue"<br/>      }<br/>    },<br/>    "type": "Pods"<br/>  },<br/>  {<br/>    "resource": {<br/>      "name": "cpu",<br/>      "target": {<br/>        "averageUtilization": 80,<br/>        "type": "Utilization"<br/>      }<br/>    },<br/>    "type": "Resource"<br/>  },<br/>  {<br/>    "resource": {<br/>      "name": "memory",<br/>      "target": {<br/>        "averageUtilization": 85,<br/>        "type": "Utilization"<br/>      }<br/>    },<br/>    "type": "Resource"<br/>  }<br/>]</pre> | no |
 | <a name="input_hpa_minReplicas_device_registry"></a> [hpa\_minReplicas\_device\_registry](#input\_hpa\_minReplicas\_device\_registry) | Minimum number of replicas the device registry horizontal pod autoscaler can scale to. | `number` | `1` | no |
 | <a name="input_hpa_minReplicas_mqtt"></a> [hpa\_minReplicas\_mqtt](#input\_hpa\_minReplicas\_mqtt) | Minimum number of replicas the horizontal pod autoscaler can scale to. | `number` | `1` | no |
-| <a name="input_http_static_ip"></a> [http\_static\_ip](#input\_http\_static\_ip) | static ip address for the http loadbalancer | `string` | n/a | yes |
-| <a name="input_mqtt_adapter"></a> [mqtt\_adapter](#input\_mqtt\_adapter) | Configuration options for the MQTT adapter.<br/>  enabled: Enables the MQTT adapter.<br/>  advanced\_load\_balancer:<br/>    enabled: Enables the use of the advanced MQTT load balancer.<br/>    chart\_version: Version of the chart to deploy.<br/>    algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .<br/>    replicaCount: Number of replicas to deploy.<br/>    resources: Resource requests and limits.<br/>    port\_configs: List of MQTT port config objects for the advanced MQTT load balancer service.<br/>    tcp\_configmap\_data: Data of the TCP configMap for the advanced MQTT load balancer. | <pre>object({<br/>    enabled = optional(bool, true),<br/>    advanced_load_balancer = optional(object({<br/>      enabled       = optional(bool, false),<br/>      chart_version = optional(string, "1.34.1"),<br/>      algorithm     = optional(string, "leastconn"),<br/>      replicaCount  = optional(number, 1),<br/>      resources = optional(object({<br/>        limits = optional(object({<br/>          cpu    = optional(string, "2000m"),<br/>          memory = optional(string, "1000Mi")<br/>        }), {}),<br/>        requests = optional(object({<br/>          cpu    = optional(string, "500m"),<br/>          memory = optional(string, "1000Mi")<br/>        }), {})<br/>      }), {}),<br/>      port_configs = optional(list(object({<br/>        name       = string,<br/>        port       = number,<br/>        targetPort = optional(number, 8883)<br/>        })), [<br/>        {<br/>          name : "mqtt"<br/>          port : 8883<br/>          targetPort : 8883<br/>        }<br/>      ]),<br/>      tcp_configmap_data = optional(map(string), {<br/>        8883 = "hono/eclipse-hono-adapter-mqtt:8883"<br/>      })<br/>    }), {}),<br/>  })</pre> | `{}` | no |
-| <a name="input_mqtt_static_ip"></a> [mqtt\_static\_ip](#input\_mqtt\_static\_ip) | static ip address for the mqtt loadbalancer | `string` | n/a | yes |
+| <a name="input_http_adapter_static_ip"></a> [http\_adapter\_static\_ip](#input\_http\_adapter\_static\_ip) | Static ip address for the HTTP adapter loadbalancer. | `string` | n/a | yes |
+| <a name="input_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#input\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled. | `bool` | n/a | yes |
+| <a name="input_mqtt_adapter_static_ip"></a> [mqtt\_adapter\_static\_ip](#input\_mqtt\_adapter\_static\_ip) | Static ip address for the MQTT adapter loadbalancer. | `string` | n/a | yes |
+| <a name="input_mqtt_rate_limiting"></a> [mqtt\_rate\_limiting](#input\_mqtt\_rate\_limiting) | Rate limiting configuration for the MQTT adapter. Only one of 'all' or 'ip' can take effect. If both are specified 'all' will take precedence. | <pre>object({<br/>    all = optional(object({<br/>      enable                 = optional(bool, false)<br/>      threshold_count        = optional(number, 100)<br/>      threshold_interval_sec = optional(number, 10)<br/>    }), {})<br/>    ip = optional(object({<br/>      enable                 = optional(bool, false)<br/>      threshold_count        = optional(number, 5)<br/>      threshold_interval_sec = optional(number, 10)<br/>    }), {})<br/>  })</pre> | `{}` | no |
+| <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | The zones the standard node pool will create nodes in (only applicable if cluster autopilot is disabled). IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy\_load\_balancer\_setup\_enabled = true'). | `list(string)` | n/a | yes |
 | <a name="input_oauth_app_name"></a> [oauth\_app\_name](#input\_oauth\_app\_name) | Name of the Application | `string` | n/a | yes |
 | <a name="input_oauth_client_id"></a> [oauth\_client\_id](#input\_oauth\_client\_id) | The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP) | `string` | n/a | yes |
 | <a name="input_oauth_client_secret"></a> [oauth\_client\_secret](#input\_oauth\_client\_secret) | The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP) | `string` | n/a | yes |
@@ -79,14 +90,14 @@ No resources.
 | <a name="input_sql_hono_database"></a> [sql\_hono\_database](#input\_sql\_hono\_database) | Name of the postgres database for Hono. | `string` | n/a | yes |
 | <a name="input_sql_ip"></a> [sql\_ip](#input\_sql\_ip) | URL of the Postgres Database | `string` | n/a | yes |
 | <a name="input_sql_user"></a> [sql\_user](#input\_sql\_user) | username of the sql database username | `string` | n/a | yes |
-| <a name="input_ssl_policy_name"></a> [ssl\_policy\_name](#input\_ssl\_policy\_name) | Name of the SSL policy for external ingress. | `string` | n/a | yes |
+| <a name="input_ssl_policy"></a> [ssl\_policy](#input\_ssl\_policy) | SSL policy for external ingress. | `string` | n/a | yes |
 | <a name="input_trust_manager_version"></a> [trust\_manager\_version](#input\_trust\_manager\_version) | Version of the chart to deploy. | `string` | `"0.5.0"` | no |
-| <a name="input_wildcard_domain"></a> [wildcard\_domain](#input\_wildcard\_domain) | The wildcard domain the secret will be maintained for (e.g. *.root-domain.com). | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_adapter_dns_auth_resource_record"></a> [adapter\_dns\_auth\_resource\_record](#output\_adapter\_dns\_auth\_resource\_record) | n/a |
 | <a name="output_hono_tls_crt_in_storage"></a> [hono\_tls\_crt\_in\_storage](#output\_hono\_tls\_crt\_in\_storage) | n/a |
 | <a name="output_hono_tls_key_in_storage"></a> [hono\_tls\_key\_in\_storage](#output\_hono\_tls\_key\_in\_storage) | n/a |
 | <a name="output_values"></a> [values](#output\_values) | n/a |

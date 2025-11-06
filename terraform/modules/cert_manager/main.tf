@@ -83,7 +83,8 @@ resource "kubectl_manifest" "certificate" {
         "kind" = var.cert_manager_issuer_kind
       }
       "dnsNames" = [
-        var.wildcard_domain,
+        var.hono_root_domain,
+        "*.${var.hono_root_domain}",
       ]
     }
   })

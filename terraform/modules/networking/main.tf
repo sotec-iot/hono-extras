@@ -25,33 +25,47 @@ resource "google_compute_subnetwork" "subnetwork" {
 }
 
 #Creating the Static IP address(external) for the http adapter
-resource "google_compute_address" "http_static_ip" {
-  count        = var.enable_http_ip_creation ? 1 : 0
+resource "google_compute_address" "http_adapter_static_ip" {
+  count        = var.enable_http_ip_creation && var.legacy_load_balancer_setup_enabled ? 1 : 0
   project      = var.project_id
   region       = var.region
-  name         = "http-static-ip"
+  name         = "http-adapter-static-ip"
+  address_type = "EXTERNAL"
+}
+
+resource "google_compute_global_address" "http_adapter_static_ip" {
+  count        = var.enable_http_ip_creation && !var.legacy_load_balancer_setup_enabled ? 1 : 0
+  project      = var.project_id
+  name         = "http-adapter-static-ip"
   address_type = "EXTERNAL"
 }
 
 #Creating the Static IP address(external) for the mqtt adapter
-resource "google_compute_address" "mqtt_static_ip" {
-  count        = var.enable_mqtt_ip_creation ? 1 : 0
+resource "google_compute_address" "mqtt_adapter_static_ip" {
+  count        = var.enable_mqtt_ip_creation && var.legacy_load_balancer_setup_enabled ? 1 : 0
   project      = var.project_id
   region       = var.region
-  name         = "mqtt-static-ip"
+  name         = "mqtt-adapter-static-ip"
   address_type = "EXTERNAL"
 }
 
-# Creating global static ip for Device Communication
-resource "google_compute_global_address" "device_communication_static_ip" {
+resource "google_compute_global_address" "mqtt_adapter_static_ip" {
+  count        = var.enable_mqtt_ip_creation && !var.legacy_load_balancer_setup_enabled ? 1 : 0
   project      = var.project_id
-  name         = "device-communication-api"
+  name         = "mqtt-adapter-static-ip"
+  address_type = "EXTERNAL"
+}
+
+# Creating global static ip for Hono API
+resource "google_compute_global_address" "hono_api_static_ip" {
+  project      = var.project_id
+  name         = "hono-api"
   address_type = "EXTERNAL"
 }
 
 # Creating global static ip for Grafana ingress
 resource "google_compute_global_address" "grafana_static_ip" {
-  count        = var.grafana_expose_externally ? 1 : 0
+  count        = var.grafana_expose_externally && var.legacy_load_balancer_setup_enabled ? 1 : 0
   project      = var.project_id
   name         = "hono-grafana"
   address_type = "EXTERNAL"

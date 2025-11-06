@@ -1,5 +1,5 @@
 resource "kubernetes_secret" "hono_domain_secret_tls" {
-  count = !var.cert_manager_enabled && ((var.hono_tls_key != null && var.hono_tls_crt != null) || (var.hono_tls_key_from_storage != null && var.hono_tls_crt_from_storage != null)) ? 1 : 0
+  count = var.legacy_load_balancer_setup_enabled && !var.cert_manager_enabled && ((var.hono_tls_key != null && var.hono_tls_crt != null) || (var.hono_tls_key_from_storage != null && var.hono_tls_crt_from_storage != null)) ? 1 : 0
   metadata {
     name      = var.hono_domain_secret_name
     namespace = var.hono_namespace
@@ -13,6 +13,8 @@ resource "kubernetes_secret" "hono_domain_secret_tls" {
 
 
 resource "kubernetes_secret" "iap_client_secret" {
+  count = var.legacy_load_balancer_setup_enabled ? 1 : 0
+
   metadata {
     name      = "iap-client-secret"
     namespace = var.hono_namespace
@@ -57,10 +59,6 @@ resource "helm_release" "prometheus_adapter" {
     })
   ]
 }
-## needed to access the project number
-data "google_project" "project" {
-  project_id = var.project_id
-}
 
 resource "google_project_iam_member" "gke_binding_pubsub_editor" {
   for_each = local.pubsub_editor_members
@@ -77,18 +75,9 @@ resource "google_project_iam_member" "gke_binding_cloudtrace_agent" {
 }
 
 # service esp doesn't work with the newer workload identity binding method used above, therefor use workload identity impersonation
-resource "kubernetes_annotations" "sa_service_esp_annotation" {
-  annotations = {
-    "iam.gke.io/gcp-service-account" = "hono-cloud-endpoint-manager@${var.project_id}.iam.gserviceaccount.com",
-  }
-  api_version = "v1"
-  kind        = "ServiceAccount"
-  metadata {
-    name      = "${var.helm_release_name}-service-esp"
-    namespace = "hono"
-  }
-}
 resource "google_service_account_iam_binding" "esp_workload_identity_binding" {
+  count = var.legacy_load_balancer_setup_enabled ? 1 : 0
+
   members = [
     "serviceAccount:${var.project_id}.svc.id.goog[hono/${var.helm_release_name}-service-esp]",
   ]

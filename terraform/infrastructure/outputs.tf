@@ -3,14 +3,14 @@ output "gke_cluster_name" {
   description = "Name of the GKE cluster."
 }
 
-output "http_static_ip" {
-  value       = module.networking.http_static_ip
-  description = "Output of the MQTT static IP address."
+output "http_adapter_static_ip" {
+  value       = module.networking.http_adapter_static_ip
+  description = "Output of the http adapter static ip address."
 }
 
-output "mqtt_static_ip" {
-  value       = module.networking.mqtt_static_ip
-  description = "Output of the MQTT static IP address."
+output "mqtt_adapter_static_ip" {
+  value       = module.networking.mqtt_adapter_static_ip
+  description = "Output of the mqtt adapter static ip address."
 }
 
 output "sql_db_pw" {
@@ -45,18 +45,18 @@ output "gke_autopilot_enabled" {
 }
 
 output "service_name_communication" {
-  value       = module.cloud_endpoint.service_name_communication
+  value       = module.cloud_endpoint[*].service_name_communication
   description = "Name of the Cloud Endpoint service for device communication."
 }
 
-output "device_communication_static_ip_name" {
-  value       = module.networking.device_communication_static_ip_name
-  description = "Name of the static IP for external ingress."
+output "hono_api_static_ip_name" {
+  value       = module.networking.hono_api_static_ip_name
+  description = "Name of the static IP for the Hono API."
 }
 
-output "device_communication_static_ip" {
-  value       = module.networking.device_communication_static_ip
-  description = "Output of the static IP for external ingress."
+output "hono_api_static_ip" {
+  value       = module.networking.hono_api_static_ip
+  description = "Output of the static IP for the Hono API."
 }
 
 output "grafana_static_ip_name" {
@@ -69,12 +69,17 @@ output "grafana_static_ip" {
   description = "Output of the static IP for Grafana external ingress."
 }
 
-output "ssl_policy_name" {
-  value       = module.networking.ssl_policy_name
-  description = "Name of the SSL policy for external ingress."
+output "ssl_policy" {
+  value       = module.networking.ssl_policy
+  description = "SSL policy for external ingress."
 }
 
 output "grafana_expose_externally" {
-  value       = module.networking.grafana_expose_externally
+  value       = var.grafana_expose_externally
   description = "Whether or not Grafana should be exposed externally."
+}
+
+output "legacy_load_balancer_setup_enabled" {
+  value       = var.legacy_load_balancer_setup_enabled
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
 }

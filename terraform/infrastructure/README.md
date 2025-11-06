@@ -42,7 +42,8 @@ No requirements.
 | <a name="input_gke_release_channel"></a> [gke\_release\_channel](#input\_gke\_release\_channel) | Which Release Channel to use for the Cluster | `string` | `"STABLE"` | no |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | `false` | no |
 | <a name="input_ip_cidr_range"></a> [ip\_cidr\_range](#input\_ip\_cidr\_range) | The range of internal addresses that are owned by this subnetwork. Provide this property when you create the subnetwork.Ranges must be unique and non-overlapping within a network. Only IPv4 is supported. | `string` | `"10.10.1.0/24"` | no |
-| <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | List of Strings for the Node Locations | `list(string)` | n/a | yes |
+| <a name="input_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#input\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled. | `bool` | `false` | no |
+| <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | List of Strings for the Node Locations. IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy\_load\_balancer\_setup\_enabled = true'). | `list(string)` | n/a | yes |
 | <a name="input_node_pool_autoscaling_enabled"></a> [node\_pool\_autoscaling\_enabled](#input\_node\_pool\_autoscaling\_enabled) | If node autoscaling should be enabled | `string` | `false` | no |
 | <a name="input_node_pool_batch_node_count"></a> [node\_pool\_batch\_node\_count](#input\_node\_pool\_batch\_node\_count) | Number of nodes to drain in a batch during blue-green upgrade process | `number` | `1` | no |
 | <a name="input_node_pool_batch_soak_duration"></a> [node\_pool\_batch\_soak\_duration](#input\_node\_pool\_batch\_soak\_duration) | Duration to wait after each batch finishes draining during blue-green upgrade process | `string` | `"0s"` | no |
@@ -86,19 +87,20 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_device_communication_static_ip"></a> [device\_communication\_static\_ip](#output\_device\_communication\_static\_ip) | Output of the static IP for external ingress. |
-| <a name="output_device_communication_static_ip_name"></a> [device\_communication\_static\_ip\_name](#output\_device\_communication\_static\_ip\_name) | Name of the static IP for external ingress. |
 | <a name="output_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#output\_gke\_autopilot\_enabled) | If autopilot mode is enabled for the GKE cluster. |
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | Name of the GKE cluster. |
 | <a name="output_grafana_expose_externally"></a> [grafana\_expose\_externally](#output\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. |
 | <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for Grafana external ingress. |
 | <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for Grafana external ingress. |
-| <a name="output_http_static_ip"></a> [http\_static\_ip](#output\_http\_static\_ip) | Output of the MQTT static IP address. |
-| <a name="output_mqtt_static_ip"></a> [mqtt\_static\_ip](#output\_mqtt\_static\_ip) | Output of the MQTT static IP address. |
+| <a name="output_hono_api_static_ip"></a> [hono\_api\_static\_ip](#output\_hono\_api\_static\_ip) | Output of the static IP for the Hono API. |
+| <a name="output_hono_api_static_ip_name"></a> [hono\_api\_static\_ip\_name](#output\_hono\_api\_static\_ip\_name) | Name of the static IP for the Hono API. |
+| <a name="output_http_adapter_static_ip"></a> [http\_adapter\_static\_ip](#output\_http\_adapter\_static\_ip) | Output of the http adapter static ip address. |
+| <a name="output_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#output\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled. |
+| <a name="output_mqtt_adapter_static_ip"></a> [mqtt\_adapter\_static\_ip](#output\_mqtt\_adapter\_static\_ip) | Output of the mqtt adapter static ip address. |
 | <a name="output_service_name_communication"></a> [service\_name\_communication](#output\_service\_name\_communication) | Name of the Cloud Endpoint service for device communication. |
 | <a name="output_sql_db_pw"></a> [sql\_db\_pw](#output\_sql\_db\_pw) | Output of the SQL user password. |
 | <a name="output_sql_grafana_database"></a> [sql\_grafana\_database](#output\_sql\_grafana\_database) | Name of the Grafana Postgres database. |
 | <a name="output_sql_hono_database"></a> [sql\_hono\_database](#output\_sql\_hono\_database) | Name of the hono Postgres database. |
 | <a name="output_sql_ip"></a> [sql\_ip](#output\_sql\_ip) | URL of the Postgres database. |
 | <a name="output_sql_user"></a> [sql\_user](#output\_sql\_user) | Output of the SQL user name. |
-| <a name="output_ssl_policy_name"></a> [ssl\_policy\_name](#output\_ssl\_policy\_name) | Name of the SSL policy for external ingress. |
+| <a name="output_ssl_policy"></a> [ssl\_policy](#output\_ssl\_policy) | SSL policy for external ingress. |

@@ -129,6 +129,10 @@ resource "google_container_node_pool" "standard_node_pool" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
   }
   upgrade_settings {
     strategy        = var.node_pool_upgrade_strategy

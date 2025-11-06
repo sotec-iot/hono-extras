@@ -3,32 +3,19 @@ variable "hono_namespace" {
   description = "namespace of the hono deployment"
 }
 
-variable "cluster_name" {
-  type        = string
-  description = "name of the cluster"
-}
-
 variable "project_id" {
   type        = string
   description = "Project ID in which the cluster is present"
 }
 
-variable "mqtt_adapter" {
-  type = object({
-    enabled = optional(bool, true),
-    advanced_load_balancer = optional(object({
-      enabled   = optional(bool, false),
-      algorithm = optional(string, "leastconn")
-    }), {}),
-  })
-  description = <<EOT
-Configuration options for the MQTT adapter.
-  enabled: Enables the MQTT adapter.
-  advanced_load_balancer:
-    enabled: Enables the use of the advanced MQTT load balancer.
-    algorithm: Load balancing algorithm used by the advanced MQTT load balancer. For a list of possible options see https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/#load-balance .
-EOT
-  default     = {}
+variable "project_number" {
+  type        = string
+  description = "Project number of the project in which the cluster is present"
+}
+
+variable "enable_mqtt_adapter" {
+  type        = bool
+  description = "Used to enable the mqtt adapter"
 }
 
 variable "enable_http_adapter" {
@@ -41,14 +28,14 @@ variable "cert_manager_enabled" {
   description = "Disables the creation of TLS secrets to manually maintain"
 }
 
-variable "http_static_ip" {
+variable "http_adapter_static_ip" {
   type        = string
-  description = "static ip address for the http loadbalancer"
+  description = "Static ip address for the HTTP adapter loadbalancer."
 }
 
-variable "mqtt_static_ip" {
+variable "mqtt_adapter_static_ip" {
   type        = string
-  description = "static ip address for the mqtt loadbalancer"
+  description = "Static ip address for the MQTT adapter loadbalancer."
 }
 
 variable "sql_user" {
@@ -79,10 +66,10 @@ variable "sql_grafana_database" {
 
 variable "service_name_communication" {
   type        = string
-  description = "name of the Cloud Endpoint service for device communication"
+  description = "Name of the Cloud Endpoint service for device communication"
 }
 
-variable "device_communication_static_ip_name" {
+variable "hono_api_static_ip_name" {
   type        = string
   description = "Name of the Static IP for External Ingress"
 }
@@ -107,9 +94,9 @@ variable "oauth_app_name" {
   description = "Name of the OAuth Application"
 }
 
-variable "device_communication_dns_name" {
+variable "hono_api_host_address" {
   type        = string
-  description = "Name of the DNS Host"
+  description = "Host address of your Hono API (e.g. api.hono.my-domain.com)"
 }
 
 variable "hono_tls_key" {
@@ -157,9 +144,9 @@ variable "oauth_client_secret" {
   description = "The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
 }
 
-variable "ssl_policy_name" {
+variable "ssl_policy" {
   type        = string
-  description = "Name of the SSL policy for external ingress"
+  description = "SSL policy for external ingress"
 }
 
 variable "hpa_enabled" {
@@ -207,12 +194,12 @@ variable "grafana_expose_externally" {
 
 variable "grafana_static_ip_name" {
   type        = string
-  description = "Name of the static IP for external ingress."
+  description = "Name of the static IP for external ingress. Only relevant if both grafana_expose_externally and legacy_load_balancer_setup_enabled are set to true"
 }
 
 variable "grafana_dns_name" {
   type        = string
-  description = "Name of the DNS host for Grafana"
+  description = "Name of the DNS host for Grafana. Only relevant if both grafana_expose_externally and legacy_load_balancer_setup_enabled are set to true. If Grafana is exposed with the legacy_load_balancer_setup_enabled=false it is reachable under \"https://{hono_api_host_address}/grafana\"."
 }
 variable "helm_release_name" {
   type        = string
@@ -222,4 +209,9 @@ variable "helm_release_name" {
 variable "data_grid_replicas" {
   type        = number
   description = "Number of replicas for the data grid"
+}
+
+variable "legacy_load_balancer_setup_enabled" {
+  type        = bool
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
 }
