@@ -10,6 +10,7 @@ resource "google_project_service" "project" {
     "run.googleapis.com",
     "eventarc.googleapis.com",
     "cloudfunctions.googleapis.com",
+    "certificatemanager.googleapis.com"
   ])
 
   project = var.project_id
@@ -21,17 +22,18 @@ resource "google_project_service" "project" {
 module "networking" {
   source = "../modules/networking"
 
-  project_id                 = var.project_id
-  region                     = var.region
-  ip_cidr_range              = var.ip_cidr_range
-  secondary_ip_range_service = var.secondary_ip_range_services
-  secondary_ip_range_pods    = var.secondary_ip_range_pods
-  enable_http_ip_creation    = var.enable_http_ip_creation
-  enable_mqtt_ip_creation    = var.enable_mqtt_ip_creation
-  ssl_policy_name            = var.ssl_policy_name
-  ssl_policy_profile         = var.ssl_policy_profile
-  ssl_policy_min_tls_version = var.ssl_policy_min_tls_version
-  grafana_expose_externally  = var.grafana_expose_externally
+  project_id                         = var.project_id
+  region                             = var.region
+  ip_cidr_range                      = var.ip_cidr_range
+  secondary_ip_range_service         = var.secondary_ip_range_services
+  secondary_ip_range_pods            = var.secondary_ip_range_pods
+  enable_http_ip_creation            = var.enable_http_ip_creation
+  enable_mqtt_ip_creation            = var.enable_mqtt_ip_creation
+  ssl_policy_name                    = var.ssl_policy_name
+  ssl_policy_profile                 = var.ssl_policy_profile
+  ssl_policy_min_tls_version         = var.ssl_policy_min_tls_version
+  grafana_expose_externally          = var.grafana_expose_externally
+  legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
 
   depends_on = [
     google_project_service.project
@@ -64,10 +66,11 @@ module "cloud_sql" {
 }
 
 module "google_iam" {
-  source                         = "../modules/google_iam"
-  service_name_communication     = module.cloud_endpoint.service_name_communication
-  project_id                     = var.project_id
-  service_account_roles_gke_sa   = var.service_account_roles_gke_sa
+  source = "../modules/google_iam"
+
+  project_id                         = var.project_id
+  service_account_roles_gke_sa       = var.service_account_roles_gke_sa
+  legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
 }
 
 module "gke" {
@@ -124,7 +127,9 @@ module "pubsub" {
 }
 
 module "cloud_endpoint" {
-  source     = "../modules/cloud_endpoint"
+  source = "../modules/cloud_endpoint"
+  count  = var.legacy_load_balancer_setup_enabled ? 1 : 0
+
   project_id = var.project_id
 
   depends_on = [

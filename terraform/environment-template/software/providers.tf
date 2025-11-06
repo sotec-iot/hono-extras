@@ -10,7 +10,7 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 5"
+      version = "~> 6"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"

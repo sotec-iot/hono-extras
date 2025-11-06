@@ -58,9 +58,9 @@ variable "cert_manager_cert_renew_before" {
   description = "When to renew the certificate based on its remaining validity period (e.g. 720h for 30 days before expiration)."
 }
 
-variable "wildcard_domain" {
+variable "hono_root_domain" {
   type        = string
-  description = "The wildcard domain the secret will be maintained for (e.g. *.root-domain.com)."
+  description = "The root domain of the Hono installation (e.g. hono.my-domain.com)."
 }
 
 variable "hono_trust_store_config_map_name" {

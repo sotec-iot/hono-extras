@@ -2,7 +2,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 6 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | ~> 2 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | ~> 1 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2 |
@@ -11,7 +11,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | ~> 5 |
+| <a name="provider_google"></a> [google](#provider\_google) | ~> 6 |
 | <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
 ## Modules
@@ -37,6 +37,7 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_adapter_dns_auth_resource_record"></a> [adapter\_dns\_auth\_resource\_record](#output\_adapter\_dns\_auth\_resource\_record) | n/a |
 | <a name="output_hono_tls_crt_in_storage"></a> [hono\_tls\_crt\_in\_storage](#output\_hono\_tls\_crt\_in\_storage) | n/a |
 | <a name="output_hono_tls_key_in_storage"></a> [hono\_tls\_key\_in\_storage](#output\_hono\_tls\_key\_in\_storage) | n/a |
 | <a name="output_values"></a> [values](#output\_values) | n/a |

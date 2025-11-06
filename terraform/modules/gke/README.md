@@ -40,7 +40,7 @@ No modules.
 | <a name="input_ip_ranges_pods"></a> [ip\_ranges\_pods](#input\_ip\_ranges\_pods) | Secondary IP Ranges in Subnetwork for Pods | `string` | n/a | yes |
 | <a name="input_ip_ranges_services"></a> [ip\_ranges\_services](#input\_ip\_ranges\_services) | Secondary IP Ranges in Subnetwork for Services | `string` | n/a | yes |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | name of the network | `string` | n/a | yes |
-| <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | List of Strings for the Node Locations | `list(string)` | n/a | yes |
+| <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | List of Strings for the Node Locations. IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy\_load\_balancer\_setup\_enabled = true'). | `list(string)` | n/a | yes |
 | <a name="input_node_pool_autoscaling_enabled"></a> [node\_pool\_autoscaling\_enabled](#input\_node\_pool\_autoscaling\_enabled) | If node autoscaling should be enabled | `string` | n/a | yes |
 | <a name="input_node_pool_batch_node_count"></a> [node\_pool\_batch\_node\_count](#input\_node\_pool\_batch\_node\_count) | Number of nodes to drain in a batch during blue-green upgrade process | `number` | n/a | yes |
 | <a name="input_node_pool_batch_soak_duration"></a> [node\_pool\_batch\_soak\_duration](#input\_node\_pool\_batch\_soak\_duration) | Duration to wait after each batch finishes draining during blue-green upgrade process | `string` | n/a | yes |

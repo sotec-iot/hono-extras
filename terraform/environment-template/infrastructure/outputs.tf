@@ -18,14 +18,19 @@ output "zone" {
   description = "Zone in which the Cluster will be deployed"
 }
 
-output "http_static_ip" {
-  value       = module.infrastructure.http_static_ip
-  description = "Static IP for the HTTP Workload"
+output "node_locations" {
+  value       = local.node_locations
+  description = "The zones the standard node pool will create nodes in (only applicable if cluster autopilot is disabled). IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy_load_balancer_setup_enabled = true')."
 }
 
-output "mqtt_static_ip" {
-  value       = module.infrastructure.mqtt_static_ip
-  description = "Static IP for the MQTT Workload"
+output "http_adapter_static_ip" {
+  value       = module.infrastructure.http_adapter_static_ip
+  description = "Output of the http adapter static ip address."
+}
+
+output "mqtt_adapter_static_ip" {
+  value       = module.infrastructure.mqtt_adapter_static_ip
+  description = "Output of the mqtt adapter static ip address."
 }
 
 output "sql_db_pw" {
@@ -61,16 +66,16 @@ output "gke_autopilot_enabled" {
 
 output "service_name_communication" {
   value       = module.infrastructure.service_name_communication
-  description = "Name of the Could Endpoints Service Device Registry"
+  description = "Name of the Cloud Endpoints Service Device Registry"
 }
 
-output "device_communication_static_ip_name" {
-  value       = module.infrastructure.device_communication_static_ip_name
+output "hono_api_static_ip_name" {
+  value       = module.infrastructure.hono_api_static_ip_name
   description = "Name of the Static IP for External Ingress"
 }
 
-output "device_communication_static_ip" {
-  value       = module.infrastructure.device_communication_static_ip
+output "hono_api_static_ip" {
+  value       = module.infrastructure.hono_api_static_ip
   description = "Output of the static IP for External Ingress"
 }
 
@@ -84,12 +89,17 @@ output "grafana_static_ip" {
   description = "Output of the static IP for grafana external ingress."
 }
 
-output "ssl_policy_name" {
-  value       = module.infrastructure.ssl_policy_name
-  description = "Name of the SSL policy for external ingress"
+output "ssl_policy" {
+  value       = module.infrastructure.ssl_policy
+  description = "SSL policy for external ingress"
 }
 
 output "grafana_expose_externally" {
   value       = module.infrastructure.grafana_expose_externally
   description = "Whether or not Grafana should be exposed externally."
+}
+
+output "legacy_load_balancer_setup_enabled" {
+  value       = module.infrastructure.legacy_load_balancer_setup_enabled
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
 }

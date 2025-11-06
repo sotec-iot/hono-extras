@@ -52,3 +52,8 @@ variable "grafana_expose_externally" {
   type        = bool
   description = "Whether or not Grafana should be exposed externally."
 }
+
+variable "legacy_load_balancer_setup_enabled" {
+  type        = bool
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
+}

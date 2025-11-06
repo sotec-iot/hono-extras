@@ -192,7 +192,7 @@ variable "gke_node_pool_name" {
 
 variable "node_locations" {
   type        = list(string)
-  description = "List of Strings for the Node Locations"
+  description = "List of Strings for the Node Locations. IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy_load_balancer_setup_enabled = true')."
 }
 
 variable "node_pool_autoscaling_enabled" {
@@ -314,4 +314,10 @@ variable "gke_notification_email" {
   type        = string
   description = "The email address of the recipients for the Google Kubernetes Engine notifications."
   default     = null
+}
+
+variable "legacy_load_balancer_setup_enabled" {
+  type        = bool
+  description = "Whether the legacy load balancer setup with Kubernetes Ingress, Cloud Endpoints and Cert Manager should be enabled."
+  default     = false
 }
