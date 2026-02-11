@@ -124,3 +124,29 @@ resource "google_monitoring_alert_policy" "pod_restart_alert_policy" {
     content = "${var.project_id}: Pod restart detected."
   }
 }
+
+resource "google_monitoring_alert_policy" "auth_device_connections_alert_policy" {
+  display_name          = "At least one authenticated device lost connection."
+  notification_channels = [google_monitoring_notification_channel.google_chat_channel.id]
+
+  combiner = "OR"
+  conditions {
+    display_name = "At least one authenticated device lost connection."
+    condition_prometheus_query_language {
+      query               = "sum(avg_over_time(hono_connections_authenticated[1m])) / sum(avg_over_time(hono_connections_authenticated[10m] offset 5m)) < 1"
+      evaluation_interval = "30s"
+    }
+  }
+
+  alert_strategy {
+    notification_channel_strategy {
+      renotify_interval = "3600s"
+    }
+  }
+  severity = "WARNING"
+  project  = var.project_id
+  documentation {
+    subject = "${var.project_id}: Devices losing connection"
+    content = "${var.project_id}: Devices losing connection"
+  }
+}
