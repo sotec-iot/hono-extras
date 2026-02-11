@@ -40,8 +40,8 @@ module "hono" {
   hono_domain_secret_name            = var.hono_domain_secret_name
   hono_domain_managed_secret_name    = var.hono_domain_managed_secret_name
   hono_trust_store_config_map_name   = var.hono_trust_store_config_map_name
-  oauth_client_id                    = var.oauth_client_id
-  oauth_client_secret                = var.oauth_client_secret
+  oauth_client_id_key                = var.oauth_client_id_key
+  oauth_client_secret_key            = var.oauth_client_secret_key
   cert_manager_enabled               = var.enable_cert_manager
   ssl_policy                         = var.ssl_policy
   hpa_enabled                        = var.hpa_enabled

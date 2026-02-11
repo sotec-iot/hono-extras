@@ -139,14 +139,14 @@ variable "hono_internal_tls_secret_name" {
   description = "Name of the kubernetes secret that will store the Hono internal TLS certificate"
 }
 
-variable "oauth_client_id" {
+variable "oauth_client_id_key" {
   type        = string
-  description = "The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
+  description = "The secret manager key for the Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
 }
 
-variable "oauth_client_secret" {
+variable "oauth_client_secret_key" {
   type        = string
-  description = "The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
+  description = "The secret manager key for the Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
 }
 
 variable "ssl_policy" {

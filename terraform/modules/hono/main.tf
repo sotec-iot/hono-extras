@@ -11,6 +11,15 @@ resource "kubernetes_secret" "hono_domain_secret_tls" {
   }
 }
 
+data "google_secret_manager_secret_version" "oauth_client_id" {
+  project = var.project_id
+  secret  = var.oauth_client_id_key
+}
+
+data "google_secret_manager_secret_version" "oauth_client_secret" {
+  project = var.project_id
+  secret  = var.oauth_client_secret_key
+}
 
 resource "kubernetes_secret" "iap_client_secret" {
   count = var.legacy_load_balancer_setup_enabled ? 1 : 0
@@ -20,8 +29,8 @@ resource "kubernetes_secret" "iap_client_secret" {
     namespace = var.hono_namespace
   }
   data = {
-    "client_id"     = var.oauth_client_id
-    "client_secret" = var.oauth_client_secret
+    "client_id"     = data.google_secret_manager_secret_version.oauth_client_id.secret_data
+    "client_secret" = data.google_secret_manager_secret_version.oauth_client_secret.secret_data
   }
 }
 

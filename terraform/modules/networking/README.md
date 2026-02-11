@@ -5,7 +5,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
 
 ## Modules
@@ -15,13 +15,12 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [google_compute_address.http_adapter_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address) | resource |
 | [google_compute_address.mqtt_adapter_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address) | resource |
 | [google_compute_global_address.grafana_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_compute_global_address.hono_api_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_compute_global_address.http_adapter_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
-| [google_compute_global_address.mqtt_adapter_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_compute_global_address.private_ip_address](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_compute_network.vpc_network](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network) | resource |
 | [google_compute_router.cloud_router](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router) | resource |
@@ -33,7 +32,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_cloud_nat_ip_allocate_option"></a> [cloud\_nat\_ip\_allocate\_option](#input\_cloud\_nat\_ip\_allocate\_option) | How external IPs are allocated for Cloud NAT. | `string` | n/a | yes |
 | <a name="input_cloud_nat_ips"></a> [cloud\_nat\_ips](#input\_cloud\_nat\_ips) | Self-links of Cloud NAT IPs. Only valid if cloud\_nat\_ip\_allocate\_option is set to MANUAL\_ONLY. | `list(string)` | n/a | yes |
 | <a name="input_cloud_nat_log_config"></a> [cloud\_nat\_log\_config](#input\_cloud\_nat\_log\_config) | Configuration for logging on the Cloud NAT gateway. | <pre>object({<br/>    enable = bool<br/>    filter = string<br/>  })</pre> | n/a | yes |
@@ -54,7 +53,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for grafana external ingress. |
 | <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for grafana external ingress. |
 | <a name="output_hono_api_static_ip"></a> [hono\_api\_static\_ip](#output\_hono\_api\_static\_ip) | Output of the static IP for the Hono API. |

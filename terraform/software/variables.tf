@@ -131,14 +131,14 @@ variable "hono_domain_managed_secret_name" {
   default     = "hono-domain-managed-secret"
 }
 
-variable "oauth_client_id" {
+variable "oauth_client_id_key" {
   type        = string
-  description = "The Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
+  description = "The secret manager key for the Google OAuth 2.0 client ID used in the Identity-Aware-Proxy (IAP)"
 }
 
-variable "oauth_client_secret" {
+variable "oauth_client_secret_key" {
   type        = string
-  description = "The Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
+  description = "The secret manager key for the Google OAuth 2.0 client secret used in the Identity-Aware-Proxy (IAP)"
 }
 
 variable "enable_cert_manager" {
