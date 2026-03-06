@@ -24,6 +24,44 @@ resource "google_compute_subnetwork" "subnetwork" {
   }
 }
 
+resource "google_compute_router" "cloud_router" {
+  count   = var.gke_enable_private_nodes ? 1 : 0
+  project = var.project_id
+  name    = "hono-gke-nat-router"
+  region  = var.region
+  network = google_compute_network.vpc_network.name
+}
+
+resource "google_compute_router_nat" "gke_nat_gateway" {
+  count                              = var.gke_enable_private_nodes ? 1 : 0
+  project                            = var.project_id
+  name                               = "hono-gke-nat-gateway"
+  region                             = var.region
+  router                             = google_compute_router.cloud_router[0].name
+  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+
+  subnetwork {
+    name                    = google_compute_subnetwork.subnetwork.name
+    source_ip_ranges_to_nat = ["PRIMARY_IP_RANGE", "LIST_OF_SECONDARY_IP_RANGES"]
+    secondary_ip_range_names = [
+      "pods",
+      "services"
+    ]
+  }
+
+  # How external IPs are allocated for NAT.
+  # "AUTO_ONLY" (default): GCP automatically allocates ephemeral external IP addresses.
+  # "MANUAL_ONLY": You explicitly provide static external IP addresses.
+  nat_ip_allocate_option = var.cloud_nat_ip_allocate_option
+
+  nat_ips = var.cloud_nat_ip_allocate_option == "MANUAL_ONLY" ? var.cloud_nat_ips : []
+
+  log_config {
+    enable = var.cloud_nat_log_config.enable
+    filter = var.cloud_nat_log_config.filter
+  }
+}
+
 #Creating the Static IP address(external) for the http adapter
 resource "google_compute_address" "http_adapter_static_ip" {
   count        = var.enable_http_ip_creation && var.legacy_load_balancer_setup_enabled ? 1 : 0
