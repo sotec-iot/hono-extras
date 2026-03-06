@@ -29,11 +29,15 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_cloud_nat_ip_allocate_option"></a> [cloud\_nat\_ip\_allocate\_option](#input\_cloud\_nat\_ip\_allocate\_option) | How external IPs are allocated for Cloud NAT. | `string` | `"AUTO_ONLY"` | no |
+| <a name="input_cloud_nat_ips"></a> [cloud\_nat\_ips](#input\_cloud\_nat\_ips) | Self-links of Cloud NAT IPs. Only valid if cloud\_nat\_ip\_allocate\_option is set to MANUAL\_ONLY. | `list(string)` | `[]` | no |
+| <a name="input_cloud_nat_log_config"></a> [cloud\_nat\_log\_config](#input\_cloud\_nat\_log\_config) | Configuration for logging on the Cloud NAT gateway. | <pre>object({<br/>    enable = bool<br/>    filter = string<br/>  })</pre> | <pre>{<br/>  "enable": true,<br/>  "filter": "ERRORS_ONLY"<br/>}</pre> | no |
 | <a name="input_enable_http_ip_creation"></a> [enable\_http\_ip\_creation](#input\_enable\_http\_ip\_creation) | Used to enable the creation of a static ip for the http adapter | `string` | `false` | no |
 | <a name="input_enable_mqtt_ip_creation"></a> [enable\_mqtt\_ip\_creation](#input\_enable\_mqtt\_ip\_creation) | Used to enable the creation of a static ip for the mqtt adapter | `string` | `true` | no |
 | <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | `false` | no |
 | <a name="input_gke_cluster_maintenance_policy_recurring_window"></a> [gke\_cluster\_maintenance\_policy\_recurring\_window](#input\_gke\_cluster\_maintenance\_policy\_recurring\_window) | The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy | <pre>object({<br/>    start_time = string,<br/>    end_time   = string,<br/>    recurrence = string<br/>  })</pre> | `null` | no |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | `"hono-cluster"` | no |
+| <a name="input_gke_enable_private_nodes"></a> [gke\_enable\_private\_nodes](#input\_gke\_enable\_private\_nodes) | Enables the private cluster configuration for the GKE cluster. | `bool` | `true` | no |
 | <a name="input_gke_machine_type"></a> [gke\_machine\_type](#input\_gke\_machine\_type) | Machine Type for node\_pools | `string` | `"c2-standard-8"` | no |
 | <a name="input_gke_node_pool_name"></a> [gke\_node\_pool\_name](#input\_gke\_node\_pool\_name) | The name of the Node Pool in the Hono Cluster | `string` | `"standard-node-pool"` | no |
 | <a name="input_gke_notification_email"></a> [gke\_notification\_email](#input\_gke\_notification\_email) | The email address of the recipients for the Google Kubernetes Engine notifications. | `string` | `null` | no |

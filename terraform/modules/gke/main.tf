@@ -12,6 +12,10 @@ resource "google_container_cluster" "hono_cluster" {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
 
+  private_cluster_config {
+    enable_private_nodes   = var.gke_enable_private_nodes
+  }
+
   release_channel {
     channel = var.gke_release_channel
   }
@@ -45,7 +49,6 @@ resource "google_container_cluster" "hono_cluster" {
     }
   }
 }
-
 
 resource "google_container_cluster" "hono_autopilot_cluster" {
   count      = var.gke_autopilot_enabled ? 1 : 0
@@ -134,6 +137,9 @@ resource "google_container_node_pool" "standard_node_pool" {
       mode = "GKE_METADATA"
     }
   }
+  network_config {
+    enable_private_nodes = var.gke_enable_private_nodes
+  }
   upgrade_settings {
     strategy        = var.node_pool_upgrade_strategy
     max_surge       = var.node_pool_upgrade_strategy == "SURGE" ? var.node_pool_max_surge : null
@@ -187,7 +193,6 @@ resource "google_cloudfunctions2_function" "gke_notification_email_function" {
   }
 }
 
-
 resource "google_storage_bucket" "gke_notification_email_function_bucket" {
   count         = var.gke_notification_enabled ? 1 : 0
   name          = "${var.project_id}-gke-notification-email-function-source"
@@ -203,4 +208,3 @@ resource "google_storage_bucket_object" "gke_notification_email_function_archive
   bucket = google_storage_bucket.gke_notification_email_function_bucket[0].name
   source = "${path.module}/gke_notification_email.zip"
 }
-

@@ -51,6 +51,12 @@ variable "gke_cluster_name" {
   default     = "hono-cluster"
 }
 
+variable "gke_enable_private_nodes" {
+  type        = bool
+  description = "Enables the private cluster configuration for the GKE cluster."
+  default     = true
+}
+
 variable "gke_cluster_maintenance_policy_recurring_window" {
   type = object({
     start_time = string,
@@ -320,4 +326,28 @@ variable "legacy_load_balancer_setup_enabled" {
   type        = bool
   description = "Whether the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
   default     = false
+}
+
+variable "cloud_nat_ip_allocate_option" {
+  type        = string
+  description = "How external IPs are allocated for Cloud NAT."
+  default     = "AUTO_ONLY"
+}
+
+variable "cloud_nat_ips" {
+  type        = list(string)
+  description = "Self-links of Cloud NAT IPs. Only valid if cloud_nat_ip_allocate_option is set to MANUAL_ONLY."
+  default     = []
+}
+
+variable "cloud_nat_log_config" {
+  type = object({
+    enable = bool
+    filter = string
+  })
+  description = "Configuration for logging on the Cloud NAT gateway."
+  default = {
+    enable = true
+    filter = "ERRORS_ONLY"
+  }
 }

@@ -34,6 +34,10 @@ module "networking" {
   ssl_policy_min_tls_version         = var.ssl_policy_min_tls_version
   grafana_expose_externally          = var.grafana_expose_externally
   legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
+  gke_enable_private_nodes           = var.gke_enable_private_nodes
+  cloud_nat_ip_allocate_option       = var.cloud_nat_ip_allocate_option
+  cloud_nat_ips                      = var.cloud_nat_ips
+  cloud_nat_log_config               = var.cloud_nat_log_config
 
   depends_on = [
     google_project_service.project
@@ -107,6 +111,7 @@ module "gke" {
   gke_notification_email                          = var.gke_notification_email
   sendgrid_api_key                                = var.sendgrid_api_key
   sendgrid_domain                                 = var.sendgrid_domain
+  gke_enable_private_nodes                        = var.gke_enable_private_nodes
 
   depends_on = [
     google_project_service.project,
