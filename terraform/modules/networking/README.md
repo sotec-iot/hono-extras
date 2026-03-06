@@ -24,6 +24,8 @@ No modules.
 | [google_compute_global_address.mqtt_adapter_static_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_compute_global_address.private_ip_address](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_global_address) | resource |
 | [google_compute_network.vpc_network](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network) | resource |
+| [google_compute_router.cloud_router](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router) | resource |
+| [google_compute_router_nat.gke_nat_gateway](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router_nat) | resource |
 | [google_compute_ssl_policy.ssl_policy](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_ssl_policy) | resource |
 | [google_compute_subnetwork.subnetwork](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork) | resource |
 | [google_service_networking_connection.private_vpc_connection](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_networking_connection) | resource |
@@ -32,8 +34,12 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_cloud_nat_ip_allocate_option"></a> [cloud\_nat\_ip\_allocate\_option](#input\_cloud\_nat\_ip\_allocate\_option) | How external IPs are allocated for Cloud NAT. | `string` | n/a | yes |
+| <a name="input_cloud_nat_ips"></a> [cloud\_nat\_ips](#input\_cloud\_nat\_ips) | Self-links of Cloud NAT IPs. Only valid if cloud\_nat\_ip\_allocate\_option is set to MANUAL\_ONLY. | `list(string)` | n/a | yes |
+| <a name="input_cloud_nat_log_config"></a> [cloud\_nat\_log\_config](#input\_cloud\_nat\_log\_config) | Configuration for logging on the Cloud NAT gateway. | <pre>object({<br/>    enable = bool<br/>    filter = string<br/>  })</pre> | n/a | yes |
 | <a name="input_enable_http_ip_creation"></a> [enable\_http\_ip\_creation](#input\_enable\_http\_ip\_creation) | Used to enable the creation of a static ip for the http adapter. | `string` | n/a | yes |
 | <a name="input_enable_mqtt_ip_creation"></a> [enable\_mqtt\_ip\_creation](#input\_enable\_mqtt\_ip\_creation) | Used to enable the creation of a static ip for the mqtt adapter. | `string` | n/a | yes |
+| <a name="input_gke_enable_private_nodes"></a> [gke\_enable\_private\_nodes](#input\_gke\_enable\_private\_nodes) | Enables the private cluster configuration for the GKE cluster. | `bool` | n/a | yes |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
 | <a name="input_ip_cidr_range"></a> [ip\_cidr\_range](#input\_ip\_cidr\_range) | The range of internal addresses that are owned by this subnetwork. Provide this property when you create the subnetwork.Ranges must be unique and non-overlapping within a network. Only IPv4 is supported. | `string` | n/a | yes |
 | <a name="input_legacy_load_balancer_setup_enabled"></a> [legacy\_load\_balancer\_setup\_enabled](#input\_legacy\_load\_balancer\_setup\_enabled) | Whether the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled. | `bool` | n/a | yes |

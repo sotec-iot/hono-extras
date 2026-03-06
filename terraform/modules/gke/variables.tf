@@ -157,3 +157,8 @@ variable "gke_notification_email" {
   type        = string
   description = "The email address of the recipients for the Google Kubernetes Engine notifications."
 }
+
+variable "gke_enable_private_nodes" {
+  type        = bool
+  description = "Enables the private cluster configuration for the GKE cluster."
+}
