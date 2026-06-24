@@ -24,7 +24,7 @@ output "http_adapter_static_ip" {
 }
 
 output "mqtt_adapter_static_ip" {
-  value       = var.legacy_load_balancer_setup_enabled ? google_compute_address.mqtt_adapter_static_ip[*].address : google_compute_global_address.mqtt_adapter_static_ip[*].address
+  value       = google_compute_address.mqtt_adapter_static_ip[*].address
   description = "Output of the mqtt adapter static ip address."
 }
 

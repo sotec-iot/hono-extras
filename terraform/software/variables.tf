@@ -426,11 +426,6 @@ variable "gcp_load_balancer_log_config" {
       sample_rate   = optional(number, 1.0)
       optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
     }), {})
-    mqtt_adapter = optional(object({
-      enable        = optional(bool, false)
-      sample_rate   = optional(number, 1.0)
-      optional_mode = optional(string, "EXCLUDE_ALL_OPTIONAL")
-    }), {})
     http_adapter = optional(object({
       enable        = optional(bool, false)
       sample_rate   = optional(number, 1.0)
@@ -441,25 +436,3 @@ variable "gcp_load_balancer_log_config" {
   default     = {}
 }
 
-variable "gcp_load_balancer_mqtt_timeout" {
-  type = number
-  description = "The timeout in seconds after which the connection will be closed by the load balancer if no communication occurred (should be longer than the keep-alive of the devices)."
-  default = 60
-}
-
-variable "mqtt_rate_limiting" {
-  type = object({
-    all = optional(object({
-      enable                 = optional(bool, false)
-      threshold_count        = optional(number, 100)
-      threshold_interval_sec = optional(number, 10)
-    }), {})
-    ip = optional(object({
-      enable                 = optional(bool, false)
-      threshold_count        = optional(number, 5)
-      threshold_interval_sec = optional(number, 10)
-    }), {})
-  })
-  default     = {}
-  description = "Rate limiting configuration for the MQTT adapter. Only one of 'all' or 'ip' can take effect. If both are specified 'all' will take precedence."
-}

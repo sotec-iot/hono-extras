@@ -42,14 +42,13 @@ locals {
           mqtt = {
             enabled = var.enable_mqtt_adapter
             svc = {
-              annotations    = var.legacy_load_balancer_setup_enabled ? {} : { "cloud.google.com/neg" = "{\"exposed_ports\": {\"8883\": {\"name\": \"hono-mqtt-adapter-neg\"}}}" }
-              type           = var.legacy_load_balancer_setup_enabled ? "LoadBalancer" : "ClusterIP"
+              type           = "LoadBalancer"
               loadBalancerIP = var.mqtt_adapter_static_ip # sets a static IP loadbalancerIP for mqtt adapter
             }
             deployment             = var.cert_manager_enabled ? local.deployment : {}
-            tlsKeysSecret          = var.legacy_load_balancer_setup_enabled ? (var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name) : (var.cert_manager_enabled ? var.hono_internal_tls_secret_name : "example")
-            tlsTrustStoreConfigMap = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
-            singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
+            tlsKeysSecret          = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
+            tlsTrustStoreConfigMap = var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
+            singleCertSecret       = false
             horizontalPodAutoscaler = {
               enabled     = var.hpa_enabled
               minReplicas = var.hpa_minReplicas_mqtt

@@ -108,24 +108,20 @@ module "gcp_load_balancer" {
   source = "../modules/gcp_load_balancer"
   count  = var.legacy_load_balancer_setup_enabled ? 0 : 1
 
-  project_id                     = var.project_id
-  available_zones                = data.google_compute_zones.available_zones.names
-  oauth_client_id                = var.oauth_client_id
-  oauth_client_secret            = var.oauth_client_secret
-  hono_api_static_ip             = var.hono_api_static_ip
-  ssl_policy                     = var.ssl_policy
-  gke_autopilot_enabled          = var.gke_autopilot_enabled
-  node_locations                 = var.node_locations
-  enable_http_adapter            = var.enable_http_adapter
-  http_adapter_static_ip         = var.http_adapter_static_ip
-  enable_mqtt_adapter            = var.enable_mqtt_adapter
-  mqtt_adapter_static_ip         = var.mqtt_adapter_static_ip
-  grafana_expose_externally      = var.grafana_expose_externally
-  hono_api_host_address          = var.hono_api_host_address
-  hono_root_domain               = var.hono_root_domain
-  gcp_load_balancer_log_config   = var.gcp_load_balancer_log_config
-  gcp_load_balancer_mqtt_timeout = var.gcp_load_balancer_mqtt_timeout
-  mqtt_rate_limiting             = var.mqtt_rate_limiting
+  project_id                   = var.project_id
+  available_zones              = data.google_compute_zones.available_zones.names
+  oauth_client_id              = var.oauth_client_id
+  oauth_client_secret          = var.oauth_client_secret
+  hono_api_static_ip           = var.hono_api_static_ip
+  ssl_policy                   = var.ssl_policy
+  gke_autopilot_enabled        = var.gke_autopilot_enabled
+  node_locations               = var.node_locations
+  enable_http_adapter          = var.enable_http_adapter
+  http_adapter_static_ip       = var.http_adapter_static_ip
+  grafana_expose_externally    = var.grafana_expose_externally
+  hono_api_host_address        = var.hono_api_host_address
+  hono_root_domain             = var.hono_root_domain
+  gcp_load_balancer_log_config = var.gcp_load_balancer_log_config
 
   depends_on = [module.hono]
 }
