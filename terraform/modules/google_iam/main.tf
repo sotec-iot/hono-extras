@@ -9,9 +9,9 @@ resource "google_service_account" "gke_service_account" {
 resource "google_project_iam_member" "gke_service_account_roles" {
   for_each = toset(local.all_service_account_roles) # Basic Service Account Roles and additional Roles will be concatenated in the locals file
 
-  project  = var.project_id
-  role     = each.key
-  member   = google_service_account.gke_service_account.member
+  project = var.project_id
+  role    = each.key
+  member  = google_service_account.gke_service_account.member
 }
 
 # Creating the Service Account for Cloud Endpoints

@@ -28,16 +28,12 @@ resource "helm_release" "cert-manager" {
 }
 
 resource "google_project_iam_member" "sa_binding_dns_admin" {
-  count = var.legacy_load_balancer_setup_enabled ? 1 : 0
-
   member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${var.cert_manager_namespace}/sa/cert-manager"
   role    = "roles/dns.admin"
   project = var.cert_manager_issuer_project_id != null && var.cert_manager_issuer_project_id != "" ? var.cert_manager_issuer_project_id : var.project_id
 }
 
 resource "kubectl_manifest" "issuer_letsencrypt_prod" {
-  count = var.legacy_load_balancer_setup_enabled ? 1 : 0
-
   yaml_body = yamlencode({
     "apiVersion" = "cert-manager.io/v1"
     "kind"       = var.cert_manager_issuer_kind
@@ -68,8 +64,6 @@ resource "kubectl_manifest" "issuer_letsencrypt_prod" {
 }
 
 resource "kubectl_manifest" "certificate" {
-  count = var.legacy_load_balancer_setup_enabled ? 1 : 0
-
   yaml_body = yamlencode({
     "apiVersion" = "cert-manager.io/v1"
     "kind"       = "Certificate"
@@ -85,9 +79,11 @@ resource "kubectl_manifest" "certificate" {
         "name" = var.cert_manager_issuer_name
         "kind" = var.cert_manager_issuer_kind
       }
-      "dnsNames" = [
+      "dnsNames" = var.legacy_load_balancer_setup_enabled ? [
         var.hono_root_domain,
         "*.${var.hono_root_domain}",
+      ] : [
+        "mqtt.${var.hono_root_domain}",
       ]
     }
   })
@@ -95,8 +91,6 @@ resource "kubectl_manifest" "certificate" {
 }
 
 resource "helm_release" "trust-manager" {
-  count = var.legacy_load_balancer_setup_enabled ? 1 : 0
-
   name             = "trust-manager"
   repository       = "https://charts.jetstack.io"
   chart            = "trust-manager"
@@ -107,8 +101,6 @@ resource "helm_release" "trust-manager" {
 }
 
 resource "kubectl_manifest" "trust-bundle" {
-  count = var.legacy_load_balancer_setup_enabled ? 1 : 0
-
   yaml_body = yamlencode({
     "apiVersion" = "trust.cert-manager.io/v1alpha1"
     "kind"       = "Bundle"
@@ -116,9 +108,17 @@ resource "kubectl_manifest" "trust-bundle" {
       "name" = var.hono_trust_store_config_map_name
     }
     "spec" = {
-      "sources" = [
-        { "useDefaultCAs" = true }
-      ]
+      "sources" = concat(
+        [{ "useDefaultCAs" = true }],
+        var.legacy_load_balancer_setup_enabled ? [] : [
+          {
+            "secret" = {
+              "name" = var.hono_cluster_ca_secret_name
+              "key"  = "tls.crt"
+            }
+          }
+        ]
+      )
       "target" = {
         "configMap" = {
           "key" = "ca.crt"
@@ -131,7 +131,7 @@ resource "kubectl_manifest" "trust-bundle" {
       }
     }
   })
-  depends_on = [helm_release.trust-manager]
+  depends_on = [helm_release.trust-manager, kubectl_manifest.root-ca-certificate]
 }
 
 resource "kubectl_manifest" "root-issuer" {

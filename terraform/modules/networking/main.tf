@@ -80,16 +80,9 @@ resource "google_compute_global_address" "http_adapter_static_ip" {
 
 #Creating the Static IP address(external) for the mqtt adapter
 resource "google_compute_address" "mqtt_adapter_static_ip" {
-  count        = var.enable_mqtt_ip_creation && var.legacy_load_balancer_setup_enabled ? 1 : 0
+  count        = var.enable_mqtt_ip_creation ? 1 : 0
   project      = var.project_id
   region       = var.region
-  name         = "mqtt-adapter-static-ip"
-  address_type = "EXTERNAL"
-}
-
-resource "google_compute_global_address" "mqtt_adapter_static_ip" {
-  count        = var.enable_mqtt_ip_creation && !var.legacy_load_balancer_setup_enabled ? 1 : 0
-  project      = var.project_id
   name         = "mqtt-adapter-static-ip"
   address_type = "EXTERNAL"
 }
