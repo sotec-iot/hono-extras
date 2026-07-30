@@ -131,7 +131,7 @@ resource "google_compute_backend_service" "grafana_backend_service" {
     }
   }
   iap {
-    enabled              = true
+    enabled              = !var.grafana_proxy_auth_enabled
     oauth2_client_id     = var.oauth_client_id
     oauth2_client_secret = var.oauth_client_secret
   }
@@ -218,8 +218,8 @@ resource "google_compute_health_check" "grafana_heath_check" {
 
   name = "grafana-health-check"
   http_health_check {
-    port         = "3000"
-    request_path = "/api/health"
+    port         = var.grafana_proxy_auth_enabled ? "9090" : "3000"
+    request_path = var.grafana_proxy_auth_enabled ? "/readyz" : "/api/health"
   }
 }
 
@@ -248,9 +248,12 @@ resource "google_compute_firewall" "hbp_hono_https_lb_device_registry" {
     protocol = "tcp"
     ports    = ["8443"]
   }
-  allow {
-    protocol = "tcp"
-    ports    = ["3000"]
+  dynamic "allow" {
+    for_each = var.grafana_expose_externally ? [1] : []
+    content {
+      protocol = "tcp"
+      ports    = var.grafana_proxy_auth_enabled ? ["4181", "9090"] : ["3000"]
+    }
   }
 }
 

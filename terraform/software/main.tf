@@ -60,6 +60,12 @@ module "hono" {
   legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
   hono_internal_tls_secret_name      = var.hono_internal_tls_secret_name
   managed_prometheus_enabled         = var.managed_prometheus_enabled
+  hono_root_domain                   = var.hono_root_domain
+  firebase_rtdb_url                  = var.firebase_rtdb_url
+  app_login_url                      = var.app_login_url
+  cookie_signing_salt_secret         = var.cookie_signing_salt_secret
+  grafana_proxy_image                = var.grafana_proxy_image
+  grafana_proxy_auth_enabled         = var.grafana_proxy_auth_enabled
 
   depends_on = [module.namespace, module.cert_manager]
 }
@@ -122,6 +128,7 @@ module "gcp_load_balancer" {
   grafana_expose_externally    = var.grafana_expose_externally
   grafana_static_ip            = var.grafana_static_ip
   grafana_dns_name             = local.grafana_dns_name
+  grafana_proxy_auth_enabled   = var.grafana_proxy_auth_enabled
   hono_api_host_address        = var.hono_api_host_address
   hono_root_domain             = var.hono_root_domain
   gcp_load_balancer_log_config = var.gcp_load_balancer_log_config
