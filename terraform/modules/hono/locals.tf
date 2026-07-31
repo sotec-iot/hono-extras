@@ -90,6 +90,56 @@ locals {
           singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
         }
         grafana = {
+          extraContainers = <<-EOT
+            - name: firebase-grafana-proxy
+              image: gcr.io/sotec-iot-core-dev/grafana-proxy:v0.3
+              imagePullPolicy: IfNotPresent
+              ports:
+                - name: proxy-http
+                  containerPort: 8080
+                  protocol: TCP
+              env:
+                - name: FIREBASE_RTDB_URL
+                  value: "https://scitis-cloudplug-testing-default-rtdb.europe-west1.firebasedatabase.app"
+                - name: TARGET_GRAFANA_URL
+                  value: "http://127.0.0.1:3000"
+                - name: APP_LOGIN_URL
+                  value: "https://scitis-cloudplug-testing.com/#/login"
+                - name: GRAFANA_PUBLIC_URL
+                  value: "https://hono.scitis-cloudplug-testing.com/grafana"
+                - name: COOKIE_SIGNING_SALT_SECRET
+                  value: "projects/263315392268/secrets/scitis-cookie-salt/versions/latest"
+                - name: REVOKED_JTIS
+                  value: ""
+              readinessProbe:
+                httpGet:
+                  path: /healthz
+                  port: 8080
+                initialDelaySeconds: 5
+                periodSeconds: 10
+                tcpSocket: null
+              livenessProbe:
+                httpGet:
+                  path: /healthz
+                  port: 8080
+                initialDelaySeconds: 15
+                periodSeconds: 20
+                tcpSocket: null
+              resources:
+                requests:
+                  cpu: 25m
+                  memory: 64Mi
+                limits:
+                  memory: 256Mi
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 65532
+                runAsGroup: 65532
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+          EOT
           service = {
             annotations = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? { "cloud.google.com/neg" = "{\"exposed_ports\": {\"3000\": {\"name\": \"grafana-neg\"}}}" } : {}
           }
