@@ -92,11 +92,11 @@ locals {
         grafana = {
           extraContainers = <<-EOT
             - name: firebase-grafana-proxy
-              image: gcr.io/sotec-iot-core-dev/grafana-proxy:v0.3
+              image: gcr.io/sotec-iot-core-dev/grafana-proxy:v0.6
               imagePullPolicy: IfNotPresent
               ports:
                 - name: proxy-http
-                  containerPort: 8080
+                  containerPort: 4181
                   protocol: TCP
               env:
                 - name: FIREBASE_RTDB_URL
@@ -113,15 +113,15 @@ locals {
                   value: ""
               readinessProbe:
                 httpGet:
-                  path: /healthz
-                  port: 8080
+                  path: /readyz
+                  port: 4181
                 initialDelaySeconds: 5
                 periodSeconds: 10
                 tcpSocket: null
               livenessProbe:
                 httpGet:
-                  path: /healthz
-                  port: 8080
+                  path: /livez
+                  port: 4181
                 initialDelaySeconds: 15
                 periodSeconds: 20
                 tcpSocket: null

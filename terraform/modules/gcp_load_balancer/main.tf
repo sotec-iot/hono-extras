@@ -131,7 +131,7 @@ resource "google_compute_backend_service" "grafana_backend_service" {
     }
   }
   iap {
-    enabled              = true
+    enabled              = false
     oauth2_client_id     = var.oauth_client_id
     oauth2_client_secret = var.oauth_client_secret
   }
@@ -218,8 +218,8 @@ resource "google_compute_health_check" "grafana_heath_check" {
 
   name = "grafana-health-check"
   http_health_check {
-    port         = "3000"
-    request_path = "/api/health"
+    port         = "4181" #3000
+    request_path = "/readyz"
   }
 }
 
@@ -250,7 +250,7 @@ resource "google_compute_firewall" "hbp_hono_https_lb_device_registry" {
   }
   allow {
     protocol = "tcp"
-    ports    = ["3000"]
+    ports    = ["4181"]
   }
 }
 
