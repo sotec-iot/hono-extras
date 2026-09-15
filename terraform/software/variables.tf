@@ -454,3 +454,33 @@ variable "gcp_load_balancer_log_config" {
   default     = {}
 }
 
+variable "firebase_rtdb_url" {
+  type        = string
+  description = "URL of the Firebase Realtime Database used by the Grafana proxy. Defaults to https://{project_id}-default-rtdb.europe-west1.firebasedatabase.app."
+  default     = null
+}
+
+variable "app_login_url" {
+  type        = string
+  description = "Public URL of the application login page used by the Grafana proxy. Defaults to https://{hono_root_domain without hono. prefix}/#/login."
+  default     = null
+}
+
+variable "grafana_public_url" {
+  type        = string
+  description = "Public URL of Grafana used by the Grafana proxy. Defaults to https://{hono_root_domain}/grafana."
+  default     = null
+}
+
+variable "cookie_signing_salt_secret" {
+  type        = string
+  description = "Resource ID of the Google Cloud Secret Manager secret that stores the cookie signing salt used by the Grafana proxy. Defaults to projects/{project_number}/secrets/{project_id}-cookie-salt/versions/latest."
+  default     = null
+}
+
+variable "grafana_proxy_version" {
+  type        = string
+  description = "Version tag of the grafana-proxy container image deployed as a sidecar to Grafana."
+  default     = "v0.6"
+}
+

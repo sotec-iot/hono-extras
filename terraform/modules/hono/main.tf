@@ -74,15 +74,15 @@ resource "google_project_iam_member" "gke_binding_cloudtrace_agent" {
 }
 
 resource "google_project_iam_member" "gke_binding_firebase_viewer" {
-  member   = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
-  role     = "roles/firebasedatabase.viewer"
-  project  = var.project_id
+  member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
+  role    = "roles/firebasedatabase.viewer"
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "gke_binding_secret_accessor" {
-  member   = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
-  role     = "roles/secretmanager.secretAccessor"
-  project  = var.project_id
+  member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
+  role    = "roles/secretmanager.secretAccessor"
+  project = var.project_id
 }
 
 # service esp doesn't work with the newer workload identity binding method used above, therefor use workload identity impersonation

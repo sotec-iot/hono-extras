@@ -22,6 +22,12 @@ locals {
     }
   }
 
+  # effective values for the Grafana firebase proxy env vars, falling back to defaults derived from project and domain settings
+  firebase_rtdb_url          = var.firebase_rtdb_url != null ? var.firebase_rtdb_url : "https://${var.project_id}-default-rtdb.europe-west1.firebasedatabase.app"
+  app_login_url              = var.app_login_url != null ? var.app_login_url : "https://${trimprefix(var.hono_root_domain, "hono.")}/#/login"
+  grafana_public_url         = var.grafana_public_url != null ? var.grafana_public_url : "https://${var.hono_root_domain}/grafana"
+  cookie_signing_salt_secret = var.cookie_signing_salt_secret != null ? var.cookie_signing_salt_secret : "projects/${var.project_number}/secrets/scitis-cookie-salt/versions/latest"
+
   values = [
     jsonencode(
       {
@@ -92,7 +98,7 @@ locals {
         grafana = {
           extraContainers = <<-EOT
             - name: firebase-grafana-proxy
-              image: gcr.io/sotec-iot-core-dev/grafana-proxy:v0.6
+              image: gcr.io/sotec-iot-core-dev/grafana-proxy:${var.grafana_proxy_version}
               imagePullPolicy: IfNotPresent
               ports:
                 - name: proxy-http
@@ -100,15 +106,15 @@ locals {
                   protocol: TCP
               env:
                 - name: FIREBASE_RTDB_URL
-                  value: "https://scitis-cloudplug-testing-default-rtdb.europe-west1.firebasedatabase.app"
+                  value: "${local.firebase_rtdb_url}"
                 - name: TARGET_GRAFANA_URL
                   value: "http://127.0.0.1:3000"
                 - name: APP_LOGIN_URL
-                  value: "https://scitis-cloudplug-testing.com/#/login"
+                  value: "${local.app_login_url}"
                 - name: GRAFANA_PUBLIC_URL
-                  value: "https://hono.scitis-cloudplug-testing.com/grafana"
+                  value: "${local.grafana_public_url}"
                 - name: COOKIE_SIGNING_SALT_SECRET
-                  value: "projects/263315392268/secrets/scitis-cookie-salt/versions/latest"
+                  value: "${local.cookie_signing_salt_secret}"
                 - name: REVOKED_JTIS
                   value: ""
               readinessProbe:

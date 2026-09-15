@@ -59,6 +59,12 @@ module "hono" {
   data_grid_replicas                 = var.data_grid_replicas
   legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
   hono_internal_tls_secret_name      = var.hono_internal_tls_secret_name
+  hono_root_domain                   = var.hono_root_domain
+  firebase_rtdb_url                  = var.firebase_rtdb_url
+  app_login_url                      = var.app_login_url
+  grafana_public_url                 = var.grafana_public_url
+  cookie_signing_salt_secret         = var.cookie_signing_salt_secret
+  grafana_proxy_version              = var.grafana_proxy_version
 
   depends_on = [module.namespace, module.cert_manager]
 }

@@ -220,3 +220,33 @@ variable "legacy_load_balancer_setup_enabled" {
   type        = bool
   description = "Whether or not the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
 }
+
+variable "hono_root_domain" {
+  type        = string
+  description = "The root domain of the Hono installation (e.g. hono.my-domain.com)."
+}
+
+variable "firebase_rtdb_url" {
+  type        = string
+  description = "URL of the Firebase Realtime Database used by the Grafana proxy. Defaults to https://{project_id}-default-rtdb.europe-west1.firebasedatabase.app."
+}
+
+variable "app_login_url" {
+  type        = string
+  description = "Public URL of the application login page used by the Grafana proxy. Defaults to https://{hono_root_domain without hono. prefix}/#/login."
+}
+
+variable "grafana_public_url" {
+  type        = string
+  description = "Public URL of Grafana used by the Grafana proxy. Defaults to https://{hono_root_domain}/grafana."
+}
+
+variable "cookie_signing_salt_secret" {
+  type        = string
+  description = "Resource ID of the Google Cloud Secret Manager secret that stores the cookie signing salt used by the Grafana proxy. Defaults to projects/{project_number}/secrets/{project_id}-cookie-salt/versions/latest."
+}
+
+variable "grafana_proxy_version" {
+  type        = string
+  description = "Version tag of the grafana-proxy container image deployed as a sidecar to Grafana."
+}
