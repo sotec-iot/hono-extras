@@ -168,7 +168,7 @@ resource "google_cloudfunctions2_function" "gke_notification_email_function" {
     }
   }
   build_config {
-    runtime     = "go123"
+    runtime     = "go127"
     entry_point = "SendEmail"
     source {
       storage_source {
