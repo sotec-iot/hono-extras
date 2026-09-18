@@ -131,9 +131,9 @@ resource "google_monitoring_alert_policy" "auth_device_connections_alert_policy"
 
   combiner = "OR"
   conditions {
-    display_name = "At least one authenticated device lost connection."
+    display_name = "A significant portion of devices lost connection."
     condition_prometheus_query_language {
-      query               = "sum(avg_over_time(hono_connections_authenticated[1m])) / sum(avg_over_time(hono_connections_authenticated[10m] offset 5m)) < 1"
+      query               = "sum(avg_over_time(hono_connections_authenticated[1m])) / sum(avg_over_time(hono_connections_authenticated[60m] offset 5m)) < ${var.auth_device_connections_threshold}"
       evaluation_interval = "30s"
     }
   }
@@ -146,7 +146,7 @@ resource "google_monitoring_alert_policy" "auth_device_connections_alert_policy"
   severity = "WARNING"
   project  = var.project_id
   documentation {
-    subject = "${var.project_id}: Devices losing connection"
-    content = "${var.project_id}: Devices losing connection"
+    subject = "${var.project_id}: A significant portion of devices lost connection."
+    content = "${var.project_id}: A significant portion of devices lost connection."
   }
 }

@@ -388,6 +388,12 @@ variable "alerts_chat_space_id" {
   default     = null
 }
 
+variable "auth_device_connections_threshold" {
+  type        = number
+  description = "Threshold for the authenticated device connections alert policy. The alert fires if the current number of authenticated device connections falls below this ratio compared to the average over the last 60 minutes."
+  default     = 0.5
+}
+
 variable "data_grid_replicas" {
   type        = number
   description = "Number of replicas for the data grid"

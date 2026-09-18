@@ -38,6 +38,12 @@ resource "google_container_cluster" "hono_cluster" {
     }
   }
 
+  monitoring_config {
+    managed_prometheus {
+      enabled = true
+    }
+  }
+
   dynamic "maintenance_policy" {
     for_each = var.gke_cluster_maintenance_policy_recurring_window != null ? [1] : []
     content {
