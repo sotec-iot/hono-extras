@@ -40,8 +40,8 @@ module "hono" {
   hono_domain_secret_name            = var.hono_domain_secret_name
   hono_domain_managed_secret_name    = var.hono_domain_managed_secret_name
   hono_trust_store_config_map_name   = var.hono_trust_store_config_map_name
-  oauth_client_id                    = var.oauth_client_id
-  oauth_client_secret                = var.oauth_client_secret
+  oauth_client_id                    = data.google_secret_manager_secret_version.oauth_client_id.secret_data
+  oauth_client_secret                = data.google_secret_manager_secret_version.oauth_client_secret.secret_data
   cert_manager_enabled               = var.enable_cert_manager
   ssl_policy                         = var.ssl_policy
   hpa_enabled                        = var.hpa_enabled
@@ -110,8 +110,8 @@ module "gcp_load_balancer" {
 
   project_id                   = var.project_id
   available_zones              = data.google_compute_zones.available_zones.names
-  oauth_client_id              = var.oauth_client_id
-  oauth_client_secret          = var.oauth_client_secret
+  oauth_client_id              = data.google_secret_manager_secret_version.oauth_client_id.secret_data
+  oauth_client_secret          = data.google_secret_manager_secret_version.oauth_client_secret.secret_data
   hono_api_static_ip           = var.hono_api_static_ip
   ssl_policy                   = var.ssl_policy
   gke_autopilot_enabled        = var.gke_autopilot_enabled

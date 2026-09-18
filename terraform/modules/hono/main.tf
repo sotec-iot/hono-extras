@@ -11,7 +11,6 @@ resource "kubernetes_secret" "hono_domain_secret_tls" {
   }
 }
 
-
 resource "kubernetes_secret" "iap_client_secret" {
   count = var.legacy_load_balancer_setup_enabled ? 1 : 0
 
