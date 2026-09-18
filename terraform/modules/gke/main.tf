@@ -13,7 +13,7 @@ resource "google_container_cluster" "hono_cluster" {
   }
 
   private_cluster_config {
-    enable_private_nodes   = var.gke_enable_private_nodes
+    enable_private_nodes = var.gke_enable_private_nodes
   }
 
   release_channel {
@@ -174,7 +174,7 @@ resource "google_cloudfunctions2_function" "gke_notification_email_function" {
     }
   }
   build_config {
-    runtime     = "go123"
+    runtime     = "go127"
     entry_point = "SendEmail"
     source {
       storage_source {

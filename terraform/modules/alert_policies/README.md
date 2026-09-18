@@ -5,7 +5,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
 
 ## Modules
@@ -26,7 +26,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_alerts_chat_space_id"></a> [alerts\_chat\_space\_id](#input\_alerts\_chat\_space\_id) | The Chat space ID is the string following “chat/space/” in the chat URL. It can only be seen in the web view of the Chat app. In order to add Google Chat as a notification channel, you must first add the Google Cloud Monitoring App to the chat space. You can add the app directly to a space by typing @Google Cloud Monitoring. | `string` | n/a | yes |
 | <a name="input_auth_device_connections_threshold"></a> [auth\_device\_connections\_threshold](#input\_auth\_device\_connections\_threshold) | Threshold for the authenticated device connections alert policy. The alert fires if the current number of authenticated device connections falls below this ratio compared to the average over the last 60 minutes. | `number` | n/a | yes |
 | <a name="input_cert_manager_namespace"></a> [cert\_manager\_namespace](#input\_cert\_manager\_namespace) | Namespace of the cert manager deployment. | `string` | n/a | yes |

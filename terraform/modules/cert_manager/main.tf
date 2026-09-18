@@ -82,7 +82,7 @@ resource "kubectl_manifest" "certificate" {
       "dnsNames" = var.legacy_load_balancer_setup_enabled ? [
         var.hono_root_domain,
         "*.${var.hono_root_domain}",
-      ] : [
+        ] : [
         "mqtt.${var.hono_root_domain}",
       ]
     }
