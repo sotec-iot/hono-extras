@@ -5,7 +5,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
@@ -16,7 +16,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [google_sql_database.grafana_sql_db](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) | resource |
 | [google_sql_database.hono_sql_db](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) | resource |
 | [google_sql_database_instance.hono_sql](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance) | resource |
@@ -26,7 +26,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_network_id"></a> [network\_id](#input\_network\_id) | Reference to VPC Network ID only | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to deploy to | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The region for the Cloud SQL Instance | `string` | n/a | yes |
@@ -51,7 +51,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_sql_db_pw"></a> [sql\_db\_pw](#output\_sql\_db\_pw) | Output of the SQL user password. |
 | <a name="output_sql_grafana_database"></a> [sql\_grafana\_database](#output\_sql\_grafana\_database) | Name of the grafana postgres database. |
 | <a name="output_sql_hono_database"></a> [sql\_hono\_database](#output\_sql\_hono\_database) | Name of the hono postgres database. |

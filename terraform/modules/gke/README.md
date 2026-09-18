@@ -5,7 +5,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
 
 ## Modules
@@ -15,7 +15,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [google_cloudfunctions2_function.gke_notification_email_function](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions2_function) | resource |
 | [google_container_cluster.hono_autopilot_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
 | [google_container_cluster.hono_cluster](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
@@ -26,7 +26,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | n/a | yes |
 | <a name="input_gke_cluster_maintenance_policy_recurring_window"></a> [gke\_cluster\_maintenance\_policy\_recurring\_window](#input\_gke\_cluster\_maintenance\_policy\_recurring\_window) | The recurring window maintenance policy for the cluster. For details see: https://registry.terraform.io/providers/hashicorp/google/5.15.0/docs/resources/container_cluster#nested_maintenance_policy | <pre>object({<br/>    start_time = string,<br/>    end_time   = string,<br/>    recurrence = string<br/>  })</pre> | n/a | yes |
 | <a name="input_gke_cluster_name"></a> [gke\_cluster\_name](#input\_gke\_cluster\_name) | Name of the GKE Cluster | `string` | n/a | yes |
@@ -63,5 +63,5 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_gke_cluster_name"></a> [gke\_cluster\_name](#output\_gke\_cluster\_name) | Name of the GKE Cluster |

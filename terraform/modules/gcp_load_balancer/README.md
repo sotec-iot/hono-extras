@@ -5,7 +5,7 @@ No requirements.
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
 
 ## Modules
@@ -15,7 +15,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [google_certificate_manager_certificate.hono_cert](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/certificate_manager_certificate) | resource |
 | [google_certificate_manager_certificate.hono_wildcard_cert](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/certificate_manager_certificate) | resource |
 | [google_certificate_manager_certificate_map.hono_cert_map](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/certificate_manager_certificate_map) | resource |
@@ -43,7 +43,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_available_zones"></a> [available\_zones](#input\_available\_zones) | Available node zone locations | `list(string)` | n/a | yes |
 | <a name="input_enable_http_adapter"></a> [enable\_http\_adapter](#input\_enable\_http\_adapter) | Used to enable the http adapter | `bool` | n/a | yes |
 | <a name="input_gcp_load_balancer_log_config"></a> [gcp\_load\_balancer\_log\_config](#input\_gcp\_load\_balancer\_log\_config) | Logging configuration for the backend services of the GCP load balancers. | <pre>object({<br/>    ui = optional(object({<br/>      enable        = optional(bool)<br/>      sample_rate   = optional(number)<br/>      optional_mode = optional(string)<br/>    }))<br/>    device_registry = optional(object({<br/>      enable        = optional(bool)<br/>      sample_rate   = optional(number)<br/>      optional_mode = optional(string)<br/>    }))<br/>    device_communication = optional(object({<br/>      enable        = optional(bool)<br/>      sample_rate   = optional(number)<br/>      optional_mode = optional(string)<br/>    }))<br/>    grafana = optional(object({<br/>      enable        = optional(bool)<br/>      sample_rate   = optional(number)<br/>      optional_mode = optional(string)<br/>    }))<br/>    http_adapter = optional(object({<br/>      enable        = optional(bool)<br/>      sample_rate   = optional(number)<br/>      optional_mode = optional(string)<br/>    }))<br/>  })</pre> | n/a | yes |
@@ -62,5 +62,5 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_adapter_dns_auth_resource_record"></a> [adapter\_dns\_auth\_resource\_record](#output\_adapter\_dns\_auth\_resource\_record) | n/a |
