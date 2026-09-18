@@ -127,11 +127,12 @@ module "gcp_load_balancer" {
 }
 
 module "alert_policies" {
-  source                 = "../modules/alert_policies"
-  count                  = var.alerts_enabled ? 1 : 0
-  project_id             = var.project_id
-  alerts_chat_space_id   = var.alerts_chat_space_id
-  hono_namespace         = var.hono_namespace
-  cert_manager_namespace = var.cert_manager_namespace
+  source                            = "../modules/alert_policies"
+  count                             = var.alerts_enabled ? 1 : 0
+  project_id                        = var.project_id
+  alerts_chat_space_id              = var.alerts_chat_space_id
+  hono_namespace                    = var.hono_namespace
+  cert_manager_namespace            = var.cert_manager_namespace
+  auth_device_connections_threshold = var.auth_device_connections_threshold
 
 }
