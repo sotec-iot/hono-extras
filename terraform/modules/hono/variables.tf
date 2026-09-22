@@ -243,7 +243,7 @@ variable "grafana_public_url" {
 
 variable "cookie_signing_salt_secret" {
   type        = string
-  description = "Resource ID of the Google Cloud Secret Manager secret that stores the cookie signing salt used by the Grafana proxy. Defaults to projects/{project_number}/secrets/{project_id}-cookie-salt/versions/latest."
+  description = "Resource ID of the Google Cloud Secret Manager secret that stores the cookie signing salt used by the Grafana proxy. Defaults to projects/{project_number}/secrets/scitis-cookie-salt/versions/latest."
 }
 
 variable "grafana_proxy_version" {

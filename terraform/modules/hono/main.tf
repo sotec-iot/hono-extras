@@ -79,6 +79,12 @@ resource "google_project_iam_member" "gke_binding_firebase_viewer" {
   project = var.project_id
 }
 
+resource "google_project_iam_member" "gke_binding_datastore_viewer" {
+  member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
+  role    = "roles/datastore.viewer"
+  project = var.project_id
+}
+
 resource "google_project_iam_member" "gke_binding_secret_accessor" {
   member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
   role    = "roles/secretmanager.secretAccessor"
