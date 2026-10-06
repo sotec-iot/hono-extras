@@ -481,6 +481,6 @@ variable "cookie_signing_salt_secret" {
 variable "grafana_proxy_version" {
   type        = string
   description = "Version tag of the grafana-proxy container image deployed as a sidecar to Grafana."
-  default     = "v0.10"
+  default     = "v0.15"
 }
 

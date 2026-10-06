@@ -218,7 +218,7 @@ resource "google_compute_health_check" "grafana_heath_check" {
 
   name = "grafana-health-check"
   http_health_check {
-    port         = "4181" #3000
+    port         = "9090" #3000
     request_path = "/readyz"
   }
 }
@@ -251,6 +251,10 @@ resource "google_compute_firewall" "hbp_hono_https_lb_device_registry" {
   allow {
     protocol = "tcp"
     ports    = ["4181"]
+  }
+  allow {
+    protocol = "tcp"
+    ports    = ["9090"]
   }
 }
 

@@ -107,29 +107,27 @@ locals {
               env:
                 - name: FIREBASE_RTDB_URL
                   value: "${local.firebase_rtdb_url}"
-                - name: TARGET_GRAFANA_URL
-                  value: "http://127.0.0.1:3000"
                 - name: APP_LOGIN_URL
                   value: "${local.app_login_url}"
                 - name: GRAFANA_PUBLIC_URL
                   value: "${local.grafana_public_url}"
                 - name: COOKIE_SIGNING_SALT_SECRET
                   value: "${local.cookie_signing_salt_secret}"
-                - name: REVOKED_JTIS
-                  value: ""
               readinessProbe:
                 httpGet:
                   path: /readyz
-                  port: 4181
+                  port: 9090
                 initialDelaySeconds: 5
                 periodSeconds: 10
+                timeoutSeconds: 6
                 tcpSocket: null
               livenessProbe:
                 httpGet:
                   path: /livez
-                  port: 4181
+                  port: 9090
                 initialDelaySeconds: 15
                 periodSeconds: 20
+                timeoutSeconds: 2
                 tcpSocket: null
               resources:
                 requests:
