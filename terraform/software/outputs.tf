@@ -16,3 +16,7 @@ output "hono_tls_crt_in_storage" {
 output "adapter_dns_auth_resource_record" {
   value = module.gcp_load_balancer[*].adapter_dns_auth_resource_record
 }
+
+output "grafana_dns_auth_resource_record" {
+  value = flatten(module.gcp_load_balancer[*].grafana_dns_auth_resource_record)
+}

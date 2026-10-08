@@ -16,3 +16,7 @@ output "hono_tls_crt_in_storage" {
 output "adapter_dns_auth_resource_record" {
   value = module.software.adapter_dns_auth_resource_record
 }
+
+output "grafana_dns_auth_resource_record" {
+  value = module.software.grafana_dns_auth_resource_record
+}

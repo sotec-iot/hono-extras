@@ -204,7 +204,7 @@ variable "grafana_static_ip_name" {
 
 variable "grafana_dns_name" {
   type        = string
-  description = "Name of the DNS host for Grafana. Only relevant if both grafana_expose_externally and legacy_load_balancer_setup_enabled are set to true. If Grafana is exposed with the legacy_load_balancer_setup_enabled=false it is reachable under \"https://{hono_api_host_address}/grafana\"."
+  description = "Host name under which Grafana is exposed. With legacy_load_balancer_setup_enabled=true it is used as the Ingress host and must be set. With legacy_load_balancer_setup_enabled=false Grafana is served at the root of this host via a dedicated load balancer (https://{grafana_dns_name}/). Only relevant if grafana_expose_externally is true."
 }
 variable "helm_release_name" {
   type        = string

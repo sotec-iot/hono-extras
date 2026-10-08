@@ -40,12 +40,12 @@ output "hono_api_static_ip" {
 
 output "grafana_static_ip_name" {
   value       = google_compute_global_address.grafana_static_ip[*].name
-  description = "Name of the static IP for grafana external ingress."
+  description = "Name of the static IP for Grafana."
 }
 
 output "grafana_static_ip" {
   value       = google_compute_global_address.grafana_static_ip[*].address
-  description = "Output of the static IP for grafana external ingress."
+  description = "Output of the static IP for Grafana."
 }
 
 output "ip_ranges_services_name" {

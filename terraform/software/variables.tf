@@ -200,6 +200,12 @@ variable "hono_root_domain" {
   description = "The root domain of the Hono installation (e.g. hono.my-domain.com)."
 }
 
+variable "root_domain" {
+  type        = string
+  description = "The root domain of your organisation under which the Hono root domain lives (e.g. my-domain.com). Used to derive the default Grafana host (grafana.<root_domain>). Defaults to hono_root_domain without its first label (or hono_root_domain itself if it only has two labels). Set explicitly for multi-part TLDs such as example.co.uk."
+  default     = null
+}
+
 variable "trust_manager_version" {
   type        = string
   description = "Version of the chart to deploy."
@@ -359,9 +365,15 @@ variable "grafana_static_ip_name" {
   description = "Name of the static IP for external ingress. Only relevant if both grafana_expose_externally and legacy_load_balancer_setup_enabled are set to true"
 }
 
+variable "grafana_static_ip" {
+  type        = string
+  description = "Static IP address for the Grafana load balancer. Only relevant if grafana_expose_externally is true and legacy_load_balancer_setup_enabled is false."
+  default     = ""
+}
+
 variable "grafana_dns_name" {
   type        = string
-  description = "Name of the DNS host for Grafana. Only relevant if both grafana_expose_externally and legacy_load_balancer_setup_enabled are set to true. If Grafana is exposed with the legacy_load_balancer_setup_enabled=false it is reachable under \"https://{hono_api_host_address}/grafana\"."
+  description = "Host name under which Grafana is exposed. With legacy_load_balancer_setup_enabled=true it is used as the Ingress host and must be set. With legacy_load_balancer_setup_enabled=false Grafana gets a dedicated load balancer reachable under https://{grafana_dns_name}/; defaults to grafana.{root_domain}. Point a DNS A record for this host to the Grafana static IP. Only relevant if grafana_expose_externally is true."
   default     = ""
 }
 

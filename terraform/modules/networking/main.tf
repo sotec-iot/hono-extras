@@ -94,11 +94,11 @@ resource "google_compute_global_address" "hono_api_static_ip" {
   address_type = "EXTERNAL"
 }
 
-# Creating global static ip for Grafana ingress
+# Creating global static ip for Grafana
 resource "google_compute_global_address" "grafana_static_ip" {
-  count        = var.grafana_expose_externally && var.legacy_load_balancer_setup_enabled ? 1 : 0
+  count        = var.grafana_expose_externally ? 1 : 0
   project      = var.project_id
-  name         = "hono-grafana"
+  name         = "grafana"
   address_type = "EXTERNAL"
 }
 

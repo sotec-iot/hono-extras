@@ -91,7 +91,7 @@ locals {
         }
         grafana = {
           service = {
-            annotations = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? { "cloud.google.com/neg" = "{\"exposed_ports\": {\"3000\": {\"name\": \"hono-grafana-neg\"}}}" } : {}
+            annotations = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? { "cloud.google.com/neg" = "{\"exposed_ports\": {\"3000\": {\"name\": \"grafana-neg\"}}}" } : {}
           }
           ingress = {
             enabled = var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally
@@ -117,8 +117,7 @@ locals {
               ssl_mode = "disable"
             }
             server = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? {
-              root_url            = "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
-              serve_from_sub_path = true
+              root_url = "https://${var.grafana_dns_name}/"
             } : {}
           }
         }

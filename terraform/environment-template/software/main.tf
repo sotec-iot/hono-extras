@@ -13,6 +13,7 @@ module "software" {
   hono_api_static_ip_name            = data.terraform_remote_state.infrastructure.outputs.hono_api_static_ip_name
   hono_api_static_ip                 = data.terraform_remote_state.infrastructure.outputs.hono_api_static_ip
   grafana_static_ip_name             = try(data.terraform_remote_state.infrastructure.outputs.grafana_static_ip_name[0], "")
+  grafana_static_ip                  = try(data.terraform_remote_state.infrastructure.outputs.grafana_static_ip[0], "")
   grafana_expose_externally          = data.terraform_remote_state.infrastructure.outputs.grafana_expose_externally
   ssl_policy                         = data.terraform_remote_state.infrastructure.outputs.ssl_policy
   gke_autopilot_enabled              = try(data.terraform_remote_state.infrastructure.outputs.gke_autopilot_enabled, false)
