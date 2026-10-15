@@ -53,6 +53,16 @@ variable "grafana_expose_externally" {
   description = "Whether or not Grafana should be exposed externally."
 }
 
+variable "grafana_static_ip" {
+  type        = string
+  description = "Static IP address for the Grafana load balancer. Only relevant if grafana_expose_externally is set to true."
+}
+
+variable "grafana_dns_name" {
+  type        = string
+  description = "Host name under which Grafana is served (e.g. grafana.my-domain.com). Only relevant if grafana_expose_externally is set to true."
+}
+
 variable "hono_api_host_address" {
   type        = string
   description = "Host address of your Hono API (e.g. api.hono.my-domain.com)"

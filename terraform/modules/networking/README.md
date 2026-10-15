@@ -54,8 +54,8 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for grafana external ingress. |
-| <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for grafana external ingress. |
+| <a name="output_grafana_static_ip"></a> [grafana\_static\_ip](#output\_grafana\_static\_ip) | Output of the static IP for Grafana. |
+| <a name="output_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#output\_grafana\_static\_ip\_name) | Name of the static IP for Grafana. |
 | <a name="output_hono_api_static_ip"></a> [hono\_api\_static\_ip](#output\_hono\_api\_static\_ip) | Output of the static IP for the Hono API. |
 | <a name="output_hono_api_static_ip_name"></a> [hono\_api\_static\_ip\_name](#output\_hono\_api\_static\_ip\_name) | Name of the static IP for the Hono API. |
 | <a name="output_http_adapter_static_ip"></a> [http\_adapter\_static\_ip](#output\_http\_adapter\_static\_ip) | Output of the http adapter static ip address. |

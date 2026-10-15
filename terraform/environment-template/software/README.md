@@ -38,6 +38,7 @@ No inputs.
 | Name | Description |
 |------|-------------|
 | <a name="output_adapter_dns_auth_resource_record"></a> [adapter\_dns\_auth\_resource\_record](#output\_adapter\_dns\_auth\_resource\_record) | n/a |
+| <a name="output_grafana_dns_auth_resource_record"></a> [grafana\_dns\_auth\_resource\_record](#output\_grafana\_dns\_auth\_resource\_record) | n/a |
 | <a name="output_hono_tls_crt_in_storage"></a> [hono\_tls\_crt\_in\_storage](#output\_hono\_tls\_crt\_in\_storage) | n/a |
 | <a name="output_hono_tls_key_in_storage"></a> [hono\_tls\_key\_in\_storage](#output\_hono\_tls\_key\_in\_storage) | n/a |
 | <a name="output_values"></a> [values](#output\_values) | n/a |

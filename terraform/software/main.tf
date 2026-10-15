@@ -54,7 +54,7 @@ module "hono" {
   prometheus_adapter_custom_metrics  = var.prometheus_adapter_custom_metrics
   grafana_expose_externally          = var.grafana_expose_externally
   grafana_static_ip_name             = var.grafana_static_ip_name
-  grafana_dns_name                   = var.grafana_dns_name
+  grafana_dns_name                   = var.legacy_load_balancer_setup_enabled ? var.grafana_dns_name : local.grafana_dns_name
   helm_release_name                  = var.helm_release_name
   data_grid_replicas                 = var.data_grid_replicas
   legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
@@ -119,6 +119,8 @@ module "gcp_load_balancer" {
   enable_http_adapter          = var.enable_http_adapter
   http_adapter_static_ip       = var.http_adapter_static_ip
   grafana_expose_externally    = var.grafana_expose_externally
+  grafana_static_ip            = var.grafana_static_ip
+  grafana_dns_name             = local.grafana_dns_name
   hono_api_host_address        = var.hono_api_host_address
   hono_root_domain             = var.hono_root_domain
   gcp_load_balancer_log_config = var.gcp_load_balancer_log_config

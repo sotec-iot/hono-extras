@@ -104,7 +104,7 @@ resource "google_compute_backend_service" "device_communication_backend_service"
 resource "google_compute_backend_service" "grafana_backend_service" {
   count = var.grafana_expose_externally ? 1 : 0
 
-  name                  = "hono-grafana-backend-service"
+  name                  = "grafana-backend-service"
   project               = var.project_id
   load_balancing_scheme = "EXTERNAL_MANAGED"
   port_name             = "service"
@@ -121,7 +121,7 @@ resource "google_compute_backend_service" "grafana_backend_service" {
     for_each = [
       for zone in(var.gke_autopilot_enabled ? var.available_zones : var.node_locations) :
       {
-        group = "https://www.googleapis.com/compute/v1/projects/${var.project_id}/zones/${zone}/networkEndpointGroups/hono-grafana-neg"
+        group = "https://www.googleapis.com/compute/v1/projects/${var.project_id}/zones/${zone}/networkEndpointGroups/grafana-neg"
       }
     ]
     content {
@@ -135,6 +135,41 @@ resource "google_compute_backend_service" "grafana_backend_service" {
     oauth2_client_id     = var.oauth_client_id
     oauth2_client_secret = var.oauth_client_secret
   }
+}
+
+resource "google_compute_global_forwarding_rule" "grafana_forwarding_rule" {
+  count = var.grafana_expose_externally ? 1 : 0
+
+  name                  = "grafana-loadbalancer"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  port_range            = "443"
+  target                = google_compute_target_https_proxy.grafana_proxy[0].id
+  ip_address            = var.grafana_static_ip
+
+  lifecycle {
+    precondition {
+      condition     = var.grafana_static_ip != ""
+      error_message = "grafana_static_ip must be set when grafana_expose_externally is true. Apply the infrastructure layer first so the Grafana static IP is created."
+    }
+  }
+}
+
+resource "google_compute_target_https_proxy" "grafana_proxy" {
+  count = var.grafana_expose_externally ? 1 : 0
+
+  name            = "grafana-loadbalancer-proxy"
+  certificate_map = "//certificatemanager.googleapis.com/${google_certificate_manager_certificate_map.grafana_cert_map[0].id}"
+  ssl_policy      = var.ssl_policy
+
+  url_map = google_compute_url_map.grafana_loadbalancer[0].self_link
+}
+
+resource "google_compute_url_map" "grafana_loadbalancer" {
+  count = var.grafana_expose_externally ? 1 : 0
+
+  name            = "grafana-loadbalancer"
+  default_service = google_compute_backend_service.grafana_backend_service[0].self_link
 }
 
 resource "google_compute_global_forwarding_rule" "hono_api_forwarding_rule" {
@@ -181,7 +216,7 @@ resource "google_compute_health_check" "device_communication_heath_check" {
 resource "google_compute_health_check" "grafana_heath_check" {
   count = var.grafana_expose_externally ? 1 : 0
 
-  name = "hono-grafana-health-check"
+  name = "grafana-health-check"
   http_health_check {
     port         = "3000"
     request_path = "/api/health"
@@ -246,16 +281,6 @@ resource "google_compute_url_map" "hono_api_loadbalancer" {
         "/v1/configs/*"
       ]
       service = google_compute_backend_service.device_communication_backend_service.self_link
-    }
-    dynamic "path_rule" {
-      for_each = var.grafana_expose_externally ? [1] : []
-      content {
-        paths = [
-          "/grafana",
-          "/grafana/*",
-        ]
-        service = google_compute_backend_service.grafana_backend_service[0].self_link
-      }
     }
   }
 }
@@ -383,4 +408,42 @@ resource "google_certificate_manager_certificate_map_entry" "hono_adapter_cert_m
   map          = google_certificate_manager_certificate_map.hono_cert_map.name
   certificates = [google_certificate_manager_certificate.hono_wildcard_cert.id]
   hostname     = "*.${var.hono_root_domain}"
+}
+
+resource "google_certificate_manager_certificate_map" "grafana_cert_map" {
+  count = var.grafana_expose_externally ? 1 : 0
+
+  name = "grafana-cert-map"
+}
+
+resource "google_certificate_manager_dns_authorization" "grafana_dns_auth" {
+  count = var.grafana_expose_externally ? 1 : 0
+
+  name        = "grafana-dns-auth"
+  description = "grafana cert dns authorization"
+  domain      = var.grafana_dns_name
+}
+
+resource "google_certificate_manager_certificate" "grafana_cert" {
+  count = var.grafana_expose_externally ? 1 : 0
+
+  name        = "grafana-cert"
+  description = "grafana cert"
+  managed {
+    domains = [
+      var.grafana_dns_name,
+    ]
+    dns_authorizations = [
+      google_certificate_manager_dns_authorization.grafana_dns_auth[0].id,
+    ]
+  }
+}
+
+resource "google_certificate_manager_certificate_map_entry" "grafana_cert_map_entry" {
+  count = var.grafana_expose_externally ? 1 : 0
+
+  name         = "grafana-entry"
+  map          = google_certificate_manager_certificate_map.grafana_cert_map[0].name
+  certificates = [google_certificate_manager_certificate.grafana_cert[0].id]
+  hostname     = var.grafana_dns_name
 }
