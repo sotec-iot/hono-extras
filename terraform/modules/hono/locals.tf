@@ -96,6 +96,26 @@ locals {
           singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
         }
         grafana = {
+          # --- Grafana listens on loopback only => proxy cannot be bypassed ---
+          # kubelet probes must therefore be exec-based, not httpGet.
+          readinessProbe = {
+            httpGet = null
+            exec = {
+              command = [ "/bin/sh", "-c", "wget -qO- http://127.0.0.1:3000/api/health > /dev/null" ]
+            }
+            initialDelaySeconds = 10
+            periodSeconds = 10
+          }
+          livenessProbe = {
+            httpGet = null
+            exec = {
+              command = [ "/bin/sh", "-c", "wget -qO- http://127.0.0.1:3000/api/health > /dev/null" ]
+            }
+            initialDelaySeconds = 60
+            periodSeconds = 10
+            timeoutSeconds = 30
+            failureThreshold = 10
+          }
           extraContainers = <<-EOT
             - name: firebase-grafana-proxy
               image: gcr.io/sotec-iot-core-dev/grafana-proxy:${var.grafana_proxy_version}
@@ -145,6 +165,10 @@ locals {
                   drop: ["ALL"]
           EOT
           service = {
+            # The grafana deployment will show this port as the grafana port, but grafana still listens on 3000.
+            # This is the port the proxy container is listening on.
+            targetPort = 4181
+            portName = http
             annotations = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? { "cloud.google.com/neg" = "{\"exposed_ports\": {\"3000\": {\"name\": \"grafana-neg\"}}}" } : {}
           }
           ingress = {
@@ -172,7 +196,32 @@ locals {
             }
             server = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? {
               root_url = "https://${var.grafana_dns_name}/"
+              # Bind to loopback: only the sidecar in the same pod can reach Grafana
+              http_addr = 127.0.0.1
+              http_port = 3000
             } : {}
+            "auth.proxy" = {
+              enabled = true
+              header_name = X-WEBAUTH-USER
+              header_property = email
+              auto_sign_up = true
+              sync_ttl = 60
+              whitelist = 127.0.0.1
+              headers = "Role:X-WEBAUTH-ROLE"
+              enable_login_token = false
+            }
+            users = {
+              allow_sign_up = false
+              allow_org_create = false
+              auto_assign_org = true
+              auto_assign_org_role = Viewer
+            }
+            security = {
+              cookie_secure = true
+              cookie_samesite = lax
+              disable_gravatar = true
+              allow_embedding = true
+            }
           }
         }
         deviceCommunication = {
