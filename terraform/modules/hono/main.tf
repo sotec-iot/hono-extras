@@ -35,6 +35,13 @@ resource "helm_release" "hono" {
 
   # using json to set values in the helm chart
   values = local.values
+
+  lifecycle {
+    precondition {
+      condition     = !var.grafana_proxy_auth_enabled || (var.grafana_expose_externally && !var.legacy_load_balancer_setup_enabled)
+      error_message = "grafana_proxy_auth_enabled requires grafana_expose_externally = true and legacy_load_balancer_setup_enabled = false (Grafana is only bound to loopback behind the dedicated Grafana load balancer)."
+    }
+  }
 }
 
 resource "helm_release" "prometheus_adapter" {
@@ -74,21 +81,39 @@ resource "google_project_iam_member" "gke_binding_cloudtrace_agent" {
 }
 
 resource "google_project_iam_member" "gke_binding_firebase_viewer" {
+  count   = var.grafana_proxy_auth_enabled ? 1 : 0
   member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
   role    = "roles/firebasedatabase.viewer"
   project = var.project_id
 }
 
+moved {
+  from = google_project_iam_member.gke_binding_firebase_viewer
+  to   = google_project_iam_member.gke_binding_firebase_viewer[0]
+}
+
 resource "google_project_iam_member" "gke_binding_datastore_viewer" {
+  count   = var.grafana_proxy_auth_enabled ? 1 : 0
   member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
   role    = "roles/datastore.viewer"
   project = var.project_id
 }
 
+moved {
+  from = google_project_iam_member.gke_binding_datastore_viewer
+  to   = google_project_iam_member.gke_binding_datastore_viewer[0]
+}
+
 resource "google_project_iam_member" "gke_binding_secret_accessor" {
+  count   = var.grafana_proxy_auth_enabled ? 1 : 0
   member  = "principal://iam.googleapis.com/projects/${var.project_number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/hono/sa/${var.helm_release_name}-grafana"
   role    = "roles/secretmanager.secretAccessor"
   project = var.project_id
+}
+
+moved {
+  from = google_project_iam_member.gke_binding_secret_accessor
+  to   = google_project_iam_member.gke_binding_secret_accessor[0]
 }
 
 # service esp doesn't work with the newer workload identity binding method used above, therefor use workload identity impersonation
