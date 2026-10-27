@@ -19,7 +19,10 @@ No modules.
 | Name | Type |
 |------|------|
 | [google_project_iam_member.gke_binding_cloudtrace_agent](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_datastore_viewer](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_firebase_viewer](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_iam_member.gke_binding_pubsub_editor](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.gke_binding_secret_accessor](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_service_account_iam_binding.esp_workload_identity_binding](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_iam_binding) | resource |
 | [helm_release.hono](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [helm_release.prometheus_adapter](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
@@ -30,12 +33,17 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_app_login_url"></a> [app\_login\_url](#input\_app\_login\_url) | Public URL of the application login page used by the Grafana proxy. Defaults to https://{hono\_root\_domain without hono. prefix}/#/login. Only used if grafana\_proxy\_auth\_enabled is true. | `string` | n/a | yes |
 | <a name="input_cert_manager_enabled"></a> [cert\_manager\_enabled](#input\_cert\_manager\_enabled) | Disables the creation of TLS secrets to manually maintain | `bool` | n/a | yes |
+| <a name="input_cookie_signing_salt_secret"></a> [cookie\_signing\_salt\_secret](#input\_cookie\_signing\_salt\_secret) | Resource ID of the Google Cloud Secret Manager secret that stores the cookie signing salt used by the Grafana proxy. Defaults to projects/{project\_number}/secrets/scitis-cookie-salt/versions/latest. Only used if grafana\_proxy\_auth\_enabled is true. | `string` | n/a | yes |
 | <a name="input_data_grid_replicas"></a> [data\_grid\_replicas](#input\_data\_grid\_replicas) | Number of replicas for the data grid | `number` | n/a | yes |
 | <a name="input_enable_http_adapter"></a> [enable\_http\_adapter](#input\_enable\_http\_adapter) | Used to enable the http adapter | `bool` | n/a | yes |
 | <a name="input_enable_mqtt_adapter"></a> [enable\_mqtt\_adapter](#input\_enable\_mqtt\_adapter) | Used to enable the mqtt adapter | `bool` | n/a | yes |
+| <a name="input_firebase_rtdb_url"></a> [firebase\_rtdb\_url](#input\_firebase\_rtdb\_url) | URL of the Firebase Realtime Database used by the Grafana proxy. Defaults to https://{project_id}-default-rtdb.europe-west1.firebasedatabase.app. Only used if grafana\_proxy\_auth\_enabled is true. | `string` | n/a | yes |
 | <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Host name under which Grafana is exposed. With legacy\_load\_balancer\_setup\_enabled=true it is used as the Ingress host and must be set. With legacy\_load\_balancer\_setup\_enabled=false Grafana is served at the root of this host via a dedicated load balancer (https://{grafana_dns_name}/). Only relevant if grafana\_expose\_externally is true. | `string` | n/a | yes |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
+| <a name="input_grafana_proxy_auth_enabled"></a> [grafana\_proxy\_auth\_enabled](#input\_grafana\_proxy\_auth\_enabled) | Whether the Firebase-based Grafana proxy auth flow is enabled: deploys the grafana-proxy sidecar, binds Grafana to loopback, enables Grafana auth.proxy and grants the Grafana service account the required GCP roles. Requires grafana\_expose\_externally = true and legacy\_load\_balancer\_setup\_enabled = false. | `bool` | n/a | yes |
+| <a name="input_grafana_proxy_version"></a> [grafana\_proxy\_version](#input\_grafana\_proxy\_version) | Version tag of the grafana-proxy container image deployed as a sidecar to Grafana. Only used if grafana\_proxy\_auth\_enabled is true. | `string` | n/a | yes |
 | <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. Only relevant if both grafana\_expose\_externally and legacy\_load\_balancer\_setup\_enabled are set to true | `string` | n/a | yes |
 | <a name="input_helm_package_repository"></a> [helm\_package\_repository](#input\_helm\_package\_repository) | Link to the Helm Package for the Hono Deployment | `string` | n/a | yes |
 | <a name="input_helm_release_name"></a> [helm\_release\_name](#input\_helm\_release\_name) | Name of the helm realease | `string` | n/a | yes |
@@ -47,6 +55,7 @@ No modules.
 | <a name="input_hono_domain_secret_name"></a> [hono\_domain\_secret\_name](#input\_hono\_domain\_secret\_name) | Name of the kubernetes secret for the hono domain (wildcard) | `string` | n/a | yes |
 | <a name="input_hono_internal_tls_secret_name"></a> [hono\_internal\_tls\_secret\_name](#input\_hono\_internal\_tls\_secret\_name) | Name of the kubernetes secret that will store the Hono internal TLS certificate | `string` | n/a | yes |
 | <a name="input_hono_namespace"></a> [hono\_namespace](#input\_hono\_namespace) | namespace of the hono deployment | `string` | n/a | yes |
+| <a name="input_hono_root_domain"></a> [hono\_root\_domain](#input\_hono\_root\_domain) | The root domain of the Hono installation (e.g. hono.my-domain.com). | `string` | n/a | yes |
 | <a name="input_hono_tls_crt"></a> [hono\_tls\_crt](#input\_hono\_tls\_crt) | Content of the hono domain tls Cert File | `string` | n/a | yes |
 | <a name="input_hono_tls_crt_from_storage"></a> [hono\_tls\_crt\_from\_storage](#input\_hono\_tls\_crt\_from\_storage) | Content of the hono domain tls Cert File from storage bucket | `string` | n/a | yes |
 | <a name="input_hono_tls_key"></a> [hono\_tls\_key](#input\_hono\_tls\_key) | Content of the hono domain tls Key File | `string` | n/a | yes |

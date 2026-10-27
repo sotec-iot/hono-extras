@@ -454,3 +454,33 @@ variable "gcp_load_balancer_log_config" {
   default     = {}
 }
 
+variable "grafana_proxy_auth_enabled" {
+  type        = bool
+  description = "Whether the Firebase-based Grafana proxy auth flow is enabled: deploys the grafana-proxy sidecar, binds Grafana to loopback, enables Grafana auth.proxy and grants the Grafana service account the required GCP roles. Requires grafana_expose_externally = true and legacy_load_balancer_setup_enabled = false."
+  default     = false
+}
+
+variable "firebase_rtdb_url" {
+  type        = string
+  description = "URL of the Firebase Realtime Database used by the Grafana proxy. Defaults to https://{project_id}-default-rtdb.europe-west1.firebasedatabase.app. Only used if grafana_proxy_auth_enabled is true."
+  default     = null
+}
+
+variable "app_login_url" {
+  type        = string
+  description = "Public URL of the application login page used by the Grafana proxy. Defaults to https://{hono_root_domain without hono. prefix}/#/login. Only used if grafana_proxy_auth_enabled is true."
+  default     = null
+}
+
+variable "cookie_signing_salt_secret" {
+  type        = string
+  description = "Resource ID of the Google Cloud Secret Manager secret that stores the cookie signing salt used by the Grafana proxy. Defaults to projects/{project_number}/secrets/scitis-cookie-salt/versions/latest. Only used if grafana_proxy_auth_enabled is true."
+  default     = null
+}
+
+variable "grafana_proxy_version" {
+  type        = string
+  description = "Version tag of the grafana-proxy container image deployed as a sidecar to Grafana. Only used if grafana_proxy_auth_enabled is true."
+  default     = "v0.16.0"
+}
+

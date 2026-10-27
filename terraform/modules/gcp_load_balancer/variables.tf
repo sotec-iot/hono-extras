@@ -63,6 +63,11 @@ variable "grafana_dns_name" {
   description = "Host name under which Grafana is served (e.g. grafana.my-domain.com). Only relevant if grafana_expose_externally is set to true."
 }
 
+variable "grafana_proxy_auth_enabled" {
+  type        = bool
+  description = "Whether the Grafana proxy auth flow is enabled. Disables IAP on the Grafana backend and health-checks the proxy sidecar instead of Grafana."
+}
+
 variable "hono_api_host_address" {
   type        = string
   description = "Host address of your Hono API (e.g. api.hono.my-domain.com)"
