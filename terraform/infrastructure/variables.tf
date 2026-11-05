@@ -351,3 +351,9 @@ variable "cloud_nat_log_config" {
     filter = "ERRORS_ONLY"
   }
 }
+
+variable "managed_prometheus_enabled" {
+  type        = bool
+  description = "Enables managed Prometheus for the GKE cluster. Only supported for standard (non-Autopilot) GKE clusters."
+  default     = false
+}

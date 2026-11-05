@@ -57,6 +57,7 @@ No modules.
 | <a name="input_gke_autopilot_enabled"></a> [gke\_autopilot\_enabled](#input\_gke\_autopilot\_enabled) | If autopilot mode should be enabled for the GKE cluster. | `bool` | n/a | yes |
 | <a name="input_grafana_dns_name"></a> [grafana\_dns\_name](#input\_grafana\_dns\_name) | Host name under which Grafana is served (e.g. grafana.my-domain.com). Only relevant if grafana\_expose\_externally is set to true. | `string` | n/a | yes |
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
+| <a name="input_grafana_proxy_auth_enabled"></a> [grafana\_proxy\_auth\_enabled](#input\_grafana\_proxy\_auth\_enabled) | Whether the Grafana proxy auth flow is enabled. Disables IAP on the Grafana backend and health-checks the proxy sidecar instead of Grafana. | `bool` | n/a | yes |
 | <a name="input_grafana_static_ip"></a> [grafana\_static\_ip](#input\_grafana\_static\_ip) | Static IP address for the Grafana load balancer. Only relevant if grafana\_expose\_externally is set to true. | `string` | n/a | yes |
 | <a name="input_hono_api_host_address"></a> [hono\_api\_host\_address](#input\_hono\_api\_host\_address) | Host address of your Hono API (e.g. api.hono.my-domain.com) | `string` | n/a | yes |
 | <a name="input_hono_api_static_ip"></a> [hono\_api\_static\_ip](#input\_hono\_api\_static\_ip) | Static IP for External Ingress | `string` | n/a | yes |
