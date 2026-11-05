@@ -40,6 +40,7 @@ No modules.
 | <a name="input_gke_service_account_email"></a> [gke\_service\_account\_email](#input\_gke\_service\_account\_email) | Email of the GKE Service Account | `string` | n/a | yes |
 | <a name="input_ip_ranges_pods"></a> [ip\_ranges\_pods](#input\_ip\_ranges\_pods) | Secondary IP Ranges in Subnetwork for Pods | `string` | n/a | yes |
 | <a name="input_ip_ranges_services"></a> [ip\_ranges\_services](#input\_ip\_ranges\_services) | Secondary IP Ranges in Subnetwork for Services | `string` | n/a | yes |
+| <a name="input_managed_prometheus_enabled"></a> [managed\_prometheus\_enabled](#input\_managed\_prometheus\_enabled) | Enables managed Prometheus for the GKE cluster. Only applies to standard (non-Autopilot) clusters. | `bool` | n/a | yes |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | name of the network | `string` | n/a | yes |
 | <a name="input_node_locations"></a> [node\_locations](#input\_node\_locations) | List of Strings for the Node Locations. IMPORTANT: The GCP Load Balancer will only create Network Endpoint Groups (NEGs) in these specified zones. Pods running in other zones will not be accessible via the load balancer. This limitation does not apply to the legacy load balancer setup ('legacy\_load\_balancer\_setup\_enabled = true'). | `list(string)` | n/a | yes |
 | <a name="input_node_pool_autoscaling_enabled"></a> [node\_pool\_autoscaling\_enabled](#input\_node\_pool\_autoscaling\_enabled) | If node autoscaling should be enabled | `string` | n/a | yes |

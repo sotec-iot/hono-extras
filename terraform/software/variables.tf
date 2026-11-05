@@ -454,3 +454,8 @@ variable "gcp_load_balancer_log_config" {
   default     = {}
 }
 
+variable "managed_prometheus_enabled" {
+  type        = bool
+  description = "Enables the Hono custom metrics PodMonitoring."
+}
+

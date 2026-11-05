@@ -31,6 +31,7 @@ No modules.
 | <a name="input_auth_device_connections_threshold"></a> [auth\_device\_connections\_threshold](#input\_auth\_device\_connections\_threshold) | Threshold for the authenticated device connections alert policy. The alert fires if the current number of authenticated device connections falls below this ratio compared to the average over the last 60 minutes. | `number` | n/a | yes |
 | <a name="input_cert_manager_namespace"></a> [cert\_manager\_namespace](#input\_cert\_manager\_namespace) | Namespace of the cert manager deployment. | `string` | n/a | yes |
 | <a name="input_hono_namespace"></a> [hono\_namespace](#input\_hono\_namespace) | namespace of the deployment | `string` | n/a | yes |
+| <a name="input_managed_prometheus_enabled"></a> [managed\_prometheus\_enabled](#input\_managed\_prometheus\_enabled) | Enables the authenticated device connections alert policy when managed Prometheus metrics are available. | `bool` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The project ID to deploy to | `string` | n/a | yes |
 
 ## Outputs

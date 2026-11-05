@@ -59,6 +59,7 @@ module "hono" {
   data_grid_replicas                 = var.data_grid_replicas
   legacy_load_balancer_setup_enabled = var.legacy_load_balancer_setup_enabled
   hono_internal_tls_secret_name      = var.hono_internal_tls_secret_name
+  managed_prometheus_enabled         = var.managed_prometheus_enabled
 
   depends_on = [module.namespace, module.cert_manager]
 }
@@ -136,5 +137,6 @@ module "alert_policies" {
   hono_namespace                    = var.hono_namespace
   cert_manager_namespace            = var.cert_manager_namespace
   auth_device_connections_threshold = var.auth_device_connections_threshold
+  managed_prometheus_enabled        = var.managed_prometheus_enabled
 
 }

@@ -83,3 +83,8 @@ output "legacy_load_balancer_setup_enabled" {
   value       = var.legacy_load_balancer_setup_enabled
   description = "Whether the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
 }
+
+output "managed_prometheus_enabled" {
+  value       = var.managed_prometheus_enabled
+  description = "Whether managed Prometheus is enabled for the GKE cluster."
+}

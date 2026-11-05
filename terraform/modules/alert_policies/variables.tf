@@ -22,3 +22,8 @@ variable "auth_device_connections_threshold" {
   type        = number
   description = "Threshold for the authenticated device connections alert policy. The alert fires if the current number of authenticated device connections falls below this ratio compared to the average over the last 60 minutes."
 }
+
+variable "managed_prometheus_enabled" {
+  type        = bool
+  description = "Enables the authenticated device connections alert policy when managed Prometheus metrics are available."
+}
