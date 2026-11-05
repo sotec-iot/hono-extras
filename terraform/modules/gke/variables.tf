@@ -162,3 +162,8 @@ variable "gke_enable_private_nodes" {
   type        = bool
   description = "Enables the private cluster configuration for the GKE cluster."
 }
+
+variable "managed_prometheus_enabled" {
+  type        = bool
+  description = "Enables managed Prometheus for the GKE cluster. Only applies to standard (non-Autopilot) clusters."
+}

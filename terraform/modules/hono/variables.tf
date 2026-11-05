@@ -220,3 +220,8 @@ variable "legacy_load_balancer_setup_enabled" {
   type        = bool
   description = "Whether or not the legacy load balancer setup with Kubernetes Ingress and Cloud Endpoints should be enabled."
 }
+
+variable "managed_prometheus_enabled" {
+  type        = bool
+  description = "Enables the Hono custom metrics PodMonitoring."
+}

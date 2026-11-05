@@ -112,6 +112,7 @@ module "gke" {
   sendgrid_api_key                                = var.sendgrid_api_key
   sendgrid_domain                                 = var.sendgrid_domain
   gke_enable_private_nodes                        = var.gke_enable_private_nodes
+  managed_prometheus_enabled                      = var.managed_prometheus_enabled
 
   depends_on = [
     google_project_service.project,

@@ -39,8 +39,9 @@ resource "google_container_cluster" "hono_cluster" {
   }
 
   monitoring_config {
+    enable_components = ["SYSTEM_COMPONENTS"]
     managed_prometheus {
-      enabled = true
+      enabled = var.managed_prometheus_enabled
     }
   }
 

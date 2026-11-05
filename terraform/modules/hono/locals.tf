@@ -89,6 +89,9 @@ locals {
           tlsTrustStoreConfigMap = var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled ? var.hono_trust_store_config_map_name : "example"
           singleCertSecret       = !var.legacy_load_balancer_setup_enabled && var.cert_manager_enabled
         }
+        prometheus = {
+          enableCustomMetricsPodMonitoring = var.managed_prometheus_enabled
+        }
         grafana = {
           service = {
             annotations = !var.legacy_load_balancer_setup_enabled && var.grafana_expose_externally ? { "cloud.google.com/neg" = "{\"exposed_ports\": {\"3000\": {\"name\": \"grafana-neg\"}}}" } : {}

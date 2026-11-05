@@ -128,6 +128,7 @@ resource "google_monitoring_alert_policy" "pod_restart_alert_policy" {
 resource "google_monitoring_alert_policy" "auth_device_connections_alert_policy" {
   display_name          = "At least one authenticated device lost connection."
   notification_channels = [google_monitoring_notification_channel.google_chat_channel.id]
+  enabled               = var.managed_prometheus_enabled
 
   combiner = "OR"
   conditions {

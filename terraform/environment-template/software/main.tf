@@ -17,6 +17,7 @@ module "software" {
   grafana_expose_externally          = data.terraform_remote_state.infrastructure.outputs.grafana_expose_externally
   ssl_policy                         = data.terraform_remote_state.infrastructure.outputs.ssl_policy
   gke_autopilot_enabled              = try(data.terraform_remote_state.infrastructure.outputs.gke_autopilot_enabled, false)
+  managed_prometheus_enabled         = try(data.terraform_remote_state.infrastructure.outputs.managed_prometheus_enabled, false)
   node_locations                     = data.terraform_remote_state.infrastructure.outputs.node_locations
   legacy_load_balancer_setup_enabled = data.terraform_remote_state.infrastructure.outputs.legacy_load_balancer_setup_enabled
   hono_tls_key_from_storage          = try(data.terraform_remote_state.software.outputs.hono_tls_key_in_storage, null)
