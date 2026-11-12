@@ -59,7 +59,6 @@ No modules.
 | <a name="input_grafana_expose_externally"></a> [grafana\_expose\_externally](#input\_grafana\_expose\_externally) | Whether or not Grafana should be exposed externally. | `bool` | n/a | yes |
 | <a name="input_grafana_proxy_auth_enabled"></a> [grafana\_proxy\_auth\_enabled](#input\_grafana\_proxy\_auth\_enabled) | Whether the Grafana proxy auth flow is enabled. Disables IAP on the Grafana backend and health-checks the proxy sidecar instead of Grafana. | `bool` | n/a | yes |
 | <a name="input_grafana_static_ip"></a> [grafana\_static\_ip](#input\_grafana\_static\_ip) | Static IP address for the Grafana load balancer. Only relevant if grafana\_expose\_externally is set to true. | `string` | n/a | yes |
-| <a name="input_hono_api_host_address"></a> [hono\_api\_host\_address](#input\_hono\_api\_host\_address) | Host address of your Hono API (e.g. api.hono.my-domain.com) | `string` | n/a | yes |
 | <a name="input_hono_api_static_ip"></a> [hono\_api\_static\_ip](#input\_hono\_api\_static\_ip) | Static IP for External Ingress | `string` | n/a | yes |
 | <a name="input_hono_root_domain"></a> [hono\_root\_domain](#input\_hono\_root\_domain) | The root domain of the Hono installation (e.g. hono.my-domain.com). | `string` | n/a | yes |
 | <a name="input_http_adapter_static_ip"></a> [http\_adapter\_static\_ip](#input\_http\_adapter\_static\_ip) | Static ip address for the HTTP adapter loadbalancer. | `string` | n/a | yes |

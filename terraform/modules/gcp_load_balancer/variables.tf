@@ -68,11 +68,6 @@ variable "grafana_proxy_auth_enabled" {
   description = "Whether the Grafana proxy auth flow is enabled. Disables IAP on the Grafana backend and health-checks the proxy sidecar instead of Grafana."
 }
 
-variable "hono_api_host_address" {
-  type        = string
-  description = "Host address of your Hono API (e.g. api.hono.my-domain.com)"
-}
-
 variable "hono_root_domain" {
   type        = string
   description = "The root domain of the Hono installation (e.g. hono.my-domain.com)."

@@ -73,6 +73,11 @@ variable "hono_root_domain" {
   description = "The root domain of the Hono installation (e.g. hono.my-domain.com)."
 }
 
+variable "hono_mqtt_host_address" {
+  type        = string
+  description = "Host address of the MQTT adapter (e.g. mqtt.hono.my-domain.com). Defaults to mqtt.{hono_root_domain}. Only relevant if legacy_load_balancer_setup_enabled is false."
+}
+
 variable "hono_trust_store_config_map_name" {
   type        = string
   description = "Name of the kubernetes trust store config map for the hono deployments managed by trust-manager."

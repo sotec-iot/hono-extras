@@ -28,7 +28,6 @@ module "software" {
   helm_package_repository            = local.helm_package_repository
   hono_chart_name                    = local.hono_chart_name
   hono_chart_version                 = local.hono_chart_version
-  hono_api_host_address              = local.hono_api_host_address
   oauth_client_id_key                = local.oauth_client_id_key
   oauth_client_secret_key            = local.oauth_client_secret_key
   hono_root_domain                   = local.hono_root_domain

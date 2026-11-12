@@ -83,7 +83,7 @@ resource "kubectl_manifest" "certificate" {
         var.hono_root_domain,
         "*.${var.hono_root_domain}",
         ] : [
-        "mqtt.${var.hono_root_domain}",
+        coalesce(var.hono_mqtt_host_address, "mqtt.${var.hono_root_domain}"),
       ]
     }
   })

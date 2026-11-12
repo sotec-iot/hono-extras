@@ -61,7 +61,7 @@ No requirements.
 | <a name="input_grafana_static_ip_name"></a> [grafana\_static\_ip\_name](#input\_grafana\_static\_ip\_name) | Name of the static IP for external ingress. Only relevant if both grafana\_expose\_externally and legacy\_load\_balancer\_setup\_enabled are set to true | `string` | n/a | yes |
 | <a name="input_helm_package_repository"></a> [helm\_package\_repository](#input\_helm\_package\_repository) | Link to the Helm Package for the Hono Deployment | `string` | n/a | yes |
 | <a name="input_helm_release_name"></a> [helm\_release\_name](#input\_helm\_release\_name) | Name of the helm release | `string` | `"eclipse-hono"` | no |
-| <a name="input_hono_api_host_address"></a> [hono\_api\_host\_address](#input\_hono\_api\_host\_address) | Host address of your Hono API (e.g. api.hono.my-domain.com) | `string` | n/a | yes |
+| <a name="input_hono_api_host_address"></a> [hono\_api\_host\_address](#input\_hono\_api\_host\_address) | Host address of your Hono API (e.g. api.hono.my-domain.com). Defaults to hono\_root\_domain. Only relevant if legacy\_load\_balancer\_setup\_enabled is true. | `string` | `null` | no |
 | <a name="input_hono_api_static_ip"></a> [hono\_api\_static\_ip](#input\_hono\_api\_static\_ip) | Static IP for External Ingress | `string` | n/a | yes |
 | <a name="input_hono_api_static_ip_name"></a> [hono\_api\_static\_ip\_name](#input\_hono\_api\_static\_ip\_name) | Name of the Static IP for External Ingress | `string` | n/a | yes |
 | <a name="input_hono_chart_name"></a> [hono\_chart\_name](#input\_hono\_chart\_name) | Name of the Chart in the Repository | `string` | `"hono"` | no |
@@ -73,6 +73,7 @@ No requirements.
 | <a name="input_hono_domain_secret_name"></a> [hono\_domain\_secret\_name](#input\_hono\_domain\_secret\_name) | Name of the kubernetes secret for the hono domain (wildcard) | `string` | `"hono-domain-secret"` | no |
 | <a name="input_hono_internal_tls_cert_name"></a> [hono\_internal\_tls\_cert\_name](#input\_hono\_internal\_tls\_cert\_name) | Name of the Certificate resource for Hono internal TLS | `string` | `"hono-cluster-ca-signed-eclipse-hono-all-tls-secret"` | no |
 | <a name="input_hono_internal_tls_secret_name"></a> [hono\_internal\_tls\_secret\_name](#input\_hono\_internal\_tls\_secret\_name) | Name of the kubernetes secret that will store the Hono internal TLS certificate | `string` | `"eclipse-hono-all-tls-secret"` | no |
+| <a name="input_hono_mqtt_host_address"></a> [hono\_mqtt\_host\_address](#input\_hono\_mqtt\_host\_address) | Host address of the MQTT adapter (e.g. mqtt.hono.my-domain.com). Defaults to mqtt.{hono\_root\_domain}. Only relevant if legacy\_load\_balancer\_setup\_enabled is false. | `string` | `null` | no |
 | <a name="input_hono_namespace"></a> [hono\_namespace](#input\_hono\_namespace) | namespace of the deployment | `string` | `"hono"` | no |
 | <a name="input_hono_root_domain"></a> [hono\_root\_domain](#input\_hono\_root\_domain) | The root domain of the Hono installation (e.g. hono.my-domain.com). | `string` | n/a | yes |
 | <a name="input_hono_tls_crt"></a> [hono\_tls\_crt](#input\_hono\_tls\_crt) | Content of the hono domain tls Cert File | `string` | n/a | yes |

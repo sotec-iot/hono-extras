@@ -96,7 +96,7 @@ variable "oauth_app_name" {
 
 variable "hono_api_host_address" {
   type        = string
-  description = "Host address of your Hono API (e.g. api.hono.my-domain.com)"
+  description = "Host address of your Hono API (e.g. api.hono.my-domain.com). Defaults to hono_root_domain. Only relevant if legacy_load_balancer_setup_enabled is true."
 }
 
 variable "hono_tls_key" {

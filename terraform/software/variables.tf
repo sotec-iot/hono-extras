@@ -96,7 +96,8 @@ variable "oauth_app_name" {
 
 variable "hono_api_host_address" {
   type        = string
-  description = "Host address of your Hono API (e.g. api.hono.my-domain.com)"
+  description = "Host address of your Hono API (e.g. api.hono.my-domain.com). Defaults to hono_root_domain. Only relevant if legacy_load_balancer_setup_enabled is true."
+  default     = null
 }
 
 variable "hono_tls_key" {
@@ -198,6 +199,12 @@ variable "cert_manager_cert_renew_before" {
 variable "hono_root_domain" {
   type        = string
   description = "The root domain of the Hono installation (e.g. hono.my-domain.com)."
+}
+
+variable "hono_mqtt_host_address" {
+  type        = string
+  description = "Host address of the MQTT adapter (e.g. mqtt.hono.my-domain.com). Defaults to mqtt.{hono_root_domain}. Only relevant if legacy_load_balancer_setup_enabled is false."
+  default     = null
 }
 
 variable "root_domain" {

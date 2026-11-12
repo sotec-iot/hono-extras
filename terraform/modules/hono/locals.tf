@@ -269,7 +269,7 @@ locals {
             enabled          = var.legacy_load_balancer_setup_enabled
             ingressTlsSecret = var.cert_manager_enabled ? var.hono_domain_managed_secret_name : var.hono_domain_secret_name
             staticIpName     = var.hono_api_static_ip_name
-            host             = var.hono_api_host_address
+            host             = coalesce(var.hono_api_host_address, var.hono_root_domain)
             sslPolicy        = element(split("/", var.ssl_policy), -1)
           }
           managementUi = {

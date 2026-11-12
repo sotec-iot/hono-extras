@@ -88,6 +88,7 @@ module "cert_manager" {
   cert_manager_cert_renew_before     = var.cert_manager_cert_renew_before
   hono_domain_managed_secret_name    = var.hono_domain_managed_secret_name
   hono_root_domain                   = var.hono_root_domain
+  hono_mqtt_host_address             = var.hono_mqtt_host_address
   trust_manager_version              = var.trust_manager_version
   hono_trust_store_config_map_name   = var.hono_trust_store_config_map_name
   hono_cluster_ca_secret_name        = var.hono_cluster_ca_secret_name
@@ -129,7 +130,6 @@ module "gcp_load_balancer" {
   grafana_static_ip            = var.grafana_static_ip
   grafana_dns_name             = local.grafana_dns_name
   grafana_proxy_auth_enabled   = var.grafana_proxy_auth_enabled
-  hono_api_host_address        = var.hono_api_host_address
   hono_root_domain             = var.hono_root_domain
   gcp_load_balancer_log_config = var.gcp_load_balancer_log_config
 
